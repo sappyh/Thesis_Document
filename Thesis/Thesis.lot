@@ -6,20 +6,20 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.1}{\ignorespaces LimeSDR USB transfer endpoints}}{6}
+\contentsline {table}{\numberline {2.1}{\ignorespaces LimeSDR USB transfer endpoints}}{7}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.2}{\ignorespaces Text USB Trace Example.}}{7}
+\contentsline {table}{\numberline {2.2}{\ignorespaces Text USB Trace Example.}}{8}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.3}{\ignorespaces URB Type and Direction.}}{8}
-\defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {3.1}{\ignorespaces Transfer Direction and Threshold Value}}{12}
+\contentsline {table}{\numberline {2.3}{\ignorespaces URB Type and Direction.}}{9}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {4.1}{\ignorespaces Analytical USB Transfer Delay}}{14}
+\contentsline {table}{\numberline {3.1}{\ignorespaces Transfer Direction and Threshold Value}}{13}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {4.2}{\ignorespaces Experimental results}}{15}
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {4.1}{\ignorespaces Analytical USB Transfer Delay}}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {4.2}{\ignorespaces Experimental results}}{16}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
