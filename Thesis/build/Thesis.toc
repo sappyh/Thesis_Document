@@ -1,0 +1,57 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.1}Problem Context}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.1.1}CSMA}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.1.2}TDMA}{3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.2}Research Questions}{3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.2.1}Report Outline}{3}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Background}{5}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}LimeSDR-USB}{5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.1}LimeSDR USB dataflow.}{5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.2}LimeSDR USB packets and endpoints}{6}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}GNU Radio}{7}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}USBMon}{7}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.1}Text Data Format}{8}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.2}Raw Binary}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.4}pidstat}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.5}802.15.4}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}Methods}{11}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}Timing Analysis}{11}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.1}Message Source}{12}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.2}Timing Measurements Program}{13}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.3}Results Correlation Method}{13}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {4}Results and Analysis}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.0.1}Analytical Method}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.0.2}Experimental Results}{15}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.0.3}Analysis}{17}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}What's next}{19}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{21}

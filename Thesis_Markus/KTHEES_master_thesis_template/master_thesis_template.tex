@@ -1,0 +1,115 @@
+\documentclass[a4paper]{report}
+
+\usepackage{KTHEEtitlepage}
+
+% Packages used in the main document for this particular example:
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage[bookmarks,pdftitle={thesis title}]{hyperref}
+\usepackage{graphicx}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Information to appear on the title page:
+\ititle{A Very Fancy Title}
+\iauthor{Author's Name}
+\idate{20xx}
+\irefnr{XR-EE-KT 20xx:xxx} % will be given after the defense
+\iaddress{Communication Theory\\
+  School of Electrical Engineering\\
+  KTH Royal Institute of Technology}
+
+\makeititle \pagenumbering{roman}
+\clearpage
+\thispagestyle{empty}
+\phantom{a}
+\addtocounter{page}{-1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Abstract}
+
+\thispagestyle{empty}
+
+Abstract of the thesis goes here...
+
+\addtocounter{page}{-1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Sammanfattning}
+
+\thispagestyle{empty}
+
+Abstract (in Swedish) of the thesis goes here...
+
+\addtocounter{page}{-1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Acknowledgment}
+\thispagestyle{empty}
+
+I thank myself for writing this nice thesis ...
+
+\addtocounter{page}{-1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chapter 1:
+\chapter{Introduction}
+
+\pagenumbering{arabic}
+
+\section{Motivation}
+
+Motivation...
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chapter 2:
+\chapter{Background}
+In this chapter we provide a brief discussion of the essential background needed throughout the thesis. See e.g., \cite{Cover2006}.
+
+
+\section{Topic A}
+
+
+
+\subsection{Topic A.1}
+
+System model is shown in Figure~\ref{fig:sysModel}
+
+\begin{figure}[!htp]
+    \centering
+        \includegraphics[width=0.9\textwidth]{./figures/Drawing1}
+        \caption{The Basic communication model.}\label{fig:sysModel}
+\end{figure}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chapter n:
+\chapter{Conclusions and Future Work}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}

@@ -1,0 +1,262 @@
+\documentclass{kththesis}
+
+
+\usepackage{blindtext} % This is just to get some nonsense text in this template, can be safely removed
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{csquotes} % Recommended by biblatex
+\usepackage[backend=biber]{biblatex}
+\usepackage{listings}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[counterclockwise, figuresleft]{rotating}
+
+\addbibresource{stateofart.bib}
+\addbibresource{USBMon.bib} % The file containing our references, in BibTeX format
+
+
+
+\usepackage{pdfpages}
+
+\usepackage{acro}
+
+
+\DeclareAcronym{sdr}{
+  short = SDR,
+  long = Software Defined Radio
+}
+
+
+\DeclareAcronym{csma}{
+  short = CSMA,
+  long = Carrier Sense Multiple Access
+}
+
+\DeclareAcronym{mac}{
+  short = MAC,
+  long = Medium Access Control
+}
+
+
+\DeclareAcronym{tdma}{
+  short = TDMA,
+  long = Time Division Multiple Access
+}
+
+\DeclareAcronym{cpu}{
+  short = CPU,
+  long = Central Processing Unit
+}
+
+\DeclareAcronym{ack}{
+  short = ACK,
+  long = Acknowledgement
+}
+
+\begin{document}
+
+\acsetup{first-long-format=\itshape}
+
+
+% Frontmatter includes the titlepage, abstracts and table-of-contents
+\frontmatter
+
+\includepdf[pages={1}]{Chapters/cover.pdf}
+%\titlepage
+
+\tableofcontents
+
+\listoffigures
+\listoftables
+
+\clearpage
+\printacronyms[%
+  name = {Abbreviations},
+  sort = false,
+]
+
+\mainmatter
+
+% Mainmatter is where the actual contents of the thesis goes
+
+
+\input{Chapters/introduction.tex}
+\input{Chapters/Background.tex}
+
+
+\chapter{Methods}
+This chapter introduces the quantitative methods used in the measurement of the timing delays. 
+\section{Timing Analysis}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{Figure/Setup.png}
+\caption{Overview of measurement setup}
+\label{setup_overview}
+\end{figure}
+The project uses the Wime Project implementation of 802.15.4 MAC and PHY layers in GNU Radio. For the purpose of measurement of round trip latency, a loop back experimentation setup(Figure \ref{setup_overview}) was implemented. A periodic message source generates messages and notes down the time T1. It is then processed and modulated by the 802.15.4 MAC and PHY respectively and sent through the OSMOCOM transreceiver to the LimeSDR. The RX and TX ports of the LMS7002M has been shorted and hence the original sent message loopbacks through the FPGA and comes back to the GNU Radio and is demodulated and processed by the PHY and MAC blocks respectively and is ultimately received by the periodic message source and the time is noted as T4.
+
+The usbmon kernel utility continuously monitors bus activity between the LimeSDR USB driver and USB Host Controller. It timestamps the transfers and generates event queues to be accessed from the user space. The timing measurements program parses the event queue to find the relevant packets and notes down their usbmon timestamps as T3 and T4 for transmit and receive packets respectively.  
+\subsection{Message Source} \label{message_source}
+A periodic message source block was implemented in the GNU Radio, it takes in the message length and time period as parameters. Figure \ref{message_source} shows the working of the message source with respect to time. The data length controls the duty cycle of the signal by varying $\Delta T_{tx}$, which is the time is requires to transmit the message through USB.\\
+
+Everytime a message is sent and it receives a loopback, the block notes down the global time as T1 for transmit and T4 for receive respectively. Since the time noted should be compared with those from usbmon, \textit{gettimeofday} was selected as the preferred method. The time period was set such that the transmitted message is received before sending the next message.\\
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figure/Message_Source.png}
+\caption{Periodic Message Source}
+\label{message_source}
+\end{figure}
+\subsection{Timing Measurements Program}
+The timing measurements program uses ioctl to access the /dev/usbmonX character device. This allows the program to access the usbmon kernel utility event queue. The events are filtered to find packets with \textbf{0x01} \& \textbf{0x81} device endpoints. The data streams are parsed to find the relevant data fields from FPGA packets(Figure \ref{fpga_packet}), following that the data is converted from integer representation to complex floating point representation. The modulus of In Phase Sample's amplitude is used to determine if the data contained in the packet is useful or not. 
+
+\begin{table}
+\centering
+\begin{tabular}{|c|c|}
+\hline
+USB Transfer Direction & Threshold Value  \\
+\hline
+|I| TX & 0.8\\
+|I| RX & 0.2\\
+\hline
+\end{tabular}
+\caption{Transfer Direction and Threshold Value}
+\label{thres_table}
+\end{table}
+
+Analyzing the samples in the data stream, the samples threshold for actual data packets to as shown in Table \ref{thres_table}.  Once the packets have been analyzed, the sequence of events was studied to generate a state machine representation for the timing functionality.\\ 
+The sequence follows the structure shown in figure \ref{sequence} if the condition mentioned about the time period in \ref{message_source} is satisfied. Since we want to measure the round trip delay, the time instant of the first TX and last RX packet as noted by T2 and T3 respectively needs to be measured. The difference between them gives the Kernel round-trip delay as measured by usbmon.    
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figure/Sequence.png}
+\caption{Sequence of valid data packet with time}
+\label{sequence}
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{Figure/State_Machine.png}
+\caption{State Machine}
+\label{state_machine}
+\end{figure}
+
+State Machine shown in Figure \ref{state_machine} controls the timing measurement function. It starts with state S0 and when it receives a TX event it sets T2 and moves to S1, further TX events don't update the value of T2 as we want the first TX event time. The state machine moves from S1 to S2 on a RX event, it sets the value of T3, further RX events updates the value of T3 as we want the time instant of the last RX event. On receiving TX event when at S2, it moves to S1, calculates $T3-T2$ and sets the value of T2.
+\subsection{Results Correlation Method}
+All the time instants are stored in Unix Time Format, a python script stores the values in separate arrays t1, t2, t3, t4 for GNU Radio Transmit Time, Kernel Transmit Time, Kernel Receive Time and GNU Radio Receive Time respectively. 
+
+\begin{algorithm}[!h]
+\caption{Time Data Correlation}
+\begin{algorithmic}
+\State {$T \gets $ Time Period of Message Source }
+\State {$l \gets $ min(length of time arrays)}
+\State $i \gets 0$
+\For {$i < l $}
+\If{($ t1[i]> t2[i]$ or $ t3[i]> t4[i]$)} \\
+\hspace{1.35cm} delete $t1[i],t4[i]$
+\ElsIf{$(t2[i]-t1[i]) > T $}
+delete t2[i]
+\ElsIf{$(t4[i]-t3[i]) > T $}
+delete t3[i] 
+\Else{ $i \gets i+1$ \\ \hspace{1.35cm} $l \gets $ min(length of time arrays) }
+\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Once the arrays have been compared to remove corrupt data, the mean and standard deviation of the respective arrays are found.
+
+\chapter{Results and Analysis}
+\subsection{Analytical Method}
+The 802.15.4 PHY layer expands 1 byte of message data to 128 bytes, so the maximum packet length of 127 bytes becomes produces sample data of size
+$127*128=16256 bytes=15.875KB$\\. The FPGA packet format adds 16 bytes overhead for every 4080 bytes so the overhead for 16256 bytes would be 64bytes. So the overall transfer size would be 16320 bytes. This would require four FPGA packets so the actual size of the USB transfer would be 16384 bytes
+Now for sampling rate of 1MHz $\equiv$ 1MSPS, the actual data transfer is 1.5 MBps since the LMS7002M has 12 bits ADC and DAC. 
+\begin{table}[!h]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+Sampling Rate & USB Transfer delay \\
+\hline
+5 MHz & 4369.07 $\mu$s\\
+10 MHz & 2184.53 $\mu$s\\
+15 MHz & 1456.35 $\mu$s\\
+20 MHz & 1092.27 $\mu$s\\
+\hline
+\end{tabular}
+\caption{Analytical USB Transfer Delay}
+\label{back_env}
+\end{table}
+
+\subsection{Experimental Results}
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{Figure/results_setup.png}
+\caption{Results Setup}
+\label{res_set}
+\end{figure}
+Figure \ref{res_set} shows the different terminology used in the results, with the TX \& RX software delay is the delay caused by the GNU Radio and LimeSDR driver processing, the Kernel RTT Time includes the buffer delay in the LimeSDR and the USB communication delay. Total RTT Time = Kernel RTT Time + TX Software Delay + RX Software Delay. All the timing measurements are done on Lenovo Thinpad X240 with Dual-Core Intel® Core™ i5-4300U CPU @ 1.90GHz and 4GB RAM. The setup use Limesuite version 17.12.0 and gateware version 2.12.
+\begin{table}
+\centering
+\label{res}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Sampling Rate(MHz)                                                  & 5    & 10   & 15   & 20   \\
+\hline
+Total RTT mean ($\mu$s)                                                      & 5360 & 3606 & 3065 & 4485 \\ \hline
+Total RTT std deviation ($\mu$s)   & 326  & 472  & 262  & 1273 \\ \hline
+Kernel RTT mean ($\mu$s)                                                     & 4113 & 1937 & 1354 & 762  \\ \hline
+Kernel RTT std deviation ($\mu$s) & 1201 & 330  & 232  & 298  \\ \hline
+TX chain mean ($\mu$s)                                                       & 470  & 675  & 831  & 1586 \\ \hline
+TX chain std deviation ($\mu$s)    & 60   & 1165 & 186  & 860  \\ \hline
+RX chain mean ($\mu$s)                                                       & 1100 & 1122 & 871  & 1769 \\ \hline
+RX chain std deviation ($\mu$s)                                              & 472  & 1764 & 262  & 1036\\ \hline
+\end{tabular}
+\caption{Experimental results}
+\end{table}
+
+
+
+\subsection{Analysis}
+\begin{itemize}
+\item {The results show a monotonic drop in the kernel USB timings with increase in sampling rate and monotonic increase for RX and TX delay (Exception: 15 MHz). This indicates with increase in sampling rate, the buffers are getting overloaded and hence an increase in processing delay compared to bus communication delay.}
+\item {Another thing that I noticed was at high sampling rate the round trip time increases with time, again pointing to buffer delay on the RX chain.}
+\item {My measurement program becomes highly unstable at higher sampling rates, for example for 20MHz, I captured 610 packets of which I could correlate only 160 packets. This is mainly because the usbmon event queues overflow and hence my timing measurement program misses some relevant events and reports wrong timing information. One method I plan on using is flushing the buffers before the message source generates the message since each measurement is independent of the previous in a TDMA protocol.  }
+\item {The analytical values for the RTT time( Table \ref{back_env}) is more than the actual value that usbmon reported(Table \ref{res}), my hypothesis is that this happens due to my assumption that all the data in the LimeSDR TX buffer is popped before the relevant RX data is popped back in the RX buffers on the LimeSDR side. But in actual operation even before all the TX data has been popped, the loopback data is being pushed to the RX buffers. This is demonstrated using figure \ref{staggering} where its shows the state of the RX and TX buffers with respect to time. \textit{t1} shows the instant when all the relevant data has been popped from the TX buffers and \textit{t2} shows the instant when the relevant RX data is popped from the buffers. For my assumption \textit{t1} should be equal to \textit{t2}, but here  $t2<t1$ hence the reported values are less than those of the analytical model. With increase in sampling rate the difference between t2 and t1 increases. There is a need to address this issue to ensure reliability of the measurement method.
+\begin{figure}
+\centering
+\hspace{1cm}\includegraphics[scale=0.5]{Figure/Staggering.png}
+\caption{Overlapping of buffers on LimeSDR}
+\label{staggering}
+\end{figure}
+}
+\end{itemize}
+
+\chapter{What's next}
+
+The project plan is presented in Gantt Chart format in figure \ref{plan}. According to my estimate I am one week behind the project plan.\\
+\begin{itemize}
+\item {Timing Analysis:\\
+\begin{itemize}
+\item {More data points to pinpoint the buffer delays.}
+\item {Off-line processing of the USB data to pinpoint the time instant of maximum correlation between RX and TX data}
+\item {Make individual measurements independent.}
+\item {Solve the buffer overlap problem.}
+\end{itemize}}
+\item{Enabling deterministic timing: A key element for enabling TDMA protocols would be deterministic send and receive time of packets. So I would look at possible strategies.}
+\item{Evaluation: Since I am looking at compression algorithms, it would be essential to find the compression ratio I am able to achieve with lossy and lossless compression. Also, I should concentrate on figuring out how these compression algorithms affect the performance of SDR systems. The strategies for deterministic timing needs to be evaluated for jitter to actual TDMA schedules.}
+\end{itemize}
+\begin{sidewaysfigure}
+\centering
+\includegraphics[width=\textheight]{Figure/Project_Plan.png}
+\caption{Project Plan}
+\label{plan}
+\end{sidewaysfigure}
+
+\printbibliography[heading=bibintoc] % Print the bibliography (and make it appear in the table of contents)
+
+\appendix
+
+% \chapter{Unnecessary Appended Material}
+
+\includepdf[pages={2}]{Chapters/cover.pdf}
+\end{document}

@@ -1,0 +1,176 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.6 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \sortlist[entry]{nty/global}
+    \entry{basak_usb_2018}{article}{}
+      \name{author}{2}{}{%
+        {{hash=fe542c438685c3c9f9d4b6456a2ea42b}{%
+           family={Basak},
+           family_i={B\bibinitperiod},
+           given={Partha},
+           given_i={P\bibinitperiod}}}%
+        {{hash=53ff65133b24007a7b1fb46e61efdb00}{%
+           family={{Kishon\bibnamedelimb Vijay\bibnamedelimb Abraham\bibnamedelimb I}},
+           family_i={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{c7ecf4615c40cef242e671deba111a9a}
+      \strng{fullhash}{c7ecf4615c40cef242e671deba111a9a}
+      \field{sortinit}{B}
+      \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{04}
+      \field{month}{10}
+      \field{title}{{USB} Debugging and Profiling Techniques}
+      \field{year}{2018}
+      \verb{url}
+      \verb https://elinux.org/images/1/17/USB_Debugging_and_Profiling_Techniques.pdf
+      \endverb
+    \endentry
+    \entry{_debugfs}{online}{}
+      \field{sortinit}{D}
+      \field{sortinithash}{78f7c4753a2004675f316a80bdb31742}
+      \field{labeltitlesource}{title}
+      \field{title}{Debugfs Documentation}
+      \field{titleaddon}{Linux Kernel Archives}
+      \verb{url}
+      \verb https://www.kernel.org/doc/Documentation/filesystems/debugfs.txt
+      \endverb
+    \endentry
+    \entry{schmid_experimental_2007}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=b4e2a832aa14084c07e8248d12122d6c}{%
+           family={Schmid},
+           family_i={S\bibinitperiod},
+           given={Thomas},
+           given_i={T\bibinitperiod}}}%
+        {{hash=818545348478f7ae37ad2a155ca0cd32}{%
+           family={Sekkat},
+           family_i={S\bibinitperiod},
+           given={Oussama},
+           given_i={O\bibinitperiod}}}%
+        {{hash=502bc3685ae1f22343d58ea1e4f6d27c}{%
+           family={Srivastava},
+           family_i={S\bibinitperiod},
+           given={Mani\bibnamedelima B.},
+           given_i={M\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{publisher}{1}{%
+        {ACM Press}%
+      }
+      \strng{namehash}{b36809ec0d662594acc5d14f4ee454d4}
+      \strng{fullhash}{b36809ec0d662594acc5d14f4ee454d4}
+      \field{sortinit}{S}
+      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Software Defined Radios are becoming more and more prevalent. Especially in the radio amateur community, Software Defined Radios are a big success. The wireless industry also has considerable interest in the dynamic reconfigurability and other advantages of Software Defined Radios. Our research focuses on the latency of Software Defined Radios and its impact on throughput in modern wireless protocols. Software Defined Radio systems often employ a bus system to transfer the samples from a radio frontend to the processor which introduces a non-negligible latency. Additionally, the signal processing calculations on general-purpose processors introduce additional latencies that are not found on conventional radios. This work concentrates on one particular Software Defined Radio system called GNU Radio, an open source Software Defined Radio application, and one of its hardware components, the Universal Software Radio Peripheral (USRP), and analyzes its receive and transmit latencies. We will use these measurements to characterize the performance impact on IEEE 802.15.4 implementation in GNU Radio. Additionally, we present two Software Defined Radio implementations of short-range radio standards, a FSK scheme used in the Chipcon CC1000 radio, and the physical layer of IEEE 802.15.4. We use these implementations for round trip time measurements and introduce two sample applications, a physical layer bridge between the FSK scheme and IEEE 802.15.4, and a dual channel receiver that receives two radio channels concurrently.}
+      \field{isbn}{978-1-59593-738-4}
+      \field{title}{An experimental study of network performance impact of increased latency in software defined radios}
+      \field{urlday}{31}
+      \field{urlmonth}{07}
+      \field{urlyear}{2018}
+      \field{year}{2007}
+      \field{pages}{59}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1145/1287767.1287779
+      \endverb
+      \verb{file}
+      \verb Schmid et al. - 2007 - An experimental study of network performance impac.pdf:/home/saptarshi/Documents/MasterThesis@RISE/Documents/Schmid et al. - 2007 - An experimental study of network performance impac.pdf:application/pdf
+      \endverb
+      \verb{url}
+      \verb http://portal.acm.org/citation.cfm?doid=1287767.1287779
+      \endverb
+    \endentry
+    \entry{ulversoy_software_2010}{article}{}
+      \name{author}{1}{}{%
+        {{hash=284742ed8f869b0b8867f352b6f5f5e6}{%
+           family={Ulversoy},
+           family_i={U\bibinitperiod},
+           given={T.},
+           given_i={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{284742ed8f869b0b8867f352b6f5f5e6}
+      \strng{fullhash}{284742ed8f869b0b8867f352b6f5f5e6}
+      \field{sortinit}{U}
+      \field{sortinithash}{8145509bd2718876fc77d31fd2cde117}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Software Defined Radio ({SDR}) may provide flexible, upgradeable and longer lifetime radio equipment for the military and for civilian wireless communications infrastructure. {SDR} may also provide more flexible and possibly cheaper multi-standard-terminals for end users. It is also important as a convenient base technology for the future context-sensitive, adaptive and learning radio units referred to as cognitive radios. {SDR} also poses many challenges, however, some of them causing {SDR} to evolve slower than otherwise anticipated. Transceiver development challenges include size, weight and power issues such as the required computing capacity, but also {SW} architectural challenges such as waveform application portability. {SDR} has demanding implications for regulators, security organizations and business developers.}
+      \field{issn}{1553-877X}
+      \field{journaltitle}{{IEEE} Communications Surveys Tutorials}
+      \field{number}{4}
+      \field{shorttitle}{Software Defined Radio}
+      \field{title}{Software Defined Radio: Challenges and Opportunities}
+      \field{volume}{12}
+      \field{year}{2010}
+      \field{pages}{531\bibrangedash 550}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.1109/SURV.2010.032910.00019
+      \endverb
+      \verb{file}
+      \verb IEEE Xplore Abstract Record:/home/saptarshi/Zotero/storage/4DEUCTHW/5462981.html:text/html;IEEE Xplore Full Text PDF:/home/saptarshi/Zotero/storage/HYR6Q8KY/Ulversoy - 2010 - Software Defined Radio Challenges and Opportuniti.pdf:application/pdf
+      \endverb
+      \keyw{Application software,cognitive radio,Cognitive radio,cognitive radios,Computer architecture,Context,{FCC},Field programmable gate arrays,Military communication,Military equipment,radio communication equipment,{SDR},software defined radio,Software defined radio,software engineering,software radio,Software radio,transceivers,Wireless communication}
+    \endentry
+    \entry{_usb_data_transfer}{online}{}
+      \field{sortinit}{U}
+      \field{sortinithash}{8145509bd2718876fc77d31fd2cde117}
+      \field{labeltitlesource}{title}
+      \field{title}{{USB} Data Transfer Types}
+      \verb{url}
+      \verb http://www.jungo.com/st/support/documentation/windriver/10.2.0/wdusb_manual.mhtml/USB_data_transfer_types.html
+      \endverb
+    \endentry
+    \entry{_usb_endpoint}{online}{}
+      \field{sortinit}{U}
+      \field{sortinithash}{8145509bd2718876fc77d31fd2cde117}
+      \field{labeltitlesource}{title}
+      \field{langid}{english}
+      \field{title}{{USB} endpoints and their pipes}
+      \field{urlday}{11}
+      \field{urlmonth}{04}
+      \field{urlyear}{2018}
+      \verb{file}
+      \verb Snapshot:/home/saptarshi/Zotero/storage/8BMZZ3WE/usb-endpoints-and-their-pipes.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-endpoints-and-their-pipes
+      \endverb
+    \endentry
+    \entry{_usbmon}{online}{}
+      \field{sortinit}{U}
+      \field{sortinithash}{8145509bd2718876fc77d31fd2cde117}
+      \field{labeltitlesource}{title}
+      \field{title}{{USBMon} Documentation}
+      \field{titleaddon}{The Linux Kernel Archives}
+      \verb{url}
+      \verb https://www.kernel.org/doc/Documentation/usb/usbmon.txt
+      \endverb
+    \endentry
+  \endsortlist
+\endrefsection
+\endinput
+
