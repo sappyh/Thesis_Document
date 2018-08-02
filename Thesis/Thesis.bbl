@@ -112,6 +112,36 @@
       \verb https://myriadrf.org/projects/limesdr/
       \endverb
     \endentry
+    \entry{nychis_enabling_nodate}{article}{}
+      \name{author}{2}{}{%
+        {{hash=5b4f944fabd2831efbffa492c7b3b00b}{%
+           family={Nychis},
+           family_i={N\bibinitperiod},
+           given={George},
+           given_i={G\bibinitperiod}}}%
+        {{hash=f057adf2410e39084705b4bf2986123e}{%
+           family={Hottelier},
+           family_i={H\bibinitperiod},
+           given={Thibaud},
+           given_i={T\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{82181b5856b830d6f5461eebc415a25d}
+      \strng{fullhash}{82181b5856b830d6f5461eebc415a25d}
+      \field{sortinit}{N}
+      \field{sortinithash}{925374ca63e7594de7fafdb83e64d41d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Over the past few years a range of new Media Access Control (MAC) protocols have been proposed for wireless networks. This research has been driven by the observation that a single one-size-fits-all MAC protocol cannot meet the needs of diverse wireless deployments and applications. Unfortunately, most MAC functionality has traditionally been implemented on the wireless card for performance reasons, thus, limiting the opportunities for MAC customization. Software-defined radios (SDRs) promise unprecedented flexibility, but their architecture has proven to be a challenge for MAC protocols.}
+      \field{title}{Enabling {MAC} {Protocol} {Implementations} on {Software}-{Defined} {Radios}}
+      \field{pages}{23}
+      \range{pages}{1}
+      \verb{file}
+      \verb Nychis and Hottelier - Enabling MAC Protocol Implementations on Software-.pdf:/home/saptarshi/Documents/MasterThesis@RISE/Documents/Nychis and Hottelier - Enabling MAC Protocol Implementations on Software-.pdf:application/pdf
+      \endverb
+    \endentry
     \entry{schmid_experimental_2007}{inproceedings}{}
       \name{author}{3}{}{%
         {{hash=b4e2a832aa14084c07e8248d12122d6c}{%

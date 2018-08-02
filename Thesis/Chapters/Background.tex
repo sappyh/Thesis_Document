@@ -1,10 +1,55 @@
 \chapter{Background}
-This chapter presents the relevant background information that are useful in the understanding of the report. First, it introduces USBMon kernel utility and how it provides event updates. Second, it explains the LimeSDR software defined radio platform and specifically its USB communication architecture.
+This chapter introduces the necessary background information needed for understanding the rest of the report.
+First section, provides a broad introduction to \ac{sdr} systems, GNU Radio Software Tool and \ac{PHY} and \ac{mac} layers of the network stack.
+Then the problems mentioned earlier are conceptualized theoretically.
+The second section introduces previous work in this domain, which are critically analyzed to help concretely define the problem area.
+Finally the last section, introduces the LimeSDR platform, IEEE 802.15.4 based system design and the tools used in the methods section.
 
-\section{LimeSDR-USB}
+
+\section{Essential Concepts}
+\subsection{\ac{PHY} and \ac{mac} Layers}
+\ac{OSI} Model (ISO/IEC 7498-1:1994) presents the abstract model for networking, that is used for most communication systems design.
+The abstract model is divided into 7 layers,  where entity in each layer implements the functionality of the layer and interacts directly with the layer beneath it, the added functionality can be used by the upper layers.
+Data from the user application is encapsulated by each subsequent layers of the \ac{OSI} model into their frame format.
+These frames carry meta-data in the form of frame headers.
+Different protocols use different headers  as it helps differentiate one protocol from another.
+These headers help the receiver in learning where the incoming data packet is coming from, who is it meant for, how to decode the contents of the data packet etc.\\
+
+\ac{PHY} layer is the lowest layer (L1) of the \ac{OSI} model,it interacts with the physical communication channel directly.
+It defines the type of data transfer(serial/parallel) and data rate of the protocol.
+\ac{PHY} layer defines the process of transmitting raw bits through the physical medium.
+The bit-stream is grouped into code words and converted to symbols, which are then modulated to a physical signal for transmission over the transmission medium.
+\ac{PHY} layers also provides physical transmission link information like carrier sense and collision detection and \ac{LQI}  to the upper layers.
+
+
+\ac{mac} layer, second layer(L2) of the \ac{OSI} model, is responsible for defining the the methods for sharing and using the same transmission medium among multiple devices.
+\ac{mac} layer addresses are used to to check if the incoming packet is meant for the device.
+In case of outgoing packets, the \ac{mac} layer adds the \ac{mac} address of the destination device to the packet header.
+It adds the synchronization preamble and \ac{FCS} for checking transmission error.
+Retransmission in case of dropped packets and acknowledgement to successfully received packets are handled by this layer.
+
+ 
+
+
+\subsection{\ac{sdr} Platforms}
+
+\ac{sdr} represents a new paradigm of communication system design where the system is flexible to adapt to the needs of the end-user as also the radio channel conditions.  The implementation 
+\begin{figure}[h!]
+\label{host_PHY}
+\centering
+\includegraphics[width=\textwidth]{Figure/Host_Phy.png}
+\caption{Host-PHY \cite{nychis_enabling_nodate} \ac{sdr} architecture.}
+\end{figure}
+
+\subsection{GNU Radio}
+
+\section{State of the Art}
+\section{Base System and Tools}
+ 
+\subsection{LimeSDR-USB}
 The LimeSDR-USB uses a USB 3.0 interface for communicating with the host computer. It supports MIMO operations with 2 RX and TX channels operating simultaneously. The maximum sampling rate supported by the ADC and DAC of LMS7002M is 160 Mhz, but the USB 3.0 restricts it to 61.44 MSPS when all the RX and TX channels are used simultaneously.
 
-\subsection{LimeSDR USB dataflow.}
+\subsubsection{LimeSDR USB dataflow.}
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.6]{Figure/Software_Architecture.jpg}
@@ -17,7 +62,7 @@ The LimeSDR-USB uses a USB 3.0 interface for communicating with the host compute
 \item{\textit{RX Data Path: } The USB data is continuously streamed from the LimeSDR to the Connection stream buffers through libusb. The Read function waits for data to be available from a usb context for the endpoint it is listening to, then it transfer data from the endpoint, parses the FPGA packets (Figure \ref{fpga_packet}) to collect the data and pushes them to the RXFIFO. If the rx stream is configured to have particular receive time, it checks if that condition is satisfied. The LimeSDR streaming API collects the data from the RXFIFO and does the necessary data interpretation translation (reverse translation to the TX Data Path), finally streams the data to GNURadio. }
 \end{itemize}
 
-\subsection{LimeSDR USB packets and endpoints}
+\subsubsection{LimeSDR USB packets and endpoints}
 LimeSDR uses four different endpoints for USB data transfer, these endpoints as Data Endpoint and Control Endpoint for both input and output directions. The control endpoints are used for configuring and retrieving data from the LMS7002M and NIOS Core on the FPGA. Data packets are used for the streaming data. 
 \begin{table}[h!]
 \centering
@@ -49,9 +94,9 @@ It uses two different packet structures for the LMS7002M Control Packets and the
 \end{figure}
 
 
-\section{GNU Radio}
 
-\section{USBMon}
+
+\subsection{USBMon}
 It is kernel facility provided to collect I/O traces on the USB Bus\cite{_usbmon}. USBMon reports the requests made to and by the USB Host Controller Drivers(HCD). It provides two kinds of API's : binary and character. The binary API is accessed by character devices located in the /dev namespace. The character API provides human readability and uniform format for the traces.The kernel data from the USBMon text data is made available to the userspace using debugfs\cite{_debugfs} utility.
 
 \begin{figure}[h!]
@@ -60,7 +105,7 @@ It is kernel facility provided to collect I/O traces on the USB Bus\cite{_usbmon
 \caption{USBMon Architecture(Adapted from \cite{basak_usb_2018}).}
 \end{figure}
 
-\subsection{Text Data Format}
+\subsubsection{Text Data Format}
 \begin{table}
 \centering
 \begin{tabular}{|c|c|c|c|c|}
@@ -115,7 +160,7 @@ USB endpoint as explained by \cite{_usb_endpoint} , refers to the buffers on the
 \item{\textit{Data:} The data words contains in the USB transfer packet.}
 \end{itemize}
 
-\subsection{Raw Binary}
+\subsubsection{Raw Binary}
 The overall data format is same as the text data, the data is available in raw binary by accessing character devices at /dev/usbmonX. The data can be read by using \textit{read} with \textit{ioctl} or by mapping the buffer using \textit{mmap}. The usbmon events are buffered in the following format:
 
 \begingroup
@@ -150,5 +195,5 @@ struct usbmon_packet {
 \endgroup
 
 
-\section{pidstat}
-\section{802.15.4}
+\subsection{pidstat}
+\subsection{802.15.4}

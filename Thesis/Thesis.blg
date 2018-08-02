@@ -1,18 +1,18 @@
 [0] Config.pm:340> INFO - This is Biber 2.4
 [0] Config.pm:343> INFO - Logfile is 'Thesis.blg'
-[42] biber:287> INFO - === ons aug  1, 2018, 14:28:11
-[148] Biber.pm:348> INFO - Reading 'Thesis.bcf'
-[313] Biber.pm:742> INFO - Found 10 citekeys in bib section 0
-[320] Biber.pm:3151> INFO - Processing section 0
-[353] Biber.pm:3308> INFO - Looking for bibtex format file 'stateofart.bib' for section 0
-[374] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
-[386] bibtex.pm:974> INFO - Found BibTeX data source 'stateofart.bib'
-[442] Biber.pm:3308> INFO - Looking for bibtex format file 'USBMon.bib' for section 0
-[458] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
-[470] bibtex.pm:974> INFO - Found BibTeX data source 'USBMon.bib'
-[606] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[606] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[606] Biber.pm:3028> INFO - Sorting list 'nty/global' of type 'entry' with scheme 'nty' and locale 'en-US'
-[607] Biber.pm:3032> INFO - No sort tailoring available for locale 'en-US'
-[623] bbl.pm:519> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
-[661] bbl.pm:615> INFO - Output to Thesis.bbl
+[44] biber:287> INFO - === tor aug  2, 2018, 14:13:54
+[155] Biber.pm:348> INFO - Reading 'Thesis.bcf'
+[328] Biber.pm:742> INFO - Found 11 citekeys in bib section 0
+[334] Biber.pm:3151> INFO - Processing section 0
+[369] Biber.pm:3308> INFO - Looking for bibtex format file 'stateofart.bib' for section 0
+[395] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
+[412] bibtex.pm:974> INFO - Found BibTeX data source 'stateofart.bib'
+[487] Biber.pm:3308> INFO - Looking for bibtex format file 'USBMon.bib' for section 0
+[503] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
+[513] bibtex.pm:974> INFO - Found BibTeX data source 'USBMon.bib'
+[667] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[667] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[667] Biber.pm:3028> INFO - Sorting list 'nty/global' of type 'entry' with scheme 'nty' and locale 'en-US'
+[667] Biber.pm:3032> INFO - No sort tailoring available for locale 'en-US'
+[686] bbl.pm:519> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
+[731] bbl.pm:615> INFO - Output to Thesis.bbl
