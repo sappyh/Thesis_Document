@@ -1,7 +1,6 @@
 \chapter{Background}
 This chapter introduces the necessary background information needed for understanding the rest of the report.
 First section, provides a broad introduction to \ac{sdr} systems, GNU Radio Software Tool and \ac{PHY} and \ac{mac} layers of the network stack.
-Then the problems mentioned earlier are conceptualized theoretically.
 The second section introduces previous work in this domain, which are critically analyzed to help concretely define the problem area.
 Finally the last section, introduces the LimeSDR platform, IEEE 802.15.4 based system design and the tools used in the methods section.
 
@@ -12,31 +11,71 @@ Finally the last section, introduces the LimeSDR platform, IEEE 802.15.4 based s
 The abstract model is divided into 7 layers,  where entity in each layer implements the functionality of the layer and interacts directly with the layer beneath it, the added functionality can be used by the upper layers.
 Data from the user application is encapsulated by each subsequent layers of the \ac{OSI} model into their frame format.
 These frames carry meta-data in the form of frame headers.
-Different protocols use different headers  as it helps differentiate one protocol from another.
-These headers help the receiver in learning where the incoming data packet is coming from, who is it meant for, how to decode the contents of the data packet etc.\\
+Different protocols use different frame format and headers  as it helps differentiate one protocol from another.
+These headers help the receiver in learning where the incoming data packet is coming from, who is it meant for, how to decode and arrange the contents of the data packets etc.\\
 
 \ac{PHY} layer is the lowest layer (L1) of the \ac{OSI} model,it interacts with the physical communication channel directly.
 It defines the type of data transfer(serial/parallel) and data rate of the protocol.
 \ac{PHY} layer defines the process of transmitting raw bits through the physical medium.
 The bit-stream is grouped into code words and converted to symbols, which are then modulated to a physical signal for transmission over the transmission medium.
-\ac{PHY} layers also provides physical transmission link information like carrier sense and collision detection and \ac{LQI}  to the upper layers.
+\ac{PHY} layers also provides physical transmission link information like carrier sense and collision detection and \ac{LQI}  to the upper layers. \\
 
 
-\ac{mac} layer, second layer(L2) of the \ac{OSI} model, is responsible for defining the the methods for sharing and using the same transmission medium among multiple devices.
+\ac{mac} layer, \ac{L2} of the \ac{OSI} model, is responsible for defining the the methods for sharing and using the common transmission medium among multiple devices.
 \ac{mac} layer addresses are used to to check if the incoming packet is meant for the device.
 In case of outgoing packets, the \ac{mac} layer adds the \ac{mac} address of the destination device to the packet header.
 It adds the synchronization preamble and \ac{FCS} for checking transmission error.
-Retransmission in case of dropped packets and acknowledgement to successfully received packets are handled by this layer.
+Retransmission in case of dropped packets and acknowledgement to successfully received packets are handled by this layer.\\
 
+\ac{csma} is \ac{L2} protocol of the OSI Model. 
+It is a method for handling multiple access of a shared medium.
+It mainly comes in two varieties: \ac{CSMA/CD}  and \ac{CSMA/CA}. In the older \ac{CSMA/CD}, the nodes wait until the frame is ready, then check is the medium is idle or not.
+If idle it starts transmission.
+During transmission, it monitors the medium for collision.
+If collision is detected, it employs a collision recovery process, where it sends a jam signal to signal other nodes that a collision has occurred.
+Then it waits for a  random delay and starts transmission again.\\
+
+\ac{CSMA/CA} tries to avoid collision, it starts off similar to \ac{CSMA/CD} where it senses to check when the channel is idle.
+If found idle, it starts transmission.
+As it is difficult for wireless nodes to detect collision at the same time its transmitting therefore it relies on an \ac{ack} from the receiving node to check if the data packet was received.
+If \ac{ack} is not received, the node assumes a collision has occurred and  uses exponential back-off to determine when the next time to re initiate transmission.\\
+\begin{figure}[h!]
+\label{Csma_flow}
+\centering
+\includegraphics[width=0.9\textwidth]{Figure/CSMA.png}
+\caption{CSMA flow graph.}
+\end{figure}
+
+\ac{tdma} is also a \ac{L2} protocol, where a coordinator schedules medium access to the nodes in a periodic manner.
+Communication happens in time-slots.
+Each node in the network is given exclusive access to transmit during its time slot.
+The coordinator generates beacon signals periodically to maintain relative time synchronization. On receiving the beacons, the nodes adjust their transmit clocks so that they have the correct estimate of their time-slots.
  
-
+ 
 
 \subsection{\ac{sdr} Platforms}
 
-\ac{sdr} represents a new paradigm of communication system design where the system is flexible to adapt to the needs of the end-user as also the radio channel conditions.  The implementation 
+\ac{sdr} represents a new paradigm of communication system design where the system is flexible to adapt to the needs of the end-user as also the radio channel conditions. Nychis et.al \cite{nychis_enabling_nodate} classifies \ac{sdr} based communication systems into two main architectures.
+\begin{itemize} 
+\item{\textit{Host-PHY Architecture:} This is the most common architecture, enabling design and development of the entire system in software.
+It provides the maximum flexibility in terms of design and implementation choices, also there is added benefit of easy upgrades.
+But, since the system is designed is software only, the processing and communication delays make most modern \ac{mac} protocols infeasible in this architecture.}
+
+
+\item{\textit{NIC-PHY Architecture:} In this architecture most of the \ac{PHY} layer functionality is implemented in \ac{FPGA} and \ac{DSP}.
+The closer proximity to the radio hardware and specialized parallel hardware processing makes this architecture most suitable for running the modern \ac{mac} protocols.
+But the design process for this architecture based systems is time consuming and difficult, as traditionally hardware programming harder simple software programming.
+However, they are much more flexible compared to commercial \ac{NIC}.
+\textit{Wireless Open Access Research Platform}(WARP) \cite{noauthor_warp_nodate} is an example of system based on this type of architecture.}
+
+\end{itemize}
+Since host-PHY \cite{nychis_enabling_nodate} is the most commonly used architecture, the report concentrates on explaining the functionality of \ac{sdr} platforms using this architecture.
+Figure \ref{host_PHY} shows the typical design of communication systems in this architecture.
+
+
 \begin{figure}[h!]
-\label{host_PHY}
 \centering
+\label{host_PHY}
 \includegraphics[width=\textwidth]{Figure/Host_Phy.png}
 \caption{Host-PHY \cite{nychis_enabling_nodate} \ac{sdr} architecture.}
 \end{figure}

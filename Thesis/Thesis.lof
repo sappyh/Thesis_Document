@@ -12,32 +12,34 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Host-PHY \cite {nychis_enabling_nodate} \ac {sdr} architecture.}}{7}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces CSMA flow graph.}}{7}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.2}{\ignorespaces LimeSDR USB software architecture}}{8}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Host-PHY \cite {nychis_enabling_nodate} \ac {sdr} architecture.}}{8}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.3}{\ignorespaces LMS Control Packet Structure}}{9}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces LimeSDR USB software architecture}}{9}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.4}{\ignorespaces FPGA Packet Structure}}{9}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces LMS Control Packet Structure}}{11}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.5}{\ignorespaces USBMon Architecture(Adapted from \cite {basak_usb_2018}).}}{10}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces FPGA Packet Structure}}{11}
 \defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Overview of measurement setup}}{13}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Periodic Message Source}}{14}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Sequence of valid data packet with time}}{15}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.4}{\ignorespaces State Machine}}{16}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces USBMon Architecture(Adapted from \cite {basak_usb_2018}).}}{12}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Results Setup}}{18}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Overview of measurement setup}}{15}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Overlapping of buffers on LimeSDR}}{20}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Periodic Message Source}}{16}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Sequence of valid data packet with time}}{17}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces State Machine}}{18}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Project Plan}}{22}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Results Setup}}{20}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Overlapping of buffers on LimeSDR}}{22}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Project Plan}}{24}

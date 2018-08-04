@@ -1,18 +1,20 @@
 [0] Config.pm:340> INFO - This is Biber 2.4
 [0] Config.pm:343> INFO - Logfile is 'Thesis.blg'
-[44] biber:287> INFO - === tor aug  2, 2018, 14:13:54
-[155] Biber.pm:348> INFO - Reading 'Thesis.bcf'
-[328] Biber.pm:742> INFO - Found 11 citekeys in bib section 0
-[334] Biber.pm:3151> INFO - Processing section 0
-[369] Biber.pm:3308> INFO - Looking for bibtex format file 'stateofart.bib' for section 0
-[395] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
-[412] bibtex.pm:974> INFO - Found BibTeX data source 'stateofart.bib'
-[487] Biber.pm:3308> INFO - Looking for bibtex format file 'USBMon.bib' for section 0
-[503] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
-[513] bibtex.pm:974> INFO - Found BibTeX data source 'USBMon.bib'
-[667] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[667] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[667] Biber.pm:3028> INFO - Sorting list 'nty/global' of type 'entry' with scheme 'nty' and locale 'en-US'
-[667] Biber.pm:3032> INFO - No sort tailoring available for locale 'en-US'
-[686] bbl.pm:519> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
-[731] bbl.pm:615> INFO - Output to Thesis.bbl
+[58] biber:287> INFO - === fre aug  3, 2018, 13:37:15
+[171] Biber.pm:348> INFO - Reading 'Thesis.bcf'
+[344] Biber.pm:742> INFO - Found 12 citekeys in bib section 0
+[351] Biber.pm:3151> INFO - Processing section 0
+[384] Biber.pm:3308> INFO - Looking for bibtex format file 'stateofart.bib' for section 0
+[426] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
+[448] bibtex.pm:974> INFO - Found BibTeX data source 'stateofart.bib'
+[514] Biber.pm:3308> INFO - Looking for bibtex format file 'USBMon.bib' for section 0
+[531] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
+[540] bibtex.pm:974> INFO - Found BibTeX data source 'USBMon.bib'
+[594] Utils.pm:147> WARN - I didn't find a database entry for 'noauthor_ieee_nodate' (section 0)
+[707] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[707] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[707] Biber.pm:3028> INFO - Sorting list 'nty/global' of type 'entry' with scheme 'nty' and locale 'en-US'
+[707] Biber.pm:3032> INFO - No sort tailoring available for locale 'en-US'
+[726] bbl.pm:519> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
+[768] bbl.pm:615> INFO - Output to Thesis.bbl
+[768] Biber.pm:109> INFO - WARNINGS: 1
