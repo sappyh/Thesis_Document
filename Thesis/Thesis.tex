@@ -119,7 +119,47 @@
   long = Network Interface Controller
 }
 
+\DeclareAcronym{FPRF}{
+  short = FPRF,
+  long = Field Programmable RF
+}
 
+\DeclareAcronym{UWB}{
+  short = UWB,
+  long = Ultra Wide Band
+}
+
+\DeclareAcronym{LNA}{
+  short = LNA,
+  long = Low noise amplifier
+}
+
+\DeclareAcronym{DDS}{
+  short = DDS,
+  long = Direct Digital Synthesis
+}
+
+\DeclareAcronym{NCO}{
+  short = NCO,
+  long = Numerically Controlled Oscillator
+}
+
+
+\DeclareAcronym{DAC}{
+  short = DAC,
+  long = Digital Analog Converter
+}
+
+
+\DeclareAcronym{FIR}{
+  short = FIR,
+  long = Finite Impulse Response
+}
+
+\DeclareAcronym{ASIC}{
+  short = ASIC,
+  long = Application Specific Integrated Circuit.
+}
 \begin{document}
 
 \acsetup{first-long-format=\itshape}
@@ -149,87 +189,9 @@
 
 \input{Chapters/introduction.tex}
 \input{Chapters/Background.tex}
+\input{Chapters/Methods.tex}
 
 
-\chapter{Methods}
-This chapter introduces the quantitative methods used in the measurement of the timing delays. 
-\section{Timing Analysis}
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=0.6]{Figure/Setup.png}
-\caption{Overview of measurement setup}
-\label{setup_overview}
-\end{figure}
-The project uses the Wime Project implementation of 802.15.4 MAC and PHY layers in GNU Radio. For the purpose of measurement of round trip latency, a loop back experimentation setup(Figure \ref{setup_overview}) was implemented. A periodic message source generates messages and notes down the time T1. It is then processed and modulated by the 802.15.4 MAC and PHY respectively and sent through the OSMOCOM transreceiver to the LimeSDR. The RX and TX ports of the LMS7002M has been shorted and hence the original sent message loopbacks through the FPGA and comes back to the GNU Radio and is demodulated and processed by the PHY and MAC blocks respectively and is ultimately received by the periodic message source and the time is noted as T4.
-
-The usbmon kernel utility continuously monitors bus activity between the LimeSDR USB driver and USB Host Controller. It timestamps the transfers and generates event queues to be accessed from the user space. The timing measurements program parses the event queue to find the relevant packets and notes down their usbmon timestamps as T3 and T4 for transmit and receive packets respectively.  
-\subsection{Message Source} \label{message_source}
-A periodic message source block was implemented in the GNU Radio, it takes in the message length and time period as parameters. Figure \ref{message_source} shows the working of the message source with respect to time. The data length controls the duty cycle of the signal by varying $\Delta T_{tx}$, which is the time is requires to transmit the message through USB.\\
-
-Everytime a message is sent and it receives a loopback, the block notes down the global time as T1 for transmit and T4 for receive respectively. Since the time noted should be compared with those from usbmon, \textit{gettimeofday} was selected as the preferred method. The time period was set such that the transmitted message is received before sending the next message.\\
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=\textwidth]{Figure/Message_Source.png}
-\caption{Periodic Message Source}
-\label{message_source}
-\end{figure}
-\subsection{Timing Measurements Program}
-The timing measurements program uses ioctl to access the /dev/usbmonX character device. This allows the program to access the usbmon kernel utility event queue. The events are filtered to find packets with \textbf{0x01} \& \textbf{0x81} device endpoints. The data streams are parsed to find the relevant data fields from FPGA packets(Figure \ref{fpga_packet}), following that the data is converted from integer representation to complex floating point representation. The modulus of In Phase Sample's amplitude is used to determine if the data contained in the packet is useful or not. 
-
-\begin{table}
-\centering
-\begin{tabular}{|c|c|}
-\hline
-USB Transfer Direction & Threshold Value  \\
-\hline
-|I| TX & 0.8\\
-|I| RX & 0.2\\
-\hline
-\end{tabular}
-\caption{Transfer Direction and Threshold Value}
-\label{thres_table}
-\end{table}
-
-Analyzing the samples in the data stream, the samples threshold for actual data packets to as shown in Table \ref{thres_table}.  Once the packets have been analyzed, the sequence of events was studied to generate a state machine representation for the timing functionality.\\ 
-The sequence follows the structure shown in figure \ref{sequence} if the condition mentioned about the time period in \ref{message_source} is satisfied. Since we want to measure the round trip delay, the time instant of the first TX and last RX packet as noted by T2 and T3 respectively needs to be measured. The difference between them gives the Kernel round-trip delay as measured by usbmon.    
-\begin{figure}[h!]
-\centering
-\includegraphics[width=\textwidth]{Figure/Sequence.png}
-\caption{Sequence of valid data packet with time}
-\label{sequence}
-\end{figure}
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=0.5]{Figure/State_Machine.png}
-\caption{State Machine}
-\label{state_machine}
-\end{figure}
-
-State Machine shown in Figure \ref{state_machine} controls the timing measurement function. It starts with state S0 and when it receives a TX event it sets T2 and moves to S1, further TX events don't update the value of T2 as we want the first TX event time. The state machine moves from S1 to S2 on a RX event, it sets the value of T3, further RX events updates the value of T3 as we want the time instant of the last RX event. On receiving TX event when at S2, it moves to S1, calculates $T3-T2$ and sets the value of T2.
-\subsection{Results Correlation Method}
-All the time instants are stored in Unix Time Format, a python script stores the values in separate arrays t1, t2, t3, t4 for GNU Radio Transmit Time, Kernel Transmit Time, Kernel Receive Time and GNU Radio Receive Time respectively. 
-
-\begin{algorithm}[!h]
-\caption{Time Data Correlation}
-\begin{algorithmic}
-\State {$T \gets $ Time Period of Message Source }
-\State {$l \gets $ min(length of time arrays)}
-\State $i \gets 0$
-\For {$i < l $}
-\If{($ t1[i]> t2[i]$ or $ t3[i]> t4[i]$)} \\
-\hspace{1.35cm} delete $t1[i],t4[i]$
-\ElsIf{$(t2[i]-t1[i]) > T $}
-delete t2[i]
-\ElsIf{$(t4[i]-t3[i]) > T $}
-delete t3[i] 
-\Else{ $i \gets i+1$ \\ \hspace{1.35cm} $l \gets $ min(length of time arrays) }
-\EndIf
-\EndFor
-\end{algorithmic}
-\end{algorithm}
-
-Once the arrays have been compared to remove corrupt data, the mean and standard deviation of the respective arrays are found.
 
 \chapter{Results and Analysis}
 \subsection{Analytical Method}

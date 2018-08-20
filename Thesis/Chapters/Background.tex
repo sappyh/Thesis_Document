@@ -27,6 +27,13 @@ In case of outgoing packets, the \ac{mac} layer adds the \ac{mac} address of the
 It adds the synchronization preamble and \ac{FCS} for checking transmission error.
 Retransmission in case of dropped packets and acknowledgement to successfully received packets are handled by this layer.\\
 
+\begin{figure}[h!]
+\label{Csma_flow}
+\centering
+\includegraphics[width=0.9\textwidth]{Figure/CSMA.png}
+\caption{CSMA flow graph.}
+\end{figure}
+
 \ac{csma} is \ac{L2} protocol of the OSI Model. 
 It is a method for handling multiple access of a shared medium.
 It mainly comes in two varieties: \ac{CSMA/CD}  and \ac{CSMA/CA}. In the older \ac{CSMA/CD}, the nodes wait until the frame is ready, then check is the medium is idle or not.
@@ -39,12 +46,7 @@ Then it waits for a  random delay and starts transmission again.\\
 If found idle, it starts transmission.
 As it is difficult for wireless nodes to detect collision at the same time its transmitting therefore it relies on an \ac{ack} from the receiving node to check if the data packet was received.
 If \ac{ack} is not received, the node assumes a collision has occurred and  uses exponential back-off to determine when the next time to re initiate transmission.\\
-\begin{figure}[h!]
-\label{Csma_flow}
-\centering
-\includegraphics[width=0.9\textwidth]{Figure/CSMA.png}
-\caption{CSMA flow graph.}
-\end{figure}
+
 
 \ac{tdma} is also a \ac{L2} protocol, where a coordinator schedules medium access to the nodes in a periodic manner.
 Communication happens in time-slots.
@@ -69,9 +71,12 @@ However, they are much more flexible compared to commercial \ac{NIC}.
 \textit{Wireless Open Access Research Platform}(WARP) \cite{noauthor_warp_nodate} is an example of system based on this type of architecture.}
 
 \end{itemize}
-Since host-PHY \cite{nychis_enabling_nodate} is the most commonly used architecture, the report concentrates on explaining the functionality of \ac{sdr} platforms using this architecture.
-Figure \ref{host_PHY} shows the typical design of communication systems in this architecture.
-
+Since host-PHY \cite{nychis_enabling_nodate} is the most commonly used architecture (\textbf{cite sources}), the report concentrates on explaining the functionality of \ac{sdr} systems using this architecture.
+Figure \ref{host_PHY} shows the typical design of communication systems in this architecture. The system can be broadly divided into two main components:
+\begin{enumerate}
+\item{\ac{sdr} Platform.}
+\item{Host Computer.}
+\end{enumerate}
 
 \begin{figure}[h!]
 \centering
@@ -80,9 +85,120 @@ Figure \ref{host_PHY} shows the typical design of communication systems in this 
 \caption{Host-PHY \cite{nychis_enabling_nodate} \ac{sdr} architecture.}
 \end{figure}
 
-\subsection{GNU Radio}
 
-\section{State of the Art}
+Since the process for transmission and reception are symmetric, this report concentrates on the explaining the reception side of 
+\ac{sdr} platforms.
+
+\paragraph{\ac{sdr} Platform:} It is the hardware that provides access to the wireless medium in a flexible manner.
+\ac{RF} signals are transmitted and received by the platform, it converts these analog signals to digital samples and transfers them to the host computer.
+The main building blocks of these platforms are shown in \ref{host_PHY}.
+\begin{itemize}
+\item{\textbf{Software Configurable \ac{RF} trans-receiver}} This is the heart of \ac{sdr} platforms and provides \ac{RF} modulation and demodulation capability.
+They are attached to wide-band antennas for receiving and transmitting over a broad range of frequencies.
+Taking the case of reception of RF signal, the signal received from the antenna is amplified by a \ac{LNA}.
+The \ac{LNA} amplifies a low power signal without significantly degrading the signal to noise ratio.
+Once amplified, the signal to passed to a \ac{RF} receiver, where the \ac{RF} signal is demodulated either to a intermediate frequency or baseband signal depending on whether the the receiver is a Zero-IF receiver or Super-heterodyne receiver respectively.\\
+
+\begin{figure}[h!]
+\centering
+\label{rf_receiver}
+\includegraphics[width=0.8\textwidth]{Figure/RF_receiver.png}
+\caption{Simple \ac{RF} receiver.}
+\end{figure}
+
+Figure \ref{rf_receiver} shows a simple \ac{RF} receiver, the \ac{LNA} output signal is fed to a mixer.
+The mixer is a signal processing block used for translating the input signal to another frequency range.
+The mixer uses a locally generated carrier frequency for the translation. 
+If the input \ac{RF} signal has a frequency of $f_{rf}$, and the local oscillator frequency is $f_{lo}$ then the mixer will produce a signal with frequency components $f_{rf}-f_{lo}$ and $f_{rf}+f_{lo}$.
+This output signal is then passed through a band-pass filter with $f_{rf}-f_{lo}$ as center frequency, this will reject the unwanted $f_rf+f_lo$.
+In the assume $f_{rf}=f_{lo}$, the bandpass filter will become a low pass filter and the output signal will be the baseband signal.
+This is the case in Zero-IF receiver architecture.
+In super heterodyne receiver architecture, a number of stages of intermediate frequency are used before generation of the baseband signal.\\
+
+In traditional trans-receiver, a crystal oscillator is used.
+This results in good stability of the local oscillator signal but the system is now tuned to a particular frequency.
+With the goal of flexibility in mind, \ac{sdr} platforms use frequency synthesizers to generate the local clock signal.
+Frequency synthesizers are used for creating arbitrary waveforms from a single frequency clock.
+Most \ac{sdr} use \ac{DDS} as the frequency synthesizer, which uses a highly stable oscillator used as a reference signal.
+
+
+
+\begin{figure}[h!]
+\centering
+\label{dds}
+\includegraphics[width=0.8\textwidth]{Figure/DDS.png}
+\caption{\ac{DDS}.}
+\end{figure}
+
+The main components of a \ac{DDS} are \ac{NCO} which is made of the Phase Accumulator and Phase to Amplitude Converter, \ac{DAC} and a Tuning Word Register as shown in Figure \ref{dds}.
+
+In each clock cycle, the phase accumulator increases the output by the value stored in the Tuning Word Register.
+This output is the input to the Phase to Amplitude Converter, which basically is a lookup table containing the amplitude for a particular phase.
+The output of the Phase Accumulator is basically the address(phase) for the lookup table.
+The output is then converted to an analog signal by the the \ac{DAC} and then passed through a low pass filter to smoothen out the waveform.
+
+Since the Tuning Word Register is responsible for how fast the phase changes, the output sinusoid frequency can be controlled by controlling the Tuning Word Register, this is how \ac{sdr} platforms are able to generate a wide range of local oscillator frequencies.
+
+In \ac{sdr} platforms, the filter is implemented using \ac{FIR} filters.
+\ac{FIR} filters are convolutional filters where the output response of a particular input is finite.
+The output of a \ac{FIR} filter can be adjusted by readjusting the parameters of the filter's impulse response.
+This allows for the \ac{sdr} to allow certain range of frequencies in the output, which can be adjusted by external control.
+
+\item{\textbf{\ac{RF} Trans receiver Controller:} The controller provides the interface to control the \ac{RF} Transceiver.
+The communication system running on the host computer, provides the desired RF parameters to the controller.
+It then translates those instructions to digital signals for configuring the RF trans-receiver modules like the \ac{FIR} filter weights, the tunable word register for selecting the desired frequency and also the desired gain in the programmable gain amplifiers.
+}
+
+\item{\textbf{ADC/DAC:} The filtered analog \ac{RF} signal needs to be converted to digital domain before transferring to the host computer.
+Fast data converters are used on the \ac{sdr} platforms for this purpose.
+Since Nyquist criteria defines the bandwidth of a \ac{RF} system is defined by the sampling rate, the sampling rate of these data converters define the available bandwidth of the system.
+The resolution of the \ac{sdr} data converters are important so as to ensure high dynamic range of the received signal, ensuring that the system is capable is receiving very weak signals as well very strong signals without saturation.
+The sampling rate of these data converters are controlled by the \ac{RF} trans-receiver controller.
+}
+\item{\textbf{\ac{FPGA}:} The \ac{FPGA} provides acts as the glue logic between the data converters and the bus controller.
+In most cases the bus communication is bursty in nature, whereas the \ac{DAC} produces a stream of samples.
+\ac{FPGA} provides for efficient buffering of these samples, packs them into bursts to be sent over the bus.
+In some platforms, additional information like a sample clock is also packed into these bursts.
+Some applications might need additional signal processing, \ac{FPGA} provides for a efficient way for implementing these filters.
+In NIC-PHY architecture most of the communication system is designed using the \ac{FPGA}.
+}
+\item{\textbf{Bus Controller:} It is the bridge for the bursts of data crossing over from the \ac{sdr} platform to the host computer and vice versa.
+It takes in data packets from the \ac{FPGA} encodes them with bus transfer protocol, then initiates transfer.
+The flow control and routing for different packets is also handled by the bus controller.}
+\end{itemize}
+
+\paragraph{Host Computer:} The host computer, a general purpose computer,is the brain of the communication system.
+It runs the software implementation of the desired protocol, taking the digital samples from the ac{sdr} as input.
+During initialization, it configures the \ac{sdr} platform.
+Depending on implementation, it can have the full network stack and an application running on top of it.
+From architectural viewpoint, the host computer has three main components as shown in Figure \ref{host_PHY}.
+
+\begin{itemize}
+\item{\textbf{Bus Controller:} The bus controller on the host computer controls the other end of the bus communication link.
+It decodes the received data bursts and sends them to the driver for further processing.
+If the bus communication involves a master slave relationship, then the host computer bus controller is designated as the master.
+It initiates the data transfer on the bus, and the slave bus controller  responds to the requests placed by this bus controller.
+}
+\item{\textbf{Driver:} The driver is the abstraction layer for the \ac{sdr} platform communication and configuration.
+For the use of use of the \ac{sdr} platform, the communication system designer should be able to provide high level instructions.
+It is left to the driver to handle the translation of high level instructions to low level register control data words.
+For example, when tuning the RF transreceiver, the system designer would be much more comfortable to say set the center frequency to 1.8 GHz, rather than saying set register at address "x" to value "data".
+This translation is taken care of by the driver.
+It also is responsible for ensuring a reliable data transfer procedure.
+Since the communication system and the incoming data may be running at different rates, the driver buffers the incoming data and provides it to the the running communication system at its incoming data processing rate.}
+\item{\textbf{Digital Signal Processing Framework:} The hardware communication systems are generally designed with concurrent execution in mind.
+Whereas, general purpose computing platform are sequential in nature. Many core processors add the capability of concurrent execution but at a much smaller scale than what can be acheived with hardware processing platforms like \ac{FPGA} and \ac{ASIC}.
+So when designing systems on general purpose computing platforms, this change in execution model needs to be taken into account.\\
+
+Threads provide a software method to implement concurrent execution model. 
+But, efficient thread management and synchronization produces significant overhead.
+Digital Signal Processing frameworks are designed to help communication system designers to only design their processing modules without worrying about thread synchronization and management.
+They are designed with concurrent execution of signal processing algorithms and modularity of system design in mind.
+Two of the most popular frameworks are GNURadio and Labview.
+In the next section, the report goes into detail about GNU Radio. 
+}
+\end{itemize}
+\subsection{GNU Radio}
 \section{Base System and Tools}
  
 \subsection{LimeSDR-USB}
@@ -117,7 +233,7 @@ Endpoint No. & Function\\
 \end{tabular}
 \caption{LimeSDR USB transfer endpoints}
 \end{table}
-It uses two different packet structures for the LMS7002M Control Packets and the Stream Data Packets. Depending on the control command, different number of bytes are packed into one data element and the maximum number of blocks in a single packet is defined. One LMS64C protocol packet (Figure \ref{lms_packet}) is maximum 64 bytes, if the data to be sent is larger than that then the data field is segmented into several packets. The block count gives the number of data element in a single packet. The FPGA contains 4080 bytes of data along with 8 bytes of counter data that can be used for timestamp on the TX packets. The Lime driver uses synchronous bulk transfer for LMS Control packets and asynchronous bulk transfers for the FPGA packets.
+It uses two different packet structures for the LMS7002M Control Packets and the Stream Data Packets. Depending on the control command, different number of bytes are packed into one data element and the maximum number of blocks in a single packet is defined. One LMS64C protocol packet (Figure \ref{lms_packet}) is maximum 64 bytes, if the data to be sent is larger than that then the data field is segmented into several packets. The block count gives the number of data element in a single packet. The FPGA contains 4080 bytes of data along with 8 bytes of counter data that can be used for timestamps on the TX packets. The Lime driver uses synchronous bulk transfer for LMS Control packets and asynchronous bulk transfers for the FPGA packets.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{Figure/LMS64C_Packet.png}
