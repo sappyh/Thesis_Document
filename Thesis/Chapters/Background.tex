@@ -28,10 +28,10 @@ It adds the synchronization preamble and \ac{FCS} for checking transmission erro
 Retransmission in case of dropped packets and acknowledgement to successfully received packets are handled by this layer.\\
 
 \begin{figure}[h!]
-\label{Csma_flow}
 \centering
 \includegraphics[width=0.9\textwidth]{Figure/CSMA.png}
 \caption{CSMA flow graph.}
+\label{Csma_flow}
 \end{figure}
 
 \ac{csma} is \ac{L2} protocol of the OSI Model. 
@@ -80,9 +80,9 @@ Figure \ref{host_PHY} shows the typical design of communication systems in this 
 
 \begin{figure}[h!]
 \centering
-\label{host_PHY}
 \includegraphics[width=\textwidth]{Figure/Host_Phy.png}
 \caption{Host-PHY \cite{nychis_enabling_nodate} \ac{sdr} architecture.}
+\label{host_PHY}
 \end{figure}
 
 
@@ -101,9 +101,9 @@ Once amplified, the signal to passed to a \ac{RF} receiver, where the \ac{RF} si
 
 \begin{figure}[h!]
 \centering
-\label{rf_receiver}
 \includegraphics[width=0.8\textwidth]{Figure/RF_receiver.png}
 \caption{Simple \ac{RF} receiver.}
+\label{rf_receiver}
 \end{figure}
 
 Figure \ref{rf_receiver} shows a simple \ac{RF} receiver, the \ac{LNA} output signal is fed to a mixer.
@@ -125,9 +125,9 @@ Most \ac{sdr} use \ac{DDS} as the frequency synthesizer, which uses a highly sta
 
 \begin{figure}[h!]
 \centering
-\label{dds}
 \includegraphics[width=0.8\textwidth]{Figure/DDS.png}
 \caption{\ac{DDS}.}
+\label{dds}
 \end{figure}
 
 The main components of a \ac{DDS} are \ac{NCO} which is made of the Phase Accumulator and Phase to Amplitude Converter, \ac{DAC} and a Tuning Word Register as shown in Figure \ref{dds}.
@@ -168,7 +168,7 @@ The flow control and routing for different packets is also handled by the bus co
 \end{itemize}
 
 \paragraph{Host Computer:} The host computer, a general purpose computer,is the brain of the communication system.
-It runs the software implementation of the desired protocol, taking the digital samples from the ac{sdr} as input.
+It runs the software implementation of the baseband processing for the desired protocol, taking the digital samples from the ac{sdr} as input.
 During initialization, it configures the \ac{sdr} platform.
 Depending on implementation, it can have the full network stack and an application running on top of it.
 From architectural viewpoint, the host computer has three main components as shown in Figure \ref{host_PHY}.
@@ -182,23 +182,133 @@ It initiates the data transfer on the bus, and the slave bus controller  respond
 \item{\textbf{Driver:} The driver is the abstraction layer for the \ac{sdr} platform communication and configuration.
 For the use of use of the \ac{sdr} platform, the communication system designer should be able to provide high level instructions.
 It is left to the driver to handle the translation of high level instructions to low level register control data words.
-For example, when tuning the RF transreceiver, the system designer would be much more comfortable to say set the center frequency to 1.8 GHz, rather than saying set register at address "x" to value "data".
+For example, when tuning the RF trans-receiver, the system designer would be much more comfortable to say set the center frequency to 1.8 GHz, rather than saying set register at address "x" to value "data".
 This translation is taken care of by the driver.
 It also is responsible for ensuring a reliable data transfer procedure.
 Since the communication system and the incoming data may be running at different rates, the driver buffers the incoming data and provides it to the the running communication system at its incoming data processing rate.}
-\item{\textbf{Digital Signal Processing Framework:} The hardware communication systems are generally designed with concurrent execution in mind.
+\item{\textbf{Digital Signal Processing Framework:} The hardware baseband processing of communication systems are generally designed with concurrent execution in mind.
 Whereas, general purpose computing platform are sequential in nature. Many core processors add the capability of concurrent execution but at a much smaller scale than what can be acheived with hardware processing platforms like \ac{FPGA} and \ac{ASIC}.
 So when designing systems on general purpose computing platforms, this change in execution model needs to be taken into account.\\
 
 Threads provide a software method to implement concurrent execution model. 
 But, efficient thread management and synchronization produces significant overhead.
-Digital Signal Processing frameworks are designed to help communication system designers to only design their processing modules without worrying about thread synchronization and management.
+Digital Signal Processing frameworks are designed to help system designers to only design their signal processing modules without worrying about thread synchronization and management.
 They are designed with concurrent execution of signal processing algorithms and modularity of system design in mind.
 Two of the most popular frameworks are GNURadio and Labview.
 In the next section, the report goes into detail about GNU Radio. 
 }
 \end{itemize}
 \subsection{GNU Radio}
+
+GNU Radio is an open-source digital signal processing framework, which has been rapidly evolving with a large active community.
+The software framework can be used for both simulation and prototyping for real-world application scenarios. 
+It  provides an graphical interface for designing signal processing chains  as well as extensive library of signal processing blocks like filters, synchronizers, demodulators etc.
+The ease of use of the framework, extensive library as well as hardware support for most \ac{sdr} platforms has led to diverse application use cases such as RFID, 802.11, cellular networks.\\
+
+
+GNU Radio is designed to stream large amounts of data in real-time between parallel computational nodes.
+The data flow between the nodes from the source to the sink is described by the flow-graph, while the flow of data is controlled by the GNU Radio Scheduler.
+Figure \ref{gnuradio_arch}, shows a simple flowgraph where the data from the Sources node is processed by the signal processing chain and output to the Sinks node.
+The signal processing chain itself is composed of multiple data processing nodes, for example the flow graph in Figure \ref{gnuradio_arch} has 4 nodes in the processing chain.
+The scheduler is in task of scheduling the execution of these blocks. 
+From the block designer point of view, these blocks can be viewed to be executing concurrently.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\textwidth]{Figure/GNURADIO_1.png}
+\caption{GNU Radio Software Architecture.}
+\label{gnuradio_arch}
+\end{figure}
+
+\paragraph{Blocks and Flow Graphs}
+
+The computational nodes in the flow-graph are the GNU Radio processing blocks.
+Each block describes how the input elements to the block, are converted to output elements in the \textit{work} function.
+
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+Number of input elements & Number of output elements & Name\\
+\hline
+N & 0 & Sink Block\\
+0 & N & Source Block\\
+N & 1 & Interpolation block\\
+1 & N & Decimation block\\
+M & N & General Block\\
+\hline
+\end{tabular}
+\caption{GNU Radio Block Types}
+\label{block_type}
+\end{table} 
+
+The relationship of input and output elements defines the type of the GNU Radio processing block as shown in Table \ref{block_type}.
+The type of block indicates the scheduler on how the block processes information.
+There are two types of blocks: \textit{Synchronous block} and \textit{block}.
+For synchronous blocks, there is a rational relationship between the input and output elements.
+The sink, source, interpolation block and decimation block in Table \ref{block_type} are synchronous blocks.
+The key difference between different block types is in how the scheduler handles the input and output buffers of each block.
+For the synchronous blocks, the scheduler implicitly handles the input and output pointers to the buffers.
+For general blocks, the \textit{work} function needs to explicitly pass the information on how many elements it consumed and produced.\\
+
+Since in GNU Radio flow graph, data is passed from one node to another, the method of passing the data among different blocks needs to be defined.
+This method is defined in the block interfaces.
+Stream Interfaces are intended to stream large amounts of data between blocks with variable processing rates.
+They use large buffers to pass the data from one node to another.
+Stream interfaces work well for samples, bits etc. but they are not the right method to pass metadata, control information or bursts of data between blocks as it involves significant overhead.
+GNU Radio recently added the message passing interface for handling asynchronous message passing.
+GNU Radio also supports stream tags for handling metadata as it is closely associated with the stream data samples.
+Stream tags are attached with stream data samples and provide additional information associated with the sample.
+It can be used both for passing control flags as well as metadata information like the \ac{PDU} size, timing information etc.
+These stream tags are propagated to the next blocks and is updated by the data rate changes.
+For example, if the block takes it 2 samples as input and produces 4 samples as output, its data rate is 2.
+In this case, if the input stream had a stream tag at position "x" then the the location in the output stream would be "2x". 
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\textwidth]{Figure/Block.png}
+\caption{Architecture of GNU Radio block}
+\label{block_arch}
+\end{figure}
+
+Figure \ref{block_arch} shows the general architecture of a GNU Radio block. 
+Each block has associated buffers for the stream interfaces, two computational components, namely the \textit{work} function and the \textit{message handler} function.
+A run time scheduler is associated with each block for controlling the execution of block during runtime. The runtime scheduler has its own signaling mechanism for interacting with schedulers of other blocks.
+This signaling mechanisms are hidden to the flow graph designer, and are used for flow control.
+The blocks providing the inputs to the current block are called upstream blocks, while those that are fed by the output of this block are called downstream block.\\
+
+For the sake of simplicity, it is assumed that the current block in Figure \ref{block_arch} has one upstream block and one downstream block.
+This implies that the block has a single input buffer and a single output buffer.
+The \textit{work} function describes the implementation of the signal processing algorithm.
+On starting execution, the \textit{work} function accesses data from the circular input buffer, which is same as the output buffer for the upstream block.
+Both the upstream block and the current blocks maintains a pointer to the last used data element position. 
+Once completion of execution, the upstream block writes new elements to the input buffer of the current block and updates its the write data pointer.
+The upstream block notifies the current block using the notify\_ downstream() method that new input data elements have been written.
+The scheduler for the current block checks if there is sufficient new data for a single execution.
+It then starts the execution of the current block once the input buffer has sufficient data.
+On successful execution, it updates the read data pointer, writes the data elements into the output buffer and updates the write pointer.
+Since, most filter design rely on history of previous inputs, the scheduler also notifies the upstream block on reading the data from the buffer to notify that its output might have been modified.
+The current block scheduler notifies the downstream block that new data elements are available when it writes to the output buffer.
+The \textit{message handler} function works similarly, in this case the upstream block scheduler uses notify\_msg() method for signaling that a new message may be available.\\
+
+The flow graph describes the flow of data between different blocks.
+Flow graphs make it easier to design complex signal processing algorithms by combining simpler blocks.
+This provides modularity and scalability to the algorithm development process.
+Generally blocks are designed in C++ to enable fine grained control and faster execution.
+Python's QT framework defines a signals and slot mechanism for communicating events between different objects.
+Slots are instantiation of C++ objects, which in this case are the the processing blocks.
+When the internal state of the block is changed, it emits a signal which notifies other slots an event has occurred.
+This mechanism is used for describing the flow graphs.
+
+
+\paragraph{Scheduler}
+The scheduler is the control unit for the flow graph.
+At initialization, the scheduler allocates the buffers and instantiates each block in its own thread.
+At runtime, it does memory management for each block, determines the requirements that are set by the block such as number of items to be processed in one execution, alignment of data in the buffers etc.
+Once the requirements are satisfied, it passes the read and write pointers to the \textit{work} function and starts the one execution.
+Once the \textit{work} function finishes its execution, the scheduler takes in the returned information and updates the state of the block and the appropriate pointers.\\
+
 \section{Base System and Tools}
  
 \subsection{LimeSDR-USB}
