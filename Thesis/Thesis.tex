@@ -16,6 +16,9 @@
 \addbibresource{stateofart.bib}
 \addbibresource{USBMon.bib} % The file containing our references, in BibTeX format
 
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 
 \usepackage{pdfpages}
@@ -201,9 +204,45 @@
   short = DDR,
   long = Double Data Rate.
 }
+
+\DeclareAcronym{FSM}{
+  short = FSM,
+  long = Finite State Machine
+}
+
+\DeclareAcronym{GPIF}{
+  short = GPIF,
+  long = General Programmable Interface
+}
+
+\DeclareAcronym{VHDL}{
+ short = VHDL,
+ long = VHSIC Hardware Description Language
+}
+
+\DeclareAcronym{RTL}{
+ short=RTL,
+ long= Register Transfer Level
+}
+
+\DeclareAcronym{FIFO}{
+ short=FIFO,
+ long= First In First Out
+}
+
+\DeclareAcronym{USB}{
+ short=USB,
+ long= Universal Serial Bus
+}
+
+\DeclareAcronym{I2C}{
+ short=I2C,
+ long= Inter-Intergrated Circuit
+}
+
 \begin{document}
 
-\acsetup{first-long-format=\itshape}
+%\acsetup{first-long-format=\itshape}
 
 
 % Frontmatter includes the titlepage, abstracts and table-of-contents
@@ -298,27 +337,6 @@ RX chain std deviation ($\mu$s)                                              & 4
 \end{figure}
 }
 \end{itemize}
-
-\chapter{What's next}
-
-The project plan is presented in Gantt Chart format in figure \ref{plan}. According to my estimate I am one week behind the project plan.\\
-\begin{itemize}
-\item {Timing Analysis:\\
-\begin{itemize}
-\item {More data points to pinpoint the buffer delays.}
-\item {Off-line processing of the USB data to pinpoint the time instant of maximum correlation between RX and TX data}
-\item {Make individual measurements independent.}
-\item {Solve the buffer overlap problem.}
-\end{itemize}}
-\item{Enabling deterministic timing: A key element for enabling TDMA protocols would be deterministic send and receive time of packets. So I would look at possible strategies.}
-\item{Evaluation: Since I am looking at compression algorithms, it would be essential to find the compression ratio I am able to achieve with lossy and lossless compression. Also, I should concentrate on figuring out how these compression algorithms affect the performance of SDR systems. The strategies for deterministic timing needs to be evaluated for jitter to actual TDMA schedules.}
-\end{itemize}
-\begin{sidewaysfigure}
-\centering
-\includegraphics[width=\textheight]{Figure/Project_Plan.png}
-\caption{Project Plan}
-\label{plan}
-\end{sidewaysfigure}
 
 \printbibliography[heading=bibintoc] % Print the bibliography (and make it appear in the table of contents)
 

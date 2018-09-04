@@ -36,58 +36,64 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.2.1}LimeSDR-USB Hardware Architecture}{16}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{LMS7002M}{16}
+\contentsline {subsubsection}{LMS7002M}{16}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{FPGA}{19}
+\contentsline {subsubsection}{FPGA}{19}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{Cypress FX3}{19}
+\contentsline {paragraph}{RX Path:}{19}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.2}LimeSDR USB dataflow.}{19}
+\contentsline {paragraph}{RX Path Delays}{21}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{LimeSDR USB packets and endpoints}{20}
+\contentsline {subsubsection}{Cypress EZ-FX3}{23}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.3}USBMon}{22}
+\contentsline {paragraph}{GPIF II}{24}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Text Data Format}{23}
+\contentsline {subsection}{\numberline {2.2.2}LimeSDR USB dataflow.}{25}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Raw Binary}{24}
+\contentsline {subsubsection}{LimeSDR USB packets and endpoints}{26}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.4}pidstat}{24}
+\contentsline {section}{\numberline {2.3}Tools Used}{27}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.5}802.15.4}{24}
+\contentsline {subsection}{\numberline {2.3.1}USBMon}{27}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Methods}{25}
+\contentsline {subsubsection}{Text Data Format}{27}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}System Architecture}{25}
+\contentsline {subsubsection}{Raw Binary}{29}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{GNU Radio Blocks}{25}
+\contentsline {subsection}{\numberline {2.3.2}pidstat}{30}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{802.15.4 \ac {PHY} layer}{26}
+\contentsline {subsection}{\numberline {2.3.3}802.15.4}{30}
 \defcounter {refsection}{0}\relax 
-\contentsline {paragraph}{Periodic Message Source}{26}
+\contentsline {chapter}{\numberline {3}Methods}{31}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}System Description}{27}
+\contentsline {section}{\numberline {3.1}System Architecture}{31}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Software Description}{27}
+\contentsline {paragraph}{GNU Radio Blocks}{31}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.3}Hardware Description}{27}
+\contentsline {paragraph}{802.15.4 \ac {PHY} layer}{32}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Timing Analysis}{27}
+\contentsline {paragraph}{Periodic Message Source}{32}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.1}Message Source}{28}
+\contentsline {subsection}{\numberline {3.1.1}System Description}{33}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.2}Timing Measurements Program}{28}
+\contentsline {subsection}{\numberline {3.1.2}Software Description}{33}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.3}Results Correlation Method}{29}
+\contentsline {subsection}{\numberline {3.1.3}Hardware Description}{33}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}Results and Analysis}{30}
+\contentsline {section}{\numberline {3.2}Timing Analysis}{33}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.0.1}Analytical Method}{30}
+\contentsline {subsection}{\numberline {3.2.1}Message Source}{34}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.0.2}Experimental Results}{30}
+\contentsline {subsection}{\numberline {3.2.2}Timing Measurements Program}{34}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.0.3}Analysis}{32}
+\contentsline {subsection}{\numberline {3.2.3}Results Correlation Method}{35}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}What's next}{34}
+\contentsline {chapter}{\numberline {4}Results and Analysis}{36}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{36}
+\contentsline {subsection}{\numberline {4.0.1}Analytical Method}{36}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.0.2}Experimental Results}{36}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.0.3}Analysis}{38}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{40}

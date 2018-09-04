@@ -346,7 +346,7 @@ Figure \ref{lime_hw_arch} shows the block diagram of a LimeSDR-USB board.
 For the sake of simplicity the diagram shows the major components, namely the LMS7002M \ac{FPRF}, \ac{FPGA} and the Cypress FX3 Bus Controller.
 Other components will be introduced in correspondence to their application with these major components.
 
-\paragraph{LMS7002M} 
+\subsubsection{LMS7002M} 
 
 LMS7002M is a fully intergarted \ac{FPRF} transreceiver providing 2*2 \ac{MIMO} functionality.
 It provides continuous coverage of the 100kHZ- 3.8GHz frequency range, with on chip data converters providing 160 MHz \ac{RF} modulation bandwidth.
@@ -403,8 +403,218 @@ The LMS7002M has a on-chip micro-controller which can be used for configuration 
 It also provides a \ac{SPI} interface for offloading the control and configuration functionality to the baseband modem.
 
 
-\paragraph{FPGA}
-\paragraph{Cypress FX3}
+\subsubsection{FPGA}
+
+The LMS7002M is designed to stream data continuously, whereas the Cypress FX3 uses USB 3.0 protocol, which transmits packets of data.
+LimeSDR-USB uses an Altera Cyclone IV \ac{FPGA} to buffer the streaming data, converts them to packets and adds meta-data to each packet as recommended by Nychis et.al \cite{nychis_enabling_nodate}.
+The architecture of the FPGA data path blocks is shown in Figure \ref{lime_hw_arch}, the TX path is responsible for moving data from the USB interface to the LMS7002.
+The RX Path on the other hand controls the reception of samples from the LMS7002M and subsequent sending to the Host-Computer via the USB interface.
+The \ac{FPGA} also has on board PLLs which are configured to be the same as the sample clock\\
+
+The \ac{FPGA} interfaces are designed to handle the segregation of control and data paths by LMS7002M.
+The data paths (TX path and RX path) uses a 12-bit parallel interface to stream and receive data; to and from the LimeLight interface of the LMS7002M.
+The control path of the \ac{FPGA} has a NIOS processor which interacts directly with the USB Slave Interface and controls the \ac{RF} parameters through an \ac{SPI} interface.\\
+
+The \ac{FPGA} RX path converts samples to packets which takes significant buffering time.
+As this report concentrates on study of timing delays, it is necessary to take a closer look at the \ac{FPGA} implementation and understand the buffering process.
+in contrast, \ac{FPGA} TX path on the other hand converts packets to samples
+As the data has already been packed into packets there is no need for buffering.
+So in the next paragraph, the report describes the \ac{FPGA} RX path in detail.
+ 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figure/DATA2PACKETS.png}
+\caption{LimeSDR FPGA RX Path}
+\label{RX_Path}
+\end{figure}
+
+\paragraph{RX Path:}
+\ac{VHDL} entities are primary level of \ac{RTL} abstraction, they define the hardware functionality in response to input signals.
+\ac{VHDL} signals on the other hand, carry information from one entity to another.
+This paragraph uses quoted text and italics to represent entities (blocks) and signals respectively.\\
+
+Figure \ref{RX_Path} shows the overview of the RX Path implementation on the LimeSDR-USB \ac{FPGA}.
+Sample data from the LMS7002M is captured by the "LMS7002\_DDIN", which uses an ALT DDIO IP block to capture in-phase and quadrature samples at double data rate.
+This means that incoming data stream is latched both at the positive and negative edges of the clock.
+"LMS7002\_DDIN" separates the sample data collected at the postive and negative edge into two different components: \textit{DIQ\_H} and \textit{DIQ\_L} repectively.
+It introduces one clock delay between the input,LMS7002M Sample Stream, and the DIQ\_L, DIQ\_H outputs.\\
+
+The "RXIQ" block is responsible for arranging the individual components into a single data stream of In-phase component of a sample followed by its Quadrature component.
+It takes four component data coming from the "LMS7002\_DDIN" block and arranges arranges them into the sequence \textit{DIQ\_L},\textit{DIQ\_H}, \textit{DIQ\_L}, \textit{DIQ\_H}.
+"RXIQ" takes one clock cycle for latching the inputs.
+It takes three clock cycles for producing the structure.
+Finally, the output is latched after one clock cycle from the internal output register.
+It writes this structure every two clock cycles to the "FIFO" by enabling the \textit{wrreq} signal.
+This means effectively one IQ sample is then sent to the "FIFO" every clock cycle. \\
+
+The first "SMPL\_COUNTER" is a 64-bit counter which increases its count every time "RXIQ" asserts the \textit{wrreq} for writing new data samples to the "FIFO". 
+The count is sent to the TX Path to track the number of produced samples. 
+The second "SMPL\_COUNTER" is also a 64 bit counter which is enabled when the data is read from the "FIFO" by the "DATA2PACKETS" block.
+It increases its count every clock cycle when the \textit{rdreq} signal is '1'.\\
+
+The "FIFO" is implemented using the same read and write clocks, generated by the FPGA RX \ac{PLL}.
+The read enable is controlled by the "RXIQ" using the \textit{wrreq} signal, so two new samples are written in two clock cycles of the RX PLL.
+On the write side, the "DATA2PACKETS" controls the write enable signal (\textit{rdreq}).
+The "FIFO" receives 48-bit data samples, stores it a \ac{FIFO} structure and keeps track of how many samples have been loaded into the \ac{FIFO}.
+The "FIFO" takes one clock cycle for latching the input.
+The number of elements counter is updated five clock cycles after the data has been latched.
+\\
+
+The "DATA2PACKETS" block is responsible for converting data samples into packets.
+It mainly consists of two \ac{FSM}.
+The first  \ac{FSM} controls the read and write signal for the input and output blocks.
+It monitors the amount of data in the "FIFO", and when it is greater than the amount of data in one packet it asserts the \textit{rdreq} signal.
+It takes two clock cycles for the "DATA2PACKETS" to register that the number of data elements in the "FIFO" is sufficient for one \ac{FPGA} packet.
+The first \ac{FSM} takes two clock cycles to generate the \textit{rdreq} signal after that.\\ 
+
+The second \ac{FSM} arranges the data in the FPGA data packet structure (Figure \ref{fpga_packet}).
+It latches the value of the value of the sample count from the second "SMPL\_COUNTER" when the first \ac{FSM} asserts the \textit{rdreq} signal.
+It adds the sample count and different flags as meta-data for each \ac{FPGA} packet. 
+The detailed description of this metadata will be provided in Section(ref).
+Once, the first \ac{FSM} determines there is enough space to write the data in the FX3 buffer, it enables the \textit{wrreq} signal and writes 64 bits of data every clock cycle.
+The second \ac{FSM} takes 6 clock cycles to output the first data element read from the "FIFO" after the \textit{rdreq} has been generated by the first \ac{FSM}.\\
+
+The FX3 buffers are controlled by the Cypress FX3 USB Controller using  \ac{GPIF} II.
+
+\paragraph{RX Path Delays}
+The delays introduced by the individual blocks has been highlighted in the previous paragraph.
+\begin{itemize}
+\item{Delay introduced by the "LMS7002\_DDDIN" block : 1 clock cycle}
+\item{Delay introduced by the "RXIQ" block: 5 clock cycles ; 1 clock cycle each for input and output latching, and 3 clock cycles for the structure formation.}
+\item{Delay introduced by the "FIFO" block: 6 clock cycles ; 1 clock cycle for input latching; 5 clock cycles for the increment of internal counter}
+\item{Delay introduced the the "DATA2PACKETS" block: 10 clock cycles ; 4 clock for generation of \textit{rdreq} signal and 6 clock cycles for output of the first data element from the "FIFO"}
+\end{itemize}
+
+The report will refer to these block delays as constant delays.
+Considering there are N samples in one packet, where N is an even number, the constant delays account for 22 clock cycles for even index samples, and 21 clock cycles for odd index samples. It can be summarized as:\\
+
+\begin{subequations} \label{eq1}
+\begin{align}
+	sampl_{rel} = sampl_{abs} \ mod \ N \label{eq1.1}\\ 
+  packet\_number= \floor*{\frac{sampl_{abs}}{N}} \label{eq1.2}\\
+  \Delta_{constant} = \frac{22 - \floor*{sampl_{rel} \ mod \ 2 }}{f_s} \label{eq1.3}
+\end{align}
+  
+\end{subequations}
+
+N = Number of samples in one packet; N= even, $f_s$ is the \ac{FPGA} RX PLL frequency, $sampl_{rel}$ is the relative sample index and $sampl_{abs}$ is the absolute sample index in Equation \ref{eq1}
+
+For example, with N=1020, $sampl_{abs}$ = 8000, packet\_number would be $\floor*{\frac{8000}{1020}} = 7$, and $sampl_{rel}$ would be  $8000 \ mod \ 1020 = 860$. \\
+ 
+In addition to the constant delays, there are two more delays that need to considered.
+They are Queuing Delay and the Streaming Delay.
+The data elements in the "FIFO" has to wait until there is sufficient data for a single packet.
+This waiting time is being referred to as Queuing Delay.
+The Queuing Delay is dependent on the absolute sample number.
+If the element is the $N^{th}$ sample, it has to wait for N clock cycles, where N is the number of samples in one packet.
+Whereas, if the element is the $N-1^{th}$ sample, it needs to wait only for one more cycle, that is two clock cycles.
+
+\begin{equation} \label{eq2}
+\Delta_{queuing} = \frac{N - 2 \times \floor*{\frac{sampl_{rel}}{2}}}{f_s}
+\end{equation}
+
+In Equation \ref{eq2}, N = Number of samples in one packet, $f_s$ is the \ac{FPGA} RX PLL frequency, and $samp_{rel}$ is defined by equation \ref{eq1.1}. \\
+
+The "DATA2PACKETS" block outputs two samples in one clock cycle, hence the data will be streamed out sequentially.
+The time a element has to wait to be streamed is being referred as the streaming delay.
+The streaming delay is also dependent on the arrival time of the sample which is equivalent to the absolute sample number.
+If the element is the $N^{th}$ sample, it is the first data element of a packet, it doesn't need to wait for any sample to be streamed ahead of it, so it has zero streaming delay.
+On the other hand, the $N-1^{th}$ sample needs to wait for N-3 samples to streamed first, before it is outputed with the $N-2^{th}$ sample.
+
+\begin{equation}\label{eq3}
+\Delta_{streaming} =\frac{\floor*{\frac{sampl_{rel}}{2}}}{f_s}
+\end{equation} 
+In Equation \ref{eq3}, N = Number of samples in one packet,  $f_s$ is the \ac{FPGA} RX PLL frequency, and $samp_{rel}$ is defined by equation \ref{eq1.1}. \\
+
+The total delay can be calculated as :\\
+\begin{subequations}\label{eq4}
+\begin{align}
+\Delta_{total}= \Delta_{constant} + \Delta_{queuing} + \Delta_{streaming} \\
+\Delta_{total}= \frac{22 +  N - \floor*{\frac{sampl_{rel}}{2}} - \floor*{sampl_{rel} \ mod \ 2}}{f_s}
+\end{align}
+\end{subequations}
+
+
+
+\subsubsection{Cypress EZ-FX3}
+LimeSDR-USB uses a Cypress EZ-FX3 as USB 3.0 peripheral controller.
+The Cypress EZ-FX3 has a fully configurable, general programmable interface called the \ac{GPIF} II .
+It allows the EZ-FX3 to integrate with any processor like \ac{ASIC}, \ac{FPGA}, Image Sensors etc.
+It also provides low speed interfaces like \ac{I2C}, \ac{SPI} for the low-speed IO operations.\\
+
+\begin{figure}[h!]
+\centering
+\hspace*{2.5cm}\includegraphics[width=0.8\textwidth]{Figure/FX3.png}
+\caption{EZ-FX3 architecture}
+\label{FX3_arch}
+\end{figure}
+The architecture of EZ-FX3 is shown in Figure \ref{FX3_arch}.
+The "ARM926EJ" is a 32-bit processor operating at 200 MHz, it is responssible for the configuring and controlling all the data tranfers through the Dstributed DMA Controller.
+The "USB" is the \ac{USB} 3.0 peripheral controller, it includes the USB 3.0 Physical Layer.
+It is responsible for handling the communication with the Host Computer.
+The \ac{GPIF} controller handles the data streams to and from the \ac{FPGA} of the LimeSDR-USB. 
+The controllers the Synchronous Slave Interface implemented on the \ac{FPGA}.
+ 
+\ac{USB} endpoint are buffers on the \ac{USB} device.
+They are logical abstraction for having multiple parallel data streams use a single physical channel.
+The LimeSDR-USB uses four different endpoints for the USB data transfer, these endpoints are divided into control and data endpoints for both the input and output directions.
+The control endpoints are used for configuring and retrieving data from the LMS7002M, where are data endpoints are used for streaming data to the LMS7002M data converters through the \ac{FPGA}.
+The different endpoint address and their associated function in LimeSDR-USB is shown in Table \ref{Lime-USB_ep}\\
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+Endpoint address & Function\\
+\hline
+0x01 & Stream Data Output\\
+0x81 & Stream Data Input\\
+0x0F & Control Data Output\\
+0x8F & Control Data Input\\
+\hline
+\end{tabular}
+\caption{LimeSDR USB transfer endpoints}
+\label{Lime-USB_ep}
+\end{table}
+
+The \ac{USB} protocol specifies different transfers mechanisms depending on the requirement of the reliability and deterministic transfers.
+Bulk Transfers are used for large bursty data.
+They don't have any guarantees on the bandwidth and are transmitted when they is bandwidth available after other types of transfers.
+They offer guaranteed delivery of data.\\
+
+The LimeSDR-USB uses Bulk Transfers for the control transfers.
+It sends bursts of data which are moved in the endpoint buffer of the Host Computer USB Controller which transfers it to the endpoint point buffer of "USB" block shown in Figure \ref{FX3_arch}.\\
+
+For the data transfers, the LimeSDR-USB uses bulk streams.
+USB 3.0 protocol introduced stream pipes where a single endpoint can be allocated to multiple data streams.
+Each stream endpoint has their associated Stream ID which is used for tagging the data in the USB endpoint packet buffer.
+Each of the data packets the endpoint buffer are transmitted as a regular bulk transfer and the USB Controller on the other end decodes the Stream ID and send it to the appropriate Stream endpoint. \\
+
+USB endpoints specifies the size of the data packet.
+For USB 3.0 the maximum data packet size is 1024 bytes.
+If the data sent to the USB Controller is greater than that, it segments that into multiple data packets and sends them as multiple bursts of data in a single USB Transaction. 
+
+
+ 
+\paragraph{GPIF II}. 
+The \ac{GPIF} II is a programmable state machine, that provides the flexibility of implementing a custom interface.
+The GPIF II segments the functionality into control and data part.
+For the data part, the LimeSDR-USB uses a 32 bit interface running at 100MHz.
+The state transitions of the state machine are based on the input control signals from the GPIF II interface .
+The output control signals are driven by the state transitions of the internal state machine.\\
+
+LimeSDR-USB implements a Slave FIFO interface using the \ac{GPIF} II interface.
+The Slave FIFO interface allows the \ac{FPGA} to perform read/ write operations directly to the EZ-FX3 internal FIFO buffers.
+The Control signals are used for addressing the internal FIFO buffers and signaling read and write operations.
+In addition, the control signals has flag signals to indicate events to the FIFO Slave Interface.
+The 32-bit data interface transfers the data according to the signaling and addressing used by the control signals.
+
+\paragraph{Sockets and Threads}
+
+
+
+ 
 
 \subsection{LimeSDR USB dataflow.}
 \begin{figure}[h!]
@@ -421,20 +631,7 @@ It also provides a \ac{SPI} interface for offloading the control and configurati
 
 \subsubsection{LimeSDR USB packets and endpoints}
 LimeSDR uses four different endpoints for USB data transfer, these endpoints as Data Endpoint and Control Endpoint for both input and output directions. The control endpoints are used for configuring and retrieving data from the LMS7002M and NIOS Core on the FPGA. Data packets are used for the streaming data. 
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|}
-\hline
-Endpoint No. & Function\\
-\hline
-0x01 & Stream Data Output\\
-0x81 & Stream Data Input\\
-0x0F & Control Data Output\\
-0x8F & Control Data Input\\
-\hline
-\end{tabular}
-\caption{LimeSDR USB transfer endpoints}
-\end{table}
+
 It uses two different packet structures for the LMS7002M Control Packets and the Stream Data Packets. Depending on the control command, different number of bytes are packed into one data element and the maximum number of blocks in a single packet is defined. One LMS64C protocol packet (Figure \ref{lms_packet}) is maximum 64 bytes, if the data to be sent is larger than that then the data field is segmented into several packets. The block count gives the number of data element in a single packet. The FPGA contains 4080 bytes of data along with 8 bytes of counter data that can be used for timestamps on the TX packets. The Lime driver uses synchronous bulk transfer for LMS Control packets and asynchronous bulk transfers for the FPGA packets.
 \begin{figure}[h!]
 \centering
@@ -452,7 +649,7 @@ It uses two different packet structures for the LMS7002M Control Packets and the
 
 
 
-
+\section{Tools Used}
 \subsection{USBMon}
 It is kernel facility provided to collect I/O traces on the USB Bus\cite{_usbmon}. USBMon reports the requests made to and by the USB Host Controller Drivers(HCD). It provides two kinds of API's : binary and character. The binary API is accessed by character devices located in the /dev namespace. The character API provides human readability and uniform format for the traces.The kernel data from the USBMon text data is made available to the userspace using debugfs\cite{_debugfs} utility.
 

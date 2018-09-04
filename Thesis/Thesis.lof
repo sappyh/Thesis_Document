@@ -28,30 +28,30 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {2.8}{\ignorespaces Block Diagram of LMS7002M.}}{17}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.9}{\ignorespaces LimeSDR USB software architecture}}{20}
+\contentsline {figure}{\numberline {2.9}{\ignorespaces LimeSDR FPGA RX Path}}{20}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.10}{\ignorespaces LMS Control Packet Structure}}{21}
+\contentsline {figure}{\numberline {2.10}{\ignorespaces EZ-FX3 architecture}}{23}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.11}{\ignorespaces FPGA Packet Structure}}{21}
+\contentsline {figure}{\numberline {2.11}{\ignorespaces LimeSDR USB software architecture}}{25}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.12}{\ignorespaces USBMon Architecture(Adapted from \cite {basak_usb_2018}).}}{22}
+\contentsline {figure}{\numberline {2.12}{\ignorespaces LMS Control Packet Structure}}{26}
 \defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.13}{\ignorespaces FPGA Packet Structure}}{27}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Periodic Message Source}}{26}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces System Description}}{27}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Sequence of valid data packet with time}}{28}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.4}{\ignorespaces State Machine}}{29}
+\contentsline {figure}{\numberline {2.14}{\ignorespaces USBMon Architecture(Adapted from \cite {basak_usb_2018}).}}{28}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Results Setup}}{31}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Periodic Message Source}}{32}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Overlapping of buffers on LimeSDR}}{33}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces System Description}}{33}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Sequence of valid data packet with time}}{34}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces State Machine}}{35}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Project Plan}}{35}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Results Setup}}{37}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Overlapping of buffers on LimeSDR}}{39}
