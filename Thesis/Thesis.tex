@@ -16,6 +16,7 @@
 \addbibresource{stateofart.bib}
 \addbibresource{USBMon.bib} % The file containing our references, in BibTeX format
 
+\usepackage{amsmath}
 \usepackage{mathtools}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
@@ -24,7 +25,7 @@
 \usepackage{pdfpages}
 
 \usepackage{acro}
-
+\usepackage{longtable}
 
 \DeclareAcronym{LPWAN}{
 	short=LPWAN,
@@ -35,6 +36,15 @@
   long = Software Defined Radio
 }
 
+\DeclareAcronym{IO}{
+  short = IO,
+  long = Input Output
+}
+
+\DeclareAcronym{DMA}{
+  short = DMA,
+  long = Direct Memory Access
+}
 
 \DeclareAcronym{csma}{
   short = CSMA,
@@ -240,6 +250,76 @@
  long= Inter-Intergrated Circuit
 }
 
+\DeclareAcronym{LR-WPAN}{
+ short= LR-WPAN,
+ long=Low-Rate Wireless Personal Area Network
+}
+
+\DeclareAcronym{6LoWPAN}{
+ short= 6LoWPAN,
+ long=IPV6 over Low-Power Wireless Personal Area Network
+}
+
+\DeclareAcronym{O-QPSK}{
+ short= O-QPSK,
+ long=Offset Quadrature Phase Shift Keying
+}
+
+\DeclareAcronym{BPSK}{
+ short= BPSK,
+ long= Binary Phase Shift Keying
+}
+\DeclareAcronym{ASK}{
+ short= ASK,
+ long= Amplitude Shift Keying
+}
+\DeclareAcronym{CSS}{
+ short= CSS,
+ long= Chirp Spread Spectrum
+}
+
+\DeclareAcronym{GTS}{
+ short= GTS,
+ long= Guaranteed Time Slot
+}
+
+\DeclareAcronym{PAN}{
+ short= PAN,
+ long= Personal Area Network
+}
+
+\DeclareAcronym{FFD}{
+ short= FFD,
+ long= Full Function Device
+}
+
+\DeclareAcronym{RFD}{
+ short= RFD,
+ long= Reduced Function Device
+}
+
+\DeclareAcronym{CRC}{
+ short= CRC,
+ long= Cyclic Redundancy Check
+}
+
+\DeclareAcronym{SHR}{
+ short= SHR,
+ long= Synchronization Header
+}
+
+\DeclareAcronym{SFD}{
+ short= SFD,
+ long= Start-of-Frame Delimiter
+}
+
+\DeclareAcronym{PN}{
+ short= PN,
+ long= Pseudo Noise
+}
+
+
+
 \begin{document}
 
 %\acsetup{first-long-format=\itshape}
@@ -251,17 +331,23 @@
 \includepdf[pages={1}]{Chapters/cover.pdf}
 %\titlepage
 
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
 \tableofcontents
-
 \listoffigures
 \listoftables
 
 \clearpage
-\printacronyms[%
-  name = {Abbreviations},
-  sort = false,
-]
 
+\acsetup{list-style=longtable, list-heading=chapter*}
+\printacronyms[ heading= chapter*, sort=true]
+
+%[
+% name = {Abbreviations},
+% sort = true,
+%]
+
+%\input{Chapters/acronym.tex}
 \mainmatter
 
 % Mainmatter is where the actual contents of the thesis goes

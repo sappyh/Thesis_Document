@@ -49,11 +49,11 @@
 
 \ifgfivepaper
 \RequirePackage[paperwidth=169mm,paperheight=239mm,twoside,
-  top=30mm,bottom=30mm,inner=18mm,outer=18mm,
+  top=30mm,bottom=30mm,inner=36mm,outer=18mm,
   headsep=10mm,headheight=5mm]{geometry} % Set paper and contents dimensions
 \else
 \RequirePackage[a4paper,twoside,
-  top=37mm,bottom=30mm,inner=25mm,outer=25mm,
+  top=37mm,bottom=50mm,inner=30mm,outer=30mm,
   headsep=15mm,headheight=5mm,footskip=25mm]{geometry} % Set paper and contents dimensions
 \fi
 \RequirePackage{fancyhdr} % Take control of headers and footers

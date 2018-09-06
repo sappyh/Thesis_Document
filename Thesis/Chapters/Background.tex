@@ -538,10 +538,9 @@ The total delay can be calculated as :\\
 
 
 \subsubsection{Cypress EZ-FX3}
-LimeSDR-USB uses a Cypress EZ-FX3 as USB 3.0 peripheral controller.
-The Cypress EZ-FX3 has a fully configurable, general programmable interface called the \ac{GPIF} II .
-It allows the EZ-FX3 to integrate with any processor like \ac{ASIC}, \ac{FPGA}, Image Sensors etc.
-It also provides low speed interfaces like \ac{I2C}, \ac{SPI} for the low-speed IO operations.\\
+LimeSDR-USB uses a Cypress EZ-FX3 as \ac{USB} 3.0 peripheral controller.
+It has a fully configurable, general programmable interface called the \ac{GPIF} II which allows integration with any processor like \ac{ASIC}, \ac{FPGA}, Image Sensors etc.
+It also provides low speed interfaces like \ac{I2C}, \ac{SPI} for the low-speed \ac{IO} operations.\\
 
 \begin{figure}[h!]
 \centering
@@ -549,17 +548,22 @@ It also provides low speed interfaces like \ac{I2C}, \ac{SPI} for the low-speed 
 \caption{EZ-FX3 architecture}
 \label{FX3_arch}
 \end{figure}
-The architecture of EZ-FX3 is shown in Figure \ref{FX3_arch}.
-The "ARM926EJ" is a 32-bit processor operating at 200 MHz, it is responssible for the configuring and controlling all the data tranfers through the Dstributed DMA Controller.
-The "USB" is the \ac{USB} 3.0 peripheral controller, it includes the USB 3.0 Physical Layer.
-It is responsible for handling the communication with the Host Computer.
-The \ac{GPIF} controller handles the data streams to and from the \ac{FPGA} of the LimeSDR-USB. 
-The controllers the Synchronous Slave Interface implemented on the \ac{FPGA}.
- 
+The hardware architecture of EZ-FX3 is shown in Figure \ref{FX3_arch}.
+The "ARM926EJ" is a 32-bit microprocessor operating at 200 MHz.
+It is responssible for the configuring and controlling the distributed \ac{DMA} controller and the peripherals.
+The "USB" block is a \ac{USB} 3.0 peripheral controller.
+It implements the \ac{USB} 3.0 Physical Layer, and is responsible for handling the communication with the Host Computer.
+The "\ac{GPIF} interface" block handles the data streams to and from the \ac{FPGA} of the LimeSDR-USB. 
+It implements a Synchronous Slave FIFO Interface which is controlled by "Slave FIFO" block of the LimeSDR \ac{FPGA}.\\
+
+For the purpose of this project, the implementation details for the USB and GPIF II interface needs to be explored further.
+The next two paragraphs, concentrates on presenting the concrete understanding of these two important interface in the context of LimeSDR-USB.
+
+\paragraph{LimeSDR USB endpoints}
 \ac{USB} endpoint are buffers on the \ac{USB} device.
 They are logical abstraction for having multiple parallel data streams use a single physical channel.
 The LimeSDR-USB uses four different endpoints for the USB data transfer, these endpoints are divided into control and data endpoints for both the input and output directions.
-The control endpoints are used for configuring and retrieving data from the LMS7002M, where are data endpoints are used for streaming data to the LMS7002M data converters through the \ac{FPGA}.
+The control endpoints are used for configuring and retrieving data from the LMS7002M, whereas data endpoints are used for streaming data to and from the LMS7002M data converters through the \ac{FPGA}.
 The different endpoint address and their associated function in LimeSDR-USB is shown in Table \ref{Lime-USB_ep}\\
 
 \begin{table}[h!]
@@ -580,41 +584,58 @@ Endpoint address & Function\\
 
 The \ac{USB} protocol specifies different transfers mechanisms depending on the requirement of the reliability and deterministic transfers.
 Bulk Transfers are used for large bursty data.
-They don't have any guarantees on the bandwidth and are transmitted when they is bandwidth available after other types of transfers.
+They don't have any guarantees on the bandwidth and are transmitted when there is bandwidth available after other types of transfers.
 They offer guaranteed delivery of data.\\
 
 The LimeSDR-USB uses Bulk Transfers for the control transfers.
-It sends bursts of data which are moved in the endpoint buffer of the Host Computer USB Controller which transfers it to the endpoint point buffer of "USB" block shown in Figure \ref{FX3_arch}.\\
+It sends bursts of data which are moved in the endpoint buffer of the Host Computer USB Controller which transfers it to the endpoint point buffer of the "USB" block shown in Figure \ref{FX3_arch}.\\
 
 For the data transfers, the LimeSDR-USB uses bulk streams.
-USB 3.0 protocol introduced stream pipes where a single endpoint can be allocated to multiple data streams.
-Each stream endpoint has their associated Stream ID which is used for tagging the data in the USB endpoint packet buffer.
-Each of the data packets the endpoint buffer are transmitted as a regular bulk transfer and the USB Controller on the other end decodes the Stream ID and send it to the appropriate Stream endpoint. \\
+USB 3.0 protocol introduced stream pipes where a single \ac{USB} endpoint can be allocated to multiple data streams.
+Each stream endpoint has their associated Stream ID which is used for tagging the data in the USB endpoint buffer.
+Each of the data packets in the endpoint buffer are transmitted as a regular bulk transfer and the USB Controller on the other end decodes the Stream ID and send it to the appropriate Stream endpoint. \\
 
-USB endpoints specifies the size of the data packet.
+USB endpoints also specifies the size of the data packet.
 For USB 3.0 the maximum data packet size is 1024 bytes.
 If the data sent to the USB Controller is greater than that, it segments that into multiple data packets and sends them as multiple bursts of data in a single USB Transaction. 
-
-
  
-\paragraph{GPIF II}. 
+\paragraph{GPIF II}
 The \ac{GPIF} II is a programmable state machine, that provides the flexibility of implementing a custom interface.
-The GPIF II segments the functionality into control and data part.
-For the data part, the LimeSDR-USB uses a 32 bit interface running at 100MHz.
+The GPIF II segments the functionality into control and data intefaces.
+For the data interface, the LimeSDR-USB defines a 32-bit interface running at 100 MHz.
 The state transitions of the state machine are based on the input control signals from the GPIF II interface .
 The output control signals are driven by the state transitions of the internal state machine.\\
 
 LimeSDR-USB implements a Slave FIFO interface using the \ac{GPIF} II interface.
-The Slave FIFO interface allows the \ac{FPGA} to perform read/ write operations directly to the EZ-FX3 internal FIFO buffers.
-The Control signals are used for addressing the internal FIFO buffers and signaling read and write operations.
-In addition, the control signals has flag signals to indicate events to the FIFO Slave Interface.
-The 32-bit data interface transfers the data according to the signaling and addressing used by the control signals.
+The Slave FIFO interface allows the \ac{FPGA} to perform read/ write operations on the EZ-FX3 internal FIFO buffers directly.
+The control interface is used for addressing the internal FIFO buffers and signaling read and write operations.
+In addition, the control interface has flag signals to indicate events to the FIFO Slave Interface.
+The 32-bit data interface transfers the data according to the signaling and addressing used on the control interface.\\
+
+The distributed \ac{DMA} controller uses sockets and threads for allowing data transfer between the FX3 RAM and the peripherals.
+They are explained in the next paragraph to help understand the Slave FIFO interface in details.
 
 \paragraph{Sockets and Threads}
+Sockets are connections between a FX3 peripheral like GPIF II, I2C and FX3 RAM. 
+The FX3 microprocessor initializes \ac{DMA} buffers, which are used for intermediate storage of data transferred through the FX3.
+The microprocessor keeps the address and size of these \ac{DMA} buffers in a linked list like structure.
+The elements of this structure are referred to as \ac{DMA} descriptor.
+The sockets are implemented as a structure with a pointer to a \ac{DMA} descriptor and interrupt flags.\\ 
 
+The sockets can signal other sockets automatically without CPU intervention or signal the CPU through interrupts.
+Automatic signaling is used when the FX3 CPU does not need to modify any data in the data stream.
+The socket which is writing data to the buffer is called producer socket and the socket reading data from the buffer is called consumer socket according to the terminology defined by (refer document.)\\
 
+One producer socket and one consumer socket accessing the same \ac{DMA} buffer can be encapsulated in a configuration referred to as \ac{DMA} channel.
+The \ac{DMA} channel can have multiple \ac{DMA} buffers.
+Each DMA buffer has its own empty/full flag to signal the producer and consumer sockets.
+For example, if a 1024 bytes socket is allocated to the DMA channel, when the producer sockets write 1024 bytes, the full flag will be enabled.
+In case of LimeSDR-USB, two \ac{DMA} channels are defined: TX \ac{DMA} channel and RX \ac{DMA} channel, with a GPIF II socket and USB socket as producer and consumer sockets.
+Each of channel have multiple \ac{DMA} buffers, and each buffer is allocated 4096 bytes.\\
 
- 
+The sockets are internal to the FX3, so for external devices to access the \ac{DMA} buffers, GPIF threads are defined.
+They connect sockets with external pins, like for Slave FIFO interface, they connect the data interface of the GPIF II with GPIF II sockets.\\
+
 
 \subsection{LimeSDR USB dataflow.}
 \begin{figure}[h!]
@@ -647,7 +668,160 @@ It uses two different packet structures for the LMS7002M Control Packets and the
 \label{fpga_packet}
 \end{figure}
 
+\section{Wime Project}
+Wime Project was created with the objective of providing experimentation as a wireless communication system performance evaluation tool.
+The project focuses on evaluation of physical layer strategies using USRP \ac{sdr} platform.
+It provides a 802.15.4 testbed which is inter-operable with the the off-the shelf TelosB nodes running the Contiki operating system.
 
+\subsection{IEEE 802.15.4}
+The IEEE 802.15.4 is a \ac{LR-WPAN} specification aiming to be a ultra low-complexity, ultra-low power and low datarate specification.
+It specifies the \ac{PHY} and \ac{mac} for \ac{LR-WPAN}s.
+It forms the basis for network protocols like \ac{6LoWPAN}, Zigbee, WirelessHart.
+It is intended to provide a data-rate of 250 kbps at 10 meters communication range.\\
+
+The IEEE 802.15.4 network topologies provide ways in which devices can talk to different nodes in the network.
+The main two network topologies used in IEEE 802.15.4 are: star and mesh.
+In star all the devices communicate to one another through the central device called the \ac{PAN} coordinator.
+In mesh, the devices can talk to one another without the need for a central coordinator.\\
+
+These network topologies helps in defining the role and type of device.
+\ac{RFD} can communicate without routing functionality so they usually are the end devices in a network.
+\ac{FFD} can route information in addition to regular communication.
+Coordinator is a special \ac{FFD} which sets up the network and acts as the manager of the network.\\
+
+The IEEE \ac{PHY} specifies defines different radio channels and modulation techniques for these network nodes.
+It specifies \ac{O-QPSK}, \ac{BPSK}, \ac{ASK}, \ac{CSS} as physical layer modulation techniques.
+The main frequency band of interest is ISM band at 2.4 GHz where 20  channels are available globally.
+The channels are spaced at 5 MHz, having channel bandwidth of 2 MHz.\\
+
+The \ac{mac} layer offers handshake for reliability.
+\ac{csma} with collision avoidance, \ac{tdma} with synchronization beacons and \ac{GTS} are defined as methods of medium access.
+There are four different \ac{mac} frames defined for different unique functions: Data, Acknowledgement, Beacon and MAC Command.
+Data and Acknowledgment frames are used for data communication, whereas Beacon and \ac{mac} command are used for network maintenance.\\
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{Figure/DataFrame.png}
+\caption{MAC Data Frame Structure}
+\label{data_frame}
+\end{figure}
+
+The relevant \ac{mac} data frame structure has been shown in Figure \ref{data_frame}.
+The function of each field is described below:
+\begin{itemize}
+\item{\textbf{MHR} defines the MAC data frame header. It consists of the following subfields:
+\begin{itemize}
+\item{\textbf{Frame Control} specifies the type of the frame and how the rest of frame is structured like the source and destination addressing modes.}
+\item{\textbf{Sequence Number} specifies the sequence identifier for the frame}
+\item{\textbf{Destination PAN ID} is an unsigned integer which is the unique \ac{PAN} ID for the destination node.}
+\item{\textbf{Destination Address} is the \ac{mac} address of the intended recipient.}
+\item{\textbf{Source PAN ID} is the \ac{PAN} ID of the sender.}
+\item{ \textbf{Source Address} is the \ac{mac} address of the originator of the frame.} 
+\end{itemize}}
+\item{\textbf{MAC payload} is the link layer frame which includes the data payload. }
+\item{\textbf{\ac{FCS}} is a 16-bit ITU-T \ac{CRC} calculated over the MHR and MAC payload fields.} 
+\end{itemize}
+The Frame Control specifies the type of the frame and how the rest of frame is structured like the source and destination addressing modes.
+
+Since, \ac{O-QPSK} modulation is being used in the Wime project, the next paragraph elaborates on the \ac{O-QPSK} modulation.
+
+\paragraph{\ac{O-QPSK}}
+
+The O-QPSK PHY specifies the PHY Data Packet as shown in Figure \ref{OQPSK_packet}.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{Figure/OQPSK.png}
+\caption{O-QPSK PHY Packet}
+\label{OQPSK_packet}
+\end{figure}
+
+\begin{itemize}
+\item{ \textbf{\ac{SHR}} is used for indicating the start of the frame. 
+It is composed of two sub subfields : Preamble and \ac{SFD}.
+For the O-QPSK, the preamble is four bytes with decimal value of "0000".
+The SFD is one byte long as is formatted as "A7" in hexadecimal.}
+\item{ \textbf{PHR} is the header for the physical layer packet and it specifies the frame length.}
+\item{ \textbf{PHY Payload} is the data payload, which for the purpose of this project is the MAC data frame.
+The PHY payload has a maximum size of 127 bytes.}
+\end{itemize}
+ 
+
+O-QPSK PHY uses 16-ary quasi orthogonal modulation.
+The data packet is converted to data symbols, the symbols subsequently are converted to chips, which are modulated onto the carrier signal.
+The octets of the PHY data packets are converted into symbols starting from the Preamble and ending with the last octet of the PHY Payload.
+The least significant bits of an octet is mapped to one symbol and the most significant bits mapped to another symbol.\\
+
+Each symbol is mapped to a 32-bit \ac{PN} sequence, which are related to each other through cyclic shifts and/or conjugation.
+The even indexes of the chip sequence are modulated onto the In-Phase component of the carrier as shown in Figure \ref{IQ_TC}.
+On the other hand, the odd indexes of the chip sequences are modulated onto the Quadrature component of the carrier.
+The chips are represented by a half-sine pulse shape shown in equation \ref{eq5}
+
+\begin{equation}\label{eq5}
+p(t) = 
+\begin{cases} 
+   sin( pi \times \frac{t}{2T_c})  \ ,0 \geq t \leq 2T_c \\
+   0    \ ,otherwise
+  \end{cases}
+\end{equation}
+$2T_c$ is the period of the half sine wave pulse in equation \ref{eq5}.
+The quadrature component is delayed by $T_c$ as shown in Figure \ref{IQ_TC}.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{Figure/IQ_TC.png}
+\caption{In-Phase and Quadrature Chip Sequences}
+\label{IQ_TC}
+\end{figure}
+
+\subsection{Wime Project GNU Radio Implementation}
+Wime Project is build on the UCLA 802.15.4 PHY implementation designed  by Thomas Schmid.
+It ports the existing implementation to the modern GNU Radio software framework.
+It furthermore extends the PHY implementation with a \ac{mac} layer and adds Rime Stack as a network layer.
+The implementation details of the PHY layer and the MAC layer is described below.\\
+
+\begin{itemize}
+
+\item{\textbf{Modulation} The Wime \ac{mac} works with asynchronous mesages, whereas the \ac{PHY} is implemented with stream interfaces.
+The GNU Radio modulation flow graph is shown in Figure \ref{TX flow graph}.
+So, at first these asynchronous \ac{mac} messages are converted to a tagged stream by the "PDU to Tagged Stream block".
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{Figure/TXPath.png}
+\caption{GNU Radio Modulation flow graph}
+\label{TX flow graph}
+\end{figure}
+
+The individual octets of the stream are then converted to symbols as described previously in the \ac{O-QPSK} paragraph by the "Packed to Unpacked Block".
+Instead of converting the symbols to chips directly and then segmenting into In-Phase and Quadrature components as in UCLA PHY.
+Wime Project implementation directly converts a symbol through a symbol table directly into a sequence of complex in-phase and quadrature values.
+Each symbol input results in 16 complex chips.
+These individual chips are interpolated by repeating a single chip four times by the "Repeat" block.
+The repeated chips are then multiplied with a sine function at different phases, differing by $\pi/4$.
+This process makes a single chip to be four samples wide.
+The quadrature component is delayed by two samples to satisfy the offset requirement ($T_c$).}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{Figure/RXPath.png}
+\caption{GNU Radio Demodulation flow graph}
+\label{RX flow graph}
+\end{figure}
+
+
+\item{\textbf{Demodulation} The data stream from the USRP is passed through a "Quadrature Demodulation" block as shown in Figure \ref{RX flow graph}.
+It does FM demodulation of the received signal stream.
+"Clock Recovery" module takes this demodulated signal stream and performs  decimation first, followed by  Mueller and Müller discrete-time error-tracking synchronizer.
+The "Clock Recovery" block outputs the chip sequences obtained from the incoming signal stream.
+These chip sequences are then sliced and converted to symbols by the "Packet Sink" block.
+The decoded valid message is then outputted to the Wime \ac{mac}.}
+
+\item{\textbf{MAC} The Wime Project adds a very simple MAC which encapsulates upper layer packets with the MAC header and adds the \ac{FCS}.
+When receiving messages from the \ac{PHY}, it does a validity check on the received message.
+On successful validation of the received message, it strips away the \ac{mac} header.
+The \ac{mac} layer transmits the message immediately without any carrier sensing.
+The project also adds the Rime communication stack on top of the \ac{mac}.}
+\end{itemize}
 
 \section{Tools Used}
 \subsection{USBMon}
@@ -660,7 +834,7 @@ It is kernel facility provided to collect I/O traces on the USB Bus\cite{_usbmon
 \end{figure}
 
 \subsubsection{Text Data Format}
-\begin{table}
+\begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
@@ -750,4 +924,3 @@ struct usbmon_packet {
 
 
 \subsection{pidstat}
-\subsection{802.15.4}
