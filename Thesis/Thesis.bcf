@@ -2067,7 +2067,6 @@
     <bcf:citekey order="18">_debugfs</bcf:citekey>
     <bcf:citekey order="19">basak_usb_2018</bcf:citekey>
     <bcf:citekey order="20">_usb_data_transfer</bcf:citekey>
-    <bcf:citekey order="21">_usb_endpoint</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="nty/global" type="entry" sortscheme="nty" sortnamekeyscheme="global">
   <bcf:sorting>

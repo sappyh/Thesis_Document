@@ -1,28 +1,30 @@
 \chapter{Background}
 This chapter introduces the necessary background information needed for understanding the rest of the report.
 First section, provides a broad introduction to \ac{sdr} systems, GNU Radio Software Tool and \ac{PHY} and \ac{mac} layers of the network stack.
-The second section introduces previous work in this domain, which are critically analyzed to help concretely define the problem area.
-Finally the last section, introduces the LimeSDR platform, IEEE 802.15.4 based system design and the tools used in the methods section.
+The second section introduces the LimeSDR platform and its hardware and software architecture.
+Wime Project and IEEE 802.15.4 is explained in the third section.
+Finally, the fourth section introduces the tools used in the methods chapter.
 
 
 \section{Essential Concepts}
 \subsection{\ac{PHY} and \ac{mac} Layers}
 \ac{OSI} Model (ISO/IEC 7498-1:1994) presents the abstract model for networking, that is used for most communication systems design.
-The abstract model is divided into 7 layers,  where entity in each layer implements the functionality of the layer and interacts directly with the layer beneath it, the added functionality can be used by the upper layers.
+The abstract model is divided into 7 layers,  where entity in each layer implements the functionality of the layer and interacts directly with the layer beneath it.
+This added functionality can be used by the upper layers.
 Data from the user application is encapsulated by each subsequent layers of the \ac{OSI} model into their frame format.
 These frames carry meta-data in the form of frame headers.
 Different protocols use different frame format and headers  as it helps differentiate one protocol from another.
 These headers help the receiver in learning where the incoming data packet is coming from, who is it meant for, how to decode and arrange the contents of the data packets etc.\\
 
 \ac{PHY} layer is the lowest layer (L1) of the \ac{OSI} model,it interacts with the physical communication channel directly.
-It defines the type of data transfer(serial/parallel) and data rate of the protocol.
+It specifies the type of data transfer(serial/parallel) and data rate of the protocol.
 \ac{PHY} layer defines the process of transmitting raw bits through the physical medium.
 The bit-stream is grouped into code words and converted to symbols, which are then modulated to a physical signal for transmission over the transmission medium.
-\ac{PHY} layers also provides physical transmission link information like carrier sense and collision detection and \ac{LQI}  to the upper layers. \\
+\ac{PHY} layers also provides physical transmission link information like carrier sense, collision detection and \ac{LQI}  to the upper layers. \\
 
 
 \ac{mac} layer, \ac{L2} of the \ac{OSI} model, is responsible for defining the the methods for sharing and using the common transmission medium among multiple devices.
-\ac{mac} layer addresses are used to to check if the incoming packet is meant for the device.
+%\ac{mac} layer addresses are used to to check if the incoming packet is meant for the device.
 In case of outgoing packets, the \ac{mac} layer adds the \ac{mac} address of the destination device to the packet header.
 It adds the synchronization preamble and \ac{FCS} for checking transmission error.
 Retransmission in case of dropped packets and acknowledgement to successfully received packets are handled by this layer.\\
@@ -35,8 +37,10 @@ Retransmission in case of dropped packets and acknowledgement to successfully re
 \end{figure}
 
 \ac{csma} is \ac{L2} protocol of the OSI Model. 
-It is a method for handling multiple access of a shared medium.
-It mainly comes in two varieties: \ac{CSMA/CD}  and \ac{CSMA/CA}. In the older \ac{CSMA/CD}, the nodes wait until the frame is ready, then check is the medium is idle or not.
+%It is a method for handling multiple access of a shared medium.
+It mainly comes in two varieties: \ac{CSMA/CD}  and \ac{CSMA/CA}.
+The flow graphs of both are shown in Figure \ref{Csma_flow}.
+In the older \ac{CSMA/CD}, the nodes checks the idleness of the channel after the frame is ready.
 If idle it starts transmission.
 During transmission, it monitors the medium for collision.
 If collision is detected, it employs a collision recovery process, where it sends a jam signal to signal other nodes that a collision has occurred.
@@ -44,7 +48,8 @@ Then it waits for a  random delay and starts transmission again.\\
 
 \ac{CSMA/CA} tries to avoid collision, it starts off similar to \ac{CSMA/CD} where it senses to check when the channel is idle.
 If found idle, it starts transmission.
-As it is difficult for wireless nodes to detect collision at the same time its transmitting therefore it relies on an \ac{ack} from the receiving node to check if the data packet was received.
+It is difficult for wireless nodes to detect collisions simultaneously during transmission.
+Therefore, it relies on an \ac{ack} message from the receiving node to check if the data packet was received.
 If \ac{ack} is not received, the node assumes a collision has occurred and  uses exponential back-off to determine when the next time to re initiate transmission.\\
 
 
@@ -66,7 +71,7 @@ But, since the system is designed is software only, the processing and communica
 
 \item{\textit{NIC-PHY Architecture:} In this architecture most of the \ac{PHY} layer functionality is implemented in \ac{FPGA} and \ac{DSP}.
 The closer proximity to the radio hardware and specialized parallel hardware processing makes this architecture most suitable for running the modern \ac{mac} protocols.
-But the design process for this architecture based systems is time consuming and difficult, as traditionally hardware programming harder simple software programming.
+But the design process for this architecture based systems is time consuming and difficult, as traditionally hardware programming is harder than software programming.
 However, they are much more flexible compared to commercial \ac{NIC}.
 \textit{Wireless Open Access Research Platform}(WARP) \cite{noauthor_warp_nodate} is an example of system based on this type of architecture.}
 
@@ -86,12 +91,12 @@ Figure \ref{host_PHY} shows the typical design of communication systems in this 
 \end{figure}
 
 
-Since the process for transmission and reception are symmetric, this report concentrates on the explaining the reception side of 
+Since the process for transmission and reception processes are very similar , this report concentrates on the explaining the reception process of 
 \ac{sdr} platforms.
 
 \paragraph{\ac{sdr} Platform:} It is the hardware that provides access to the wireless medium in a flexible manner.
 \ac{RF} signals are transmitted and received by the platform, it converts these analog signals to digital samples and transfers them to the host computer.
-The main building blocks of these platforms are shown in \ref{host_PHY}.
+The main building blocks of these platforms are shown in Figure \ref{host_PHY}.
 \begin{itemize}
 \item{\textbf{Software Configurable \ac{RF} trans-receiver}} This is the heart of \ac{sdr} platforms and provides \ac{RF} modulation and demodulation capability.
 They are attached to wide-band antennas for receiving and transmitting over a broad range of frequencies.
@@ -106,14 +111,14 @@ Once amplified, the signal to passed to a \ac{RF} receiver, where the \ac{RF} si
 \label{rf_receiver}
 \end{figure}
 
-Figure \ref{rf_receiver} shows a simple \ac{RF} receiver, the \ac{LNA} output signal is fed to a mixer.
+Figure \ref{rf_receiver} shows a simple \ac{RF} receiver in which the \ac{LNA} output signal is fed to a mixer.
 The mixer is a signal processing block used for translating the input signal to another frequency range.
 The mixer uses a locally generated carrier frequency for the translation. 
 If the input \ac{RF} signal has a frequency of $f_{rf}$, and the local oscillator frequency is $f_{lo}$ then the mixer will produce a signal with frequency components $f_{rf}-f_{lo}$ and $f_{rf}+f_{lo}$.
 This output signal is then passed through a band-pass filter with $f_{rf}-f_{lo}$ as center frequency, this will reject the unwanted $f_rf+f_lo$.
-In the assume $f_{rf}=f_{lo}$, the bandpass filter will become a low pass filter and the output signal will be the baseband signal.
+If we assume $f_{rf}=f_{lo}$, the bandpass filter will become a low pass filter and the output signal will be the baseband signal.
 This is the case in Zero-IF receiver architecture.
-In super heterodyne receiver architecture, a number of stages of intermediate frequency are used before generation of the baseband signal.\\
+In super heterodyne receiver architecture, a number of intermediate frequency stages are used before generation of the baseband signal.\\
 
 In traditional trans-receiver, a crystal oscillator is used.
 This results in good stability of the local oscillator signal but the system is now tuned to a particular frequency.
@@ -132,14 +137,14 @@ Most \ac{sdr} use \ac{DDS} as the frequency synthesizer, which uses a highly sta
 
 The main components of a \ac{DDS} are \ac{NCO} which is made of the Phase Accumulator and Phase to Amplitude Converter, \ac{DAC} and a Tuning Word Register as shown in Figure \ref{dds}.
 
-In each clock cycle, the phase accumulator increases the output by the value stored in the Tuning Word Register.
+In each clock cycle, the phase accumulator increases the output(phase) by the value stored in the Tuning Word Register.
 This output is the input to the Phase to Amplitude Converter, which basically is a lookup table containing the amplitude for a particular phase.
 The output of the Phase Accumulator is basically the address(phase) for the lookup table.
 The output is then converted to an analog signal by the the \ac{DAC} and then passed through a low pass filter to smoothen out the waveform.
 
 Since the Tuning Word Register is responsible for how fast the phase changes, the output sinusoid frequency can be controlled by controlling the Tuning Word Register, this is how \ac{sdr} platforms are able to generate a wide range of local oscillator frequencies.
 
-In \ac{sdr} platforms, the filter is implemented using \ac{FIR} filters.
+In \ac{sdr} platforms, the filter (shown in Figure \ref{sdr_architecture} is implemented using \ac{FIR} filters.
 \ac{FIR} filters are convolutional filters where the output response of a particular input is finite.
 The output of a \ac{FIR} filter can be adjusted by readjusting the parameters of the filter's impulse response.
 This allows for the \ac{sdr} to allow certain range of frequencies in the output, which can be adjusted by external control.
@@ -151,7 +156,7 @@ It then translates those instructions to digital signals for configuring the RF 
 
 \item{\textbf{ADC/DAC:} The filtered analog \ac{RF} signal needs to be converted to digital domain before transferring to the host computer.
 Fast data converters are used on the \ac{sdr} platforms for this purpose.
-Since Nyquist criteria defines the bandwidth of a \ac{RF} system is defined by the sampling rate, the sampling rate of these data converters define the available bandwidth of the system.
+The sampling rate of these data converters determine the available \ac{RF} bandwidth of the system according to the Nyquist criteria.
 The resolution of the \ac{sdr} data converters are important so as to ensure high dynamic range of the received signal, ensuring that the system is capable is receiving very weak signals as well very strong signals without saturation.
 The sampling rate of these data converters are controlled by the \ac{RF} trans-receiver controller.
 }
@@ -167,8 +172,8 @@ It takes in data packets from the \ac{FPGA} encodes them with bus transfer proto
 The flow control and routing for different packets is also handled by the bus controller.}
 \end{itemize}
 
-\paragraph{Host Computer:} The host computer, a general purpose computer,is the brain of the communication system.
-It runs the software implementation of the baseband processing for the desired protocol, taking the digital samples from the ac{sdr} as input.
+\paragraph{Host Computer:} The host computer, a general purpose computer, is the brain of the communication system.
+It runs the software implementation of the baseband processing for the desired protocol, taking the digital samples from the \ac{sdr} as input.
 During initialization, it configures the \ac{sdr} platform.
 Depending on implementation, it can have the full network stack and an application running on top of it.
 From architectural viewpoint, the host computer has three main components as shown in Figure \ref{host_PHY}.
@@ -180,12 +185,12 @@ If the bus communication involves a master slave relationship, then the host com
 It initiates the data transfer on the bus, and the slave bus controller  responds to the requests placed by this bus controller.
 }
 \item{\textbf{Driver:} The driver is the abstraction layer for the \ac{sdr} platform communication and configuration.
-For the use of use of the \ac{sdr} platform, the communication system designer should be able to provide high level instructions.
+The communication system designer should be able to provide high level instructions to the \ac{sdr} platform.
 It is left to the driver to handle the translation of high level instructions to low level register control data words.
 For example, when tuning the RF trans-receiver, the system designer would be much more comfortable to say set the center frequency to 1.8 GHz, rather than saying set register at address "x" to value "data".
-This translation is taken care of by the driver.
-It also is responsible for ensuring a reliable data transfer procedure.
-Since the communication system and the incoming data may be running at different rates, the driver buffers the incoming data and provides it to the the running communication system at its incoming data processing rate.}
+The driver handles this translation.
+It also is responsible for ensuring a reliable data transfer link.
+Since the communication system and the incoming data may be running at different rates, the driver buffers the incoming data and provides it to the the running communication system at its data processing rate.}
 \item{\textbf{Digital Signal Processing Framework:} The hardware baseband processing of communication systems are generally designed with concurrent execution in mind.
 Whereas, general purpose computing platform are sequential in nature. Many core processors add the capability of concurrent execution but at a much smaller scale than what can be acheived with hardware processing platforms like \ac{FPGA} and \ac{ASIC}.
 So when designing systems on general purpose computing platforms, this change in execution model needs to be taken into account.\\
@@ -201,14 +206,15 @@ In the next section, the report goes into detail about GNU Radio.
 \subsection{GNU Radio}
 
 GNU Radio is an open-source digital signal processing framework, which has been rapidly evolving with a large active community.
-The software framework can be used for both simulation and prototyping for real-world application scenarios. 
-It  provides an graphical interface for designing signal processing chains  as well as extensive library of signal processing blocks like filters, synchronizers, demodulators etc.
+The software framework can be used for both simulation and prototyping real-world application scenarios. 
+It  provides a graphical interface for designing signal processing chains  as well as extensive library of signal processing blocks like filters, synchronizers, demodulators etc.
 The ease of use of the framework, extensive library as well as hardware support for most \ac{sdr} platforms has led to diverse application use cases such as RFID, 802.11, cellular networks.\\
 
 
 GNU Radio is designed to stream large amounts of data in real-time between parallel computational nodes.
 The data flow between the nodes from the source to the sink is described by the flow-graph, while the flow of data is controlled by the GNU Radio Scheduler.
-Figure \ref{gnuradio_arch}, shows a simple flowgraph where the data from the Sources node is processed by the signal processing chain and output to the Sinks node.
+Figure \ref{gnuradio_arch}, shows a simple flowgraph where the data from the Sources node is processed by the signal processing chain.
+The processed data is sent to the Sink nodes.
 The signal processing chain itself is composed of multiple data processing nodes, for example the flow graph in Figure \ref{gnuradio_arch} has 4 nodes in the processing chain.
 The scheduler is in task of scheduling the execution of these blocks. 
 From the block designer point of view, these blocks can be viewed to be executing concurrently.
@@ -255,14 +261,15 @@ Since in GNU Radio flow graph, data is passed from one node to another, the meth
 This method is defined in the block interfaces.
 Stream Interfaces are intended to stream large amounts of data between blocks with variable processing rates.
 They use large buffers to pass the data from one node to another.
-Stream interfaces work well for samples, bits etc. but they are not the right method to pass metadata, control information or bursts of data between blocks as it involves significant overhead.
+Stream interfaces work well for samples, bits etc. but they are not the right method to pass metadata, control information or bursts of data between blocks as it involves significant overhead.\\
+
 GNU Radio recently added the message passing interface for handling asynchronous message passing.
 GNU Radio also supports stream tags for handling metadata as it is closely associated with the stream data samples.
 Stream tags are attached with stream data samples and provide additional information associated with the sample.
 It can be used both for passing control flags as well as metadata information like the \ac{PDU} size, timing information etc.
 These stream tags are propagated to the next blocks and is updated by the data rate changes.
 For example, if the block takes it 2 samples as input and produces 4 samples as output, its data rate is 2.
-In this case, if the input stream had a stream tag at position "x" then the the location in the output stream would be "2x". 
+In this case, if the input stream had a stream tag at position "x" then the the location in the output stream would be "2x". \\
 
 
 \begin{figure}[h!]
@@ -287,7 +294,8 @@ Once completion of execution, the upstream block writes new elements to the inpu
 The upstream block notifies the current block using the notify\_ downstream() method that new input data elements have been written.
 The scheduler for the current block checks if there is sufficient new data for a single execution.
 It then starts the execution of the current block once the input buffer has sufficient data.
-On successful execution, it updates the read data pointer, writes the data elements into the output buffer and updates the write pointer.
+On successful execution, it updates the read data pointer, writes the data elements into the output buffer and updates the write pointer.\\
+
 Since, most filter design rely on history of previous inputs, the scheduler also notifies the upstream block on reading the data from the buffer to notify that its output might have been modified.
 The current block scheduler notifies the downstream block that new data elements are available when it writes to the output buffer.
 The \textit{message handler} function works similarly, in this case the upstream block scheduler uses notify\_msg() method for signaling that a new message may be available.\\
@@ -314,7 +322,7 @@ Once the \textit{work} function finishes its execution, the scheduler takes in t
 The \ac{sdr} platform used in this project is LimeSDR-USB.
 It follows the architecture of the \ac{sdr} platform shown in Figure \ref{host_PHY}.
 The technical specifications of LimeSDR-USB and the component description in reference to Figure \ref{host_PHY} has been summarized in Table \ref{specs}.
-In the next paragraphs, the report discusses the hardware and software architecture of LimeSDR-USB.
+In the next subsections, the report discusses the hardware and software architecture of LimeSDR-USB.
 
 
 \begin{table}[h!]
@@ -348,10 +356,10 @@ Other components will be introduced in correspondence to their application with 
 
 \subsubsection{LMS7002M} 
 
-LMS7002M is a fully intergarted \ac{FPRF} transreceiver providing 2*2 \ac{MIMO} functionality.
-It provides continuous coverage of the 100kHZ- 3.8GHz frequency range, with on chip data converters providing 160 MHz \ac{RF} modulation bandwidth.
-It is designed for a broad range of applications, ranging from broadband wireless communication, cellular communications, \ac{sdr} applications etc.\\
-The hardware mainly consists of three main segments: analog processing chain, data converters and digital processing chain.\\
+LMS7002M is a fully intergarted \ac{FPRF} transreceiver providing 2$\times$2 \ac{MIMO} functionality.
+It provides continuous coverage in the 100kHZ- 3.8GHz frequency range, with on chip data converters providing 160 MHz \ac{RF} bandwidth.
+It is designed for a broad range of applications, ranging from broadband wireless communication, cellular communications, \ac{sdr} applications etc.
+The hardware mainly consists of three main sub-components: analog processing chain, data converters and digital processing chain.\\
 
 \begin{figure}[h!]
 \centering
@@ -360,10 +368,10 @@ The hardware mainly consists of three main segments: analog processing chain, da
 \label{lms7002m}
 \end{figure}
 
-LMS7002M offers full duplex on both the TX and RX chains, enabling it to transmit and receive simultaneously.
+LMS7002M offers full duplex communication link on both the TX and RX chains.
 Each of the RX chains has three separate \ac{RF} ports tuned for narrow band low frequency, narrow band high frequency and wide band operations.
 Similarly, the TX Chains are connected two separate \ac{RF} ports tuned for high frequency and low frequency operations.
-This separation is done for better impedance matching at the boundary of the antennas.
+This separation is done for better impedance matching at the boundary of the antennas.\\
 
 Figure \ref{lms7002m} shows the functional block diagram for a LMS7002M \ac{FPRF}.
 Since, both the RX and TX paths are identical, the report concentrates on only one RX path.
@@ -373,10 +381,12 @@ The RX \ac{PGA} outputs the analog baseband signal.\\
 
 LMS7002M uses a fractional N-\ac{PLL} architecture for the local oscillator frequency synthesis.
 \ac{PLL} is used extensively in \ac{RF} circuits for making sure the generated local oscillator signal and the reference signal have the same phase and frequency.
-PLLs are essentially negative feedback systems, so when the input signal differs a lot from the output signal, the control logic tries to lower the error(\textit{input-output)}.
+PLLs are essentially negative feedback systems, so when the input signal differs a lot from the output signal, the control logic tries to lower the error (\textit{input-output)}.\\
+
 Integer N- \ac{PLL} architectures are used to generate high frequency signals from low frequency reference clocks, by using a frequency divider in the negative loopback path.
 The frequency divider is basically a counter, that outputs every "N" (division factor of the loop) clock cycles of the output signal.
-But since the output signal frequency will be multiples of the reference clock, the output signal resolution is determined by the  reference clock.
+But since the output signal frequency will be multiples of the reference clock, the output signal resolution is determined by the  reference clock.\\
+
 So to have a high frequency as well as a high resolution, the divider counter should be very large in size.
 To counter the problem, fractional N-{PLL} architectures were designed where the output signal frequency can also be a fractional multiple of the input signal frequency.
 This helps in increasing the frequency resolution without the need for a large divisor counter.
@@ -386,8 +396,9 @@ In case of LimeSDR, the reference signal fed to the PLL varies from to 10 to 52 
 The output signal can vary from 30 to 3800 MHz, with a frequency resolution of 24.8 Hz.\\
 
 Once the \ac{RF} demodulation is completed by the analog processing chain, the analog signal is sent to the data converters and converted to digital data samples.
-The sampling rate for the data conversion is determined by the \ac{RF} channel bandwidth.
-The digital samples are sent to the \ac{TSP}, LMS7002M digital side, for further processing.
+The sampling rate for the data conversion is determined by the required \ac{RF} channel bandwidth.
+The digital samples are sent to the \ac{TSP} for further processing.\\
+
 The \ac{TSP} uses advanced signal processing algorithms like IQ DC offset correction, IQ phase correction for correcting the received samples.
 An interpolation and decimation filter is added to the \ac{TSP} for the TX and RX chains respectively.
 These filters are implemented with a chain of five fixed co-efficient half band \ac{FIR} filters, which allows interpolation and decimation factors of 1,2,4,8,16.
@@ -405,20 +416,20 @@ It also provides a \ac{SPI} interface for offloading the control and configurati
 
 \subsubsection{FPGA}
 
-The LMS7002M is designed to stream data continuously, whereas the Cypress FX3 uses USB 3.0 protocol, which transmits packets of data.
+The LMS7002M is designed to stream data continuously, whereas the Cypress FX3 uses USB 3.0 protocol transmits packets of data.
 LimeSDR-USB uses an Altera Cyclone IV \ac{FPGA} to buffer the streaming data, converts them to packets and adds meta-data to each packet as recommended by Nychis et.al \cite{nychis_enabling_nodate}.
-The architecture of the FPGA data path blocks is shown in Figure \ref{lime_hw_arch}, the TX path is responsible for moving data from the USB interface to the LMS7002.
+The architecture of the FPGA data path blocks is shown in Figure \ref{lime_hw_arch}.
+The TX path is responsible for moving data from the USB interface to the LMS7002.
 The RX Path on the other hand controls the reception of samples from the LMS7002M and subsequent sending to the Host-Computer via the USB interface.
 The \ac{FPGA} also has on board PLLs which are configured to be the same as the sample clock\\
 
 The \ac{FPGA} interfaces are designed to handle the segregation of control and data paths by LMS7002M.
-The data paths (TX path and RX path) uses a 12-bit parallel interface to stream and receive data; to and from the LimeLight interface of the LMS7002M.
+The data paths (TX path and RX path) uses a 12-bit parallel interface to stream data to and from the LimeLight interface of the LMS7002M.
 The control path of the \ac{FPGA} has a NIOS processor which interacts directly with the USB Slave Interface and controls the \ac{RF} parameters through an \ac{SPI} interface.\\
 
 The \ac{FPGA} RX path converts samples to packets which takes significant buffering time.
 As this report concentrates on study of timing delays, it is necessary to take a closer look at the \ac{FPGA} implementation and understand the buffering process.
-in contrast, \ac{FPGA} TX path on the other hand converts packets to samples
-As the data has already been packed into packets there is no need for buffering.
+In contrast, \ac{FPGA} TX path converts packets to samples and there is no need for buffering.
 So in the next paragraph, the report describes the \ac{FPGA} RX path in detail.
  
 
@@ -438,7 +449,7 @@ Figure \ref{RX_Path} shows the overview of the RX Path implementation on the Lim
 Sample data from the LMS7002M is captured by the "LMS7002\_DDIN", which uses an ALT DDIO IP block to capture in-phase and quadrature samples at double data rate.
 This means that incoming data stream is latched both at the positive and negative edges of the clock.
 "LMS7002\_DDIN" separates the sample data collected at the postive and negative edge into two different components: \textit{DIQ\_H} and \textit{DIQ\_L} repectively.
-It introduces one clock delay between the input,LMS7002M Sample Stream, and the DIQ\_L, DIQ\_H outputs.\\
+It introduces one clock delay between the input,LMS7002M Sample Stream, and the \textit{DIQ\_L}, \textit{DIQ\_H} outputs.\\
 
 The "RXIQ" block is responsible for arranging the individual components into a single data stream of In-phase component of a sample followed by its Quadrature component.
 It takes four component data coming from the "LMS7002\_DDIN" block and arranges arranges them into the sequence \textit{DIQ\_L},\textit{DIQ\_H}, \textit{DIQ\_L}, \textit{DIQ\_H}.
@@ -458,7 +469,7 @@ The read enable is controlled by the "RXIQ" using the \textit{wrreq} signal, so 
 On the write side, the "DATA2PACKETS" controls the write enable signal (\textit{rdreq}).
 The "FIFO" receives 48-bit data samples, stores it a \ac{FIFO} structure and keeps track of how many samples have been loaded into the \ac{FIFO}.
 The "FIFO" takes one clock cycle for latching the input.
-The number of elements counter is updated five clock cycles after the data has been latched.
+The counter for the number of elements is updated five clock cycles after the data has been latched.
 \\
 
 The "DATA2PACKETS" block is responsible for converting data samples into packets.
@@ -466,16 +477,13 @@ It mainly consists of two \ac{FSM}.
 The first  \ac{FSM} controls the read and write signal for the input and output blocks.
 It monitors the amount of data in the "FIFO", and when it is greater than the amount of data in one packet it asserts the \textit{rdreq} signal.
 It takes two clock cycles for the "DATA2PACKETS" to register that the number of data elements in the "FIFO" is sufficient for one \ac{FPGA} packet.
-The first \ac{FSM} takes two clock cycles to generate the \textit{rdreq} signal after that.\\ 
+The first \ac{FSM} takes two more clock cycles to generate the \textit{rdreq} signal after that.\\ 
 
-The second \ac{FSM} arranges the data in the FPGA data packet structure (Figure \ref{fpga_packet}).
-It latches the value of the value of the sample count from the second "SMPL\_COUNTER" when the first \ac{FSM} asserts the \textit{rdreq} signal.
+The second \ac{FSM} arranges the data in the FPGA data packet structure (Figure \ref{trans_loop}).
+It latches the value of the sample count from the second "SMPL\_COUNTER" when the first \ac{FSM} asserts the \textit{rdreq} signal.
 It adds the sample count and different flags as meta-data for each \ac{FPGA} packet. 
-The detailed description of this metadata will be provided in Section(ref).
 Once, the first \ac{FSM} determines there is enough space to write the data in the FX3 buffer, it enables the \textit{wrreq} signal and writes 64 bits of data every clock cycle.
 The second \ac{FSM} takes 6 clock cycles to output the first data element read from the "FIFO" after the \textit{rdreq} has been generated by the first \ac{FSM}.\\
-
-The FX3 buffers are controlled by the Cypress FX3 USB Controller using  \ac{GPIF} II.
 
 \paragraph{RX Path Delays}
 The delays introduced by the individual blocks has been highlighted in the previous paragraph.
@@ -483,11 +491,11 @@ The delays introduced by the individual blocks has been highlighted in the previ
 \item{Delay introduced by the "LMS7002\_DDDIN" block : 1 clock cycle}
 \item{Delay introduced by the "RXIQ" block: 5 clock cycles ; 1 clock cycle each for input and output latching, and 3 clock cycles for the structure formation.}
 \item{Delay introduced by the "FIFO" block: 6 clock cycles ; 1 clock cycle for input latching; 5 clock cycles for the increment of internal counter}
-\item{Delay introduced the the "DATA2PACKETS" block: 10 clock cycles ; 4 clock for generation of \textit{rdreq} signal and 6 clock cycles for output of the first data element from the "FIFO"}
+\item{Delay introduced the the "DATA2PACKETS" block: 10 clock cycles ; 4 clock for generation of \textit{rdreq} signal and 6 clock cycles for output of the first data element read from the "FIFO"}
 \end{itemize}
 
 The report will refer to these block delays as constant delays.
-Considering there are N samples in one packet, where N is an even number, the constant delays account for 22 clock cycles for even index samples, and 21 clock cycles for odd index samples. It can be summarized as:\\
+The constant delay is 22 clock cycles for even index samples, and 21 clock cycles for odd index samples. It can be summarized as:\\
 
 \begin{subequations} \label{eq1}
 \begin{align}
@@ -508,7 +516,7 @@ The data elements in the "FIFO" has to wait until there is sufficient data for a
 This waiting time is being referred to as Queuing Delay.
 The Queuing Delay is dependent on the absolute sample number.
 If the element is the $N^{th}$ sample, it has to wait for N clock cycles, where N is the number of samples in one packet.
-Whereas, if the element is the $N-1^{th}$ sample, it needs to wait only for one more cycle, that is two clock cycles.
+If the element is the $N-1^{th}$ sample, it needs to wait only for one more cycle, that is two clock cycles.
 
 \begin{equation} \label{eq2}
 \Delta_{queuing} = \frac{N - 2 \times \floor*{\frac{sampl_{rel}}{2}}}{f_s}
@@ -520,7 +528,7 @@ The "DATA2PACKETS" block outputs two samples in one clock cycle, hence the data 
 The time a element has to wait to be streamed is being referred as the streaming delay.
 The streaming delay is also dependent on the arrival time of the sample which is equivalent to the absolute sample number.
 If the element is the $N^{th}$ sample, it is the first data element of a packet, it doesn't need to wait for any sample to be streamed ahead of it, so it has zero streaming delay.
-On the other hand, the $N-1^{th}$ sample needs to wait for N-3 samples to streamed first, before it is outputed with the $N-2^{th}$ sample.
+On the other hand, the $N-1^{th}$ sample needs to wait for N-3 samples to streamed first, before it is outputted together with the $N-2^{th}$ sample.
 
 \begin{equation}\label{eq3}
 \Delta_{streaming} =\frac{\floor*{\frac{sampl_{rel}}{2}}}{f_s}
@@ -593,7 +601,7 @@ It sends bursts of data which are moved in the endpoint buffer of the Host Compu
 For the data transfers, the LimeSDR-USB uses bulk streams.
 USB 3.0 protocol introduced stream pipes where a single \ac{USB} endpoint can be allocated to multiple data streams.
 Each stream endpoint has their associated Stream ID which is used for tagging the data in the USB endpoint buffer.
-Each of the data packets in the endpoint buffer are transmitted as a regular bulk transfer and the USB Controller on the other end decodes the Stream ID and send it to the appropriate Stream endpoint. \\
+Each of the data packets in the endpoint buffer are transmitted as a regular bulk transfer and the USB Controller on the other end decodes the Stream ID and sends it to the appropriate Stream endpoint. \\
 
 USB endpoints also specifies the size of the data packet.
 For USB 3.0 the maximum data packet size is 1024 bytes.
@@ -603,12 +611,12 @@ If the data sent to the USB Controller is greater than that, it segments that in
 The \ac{GPIF} II is a programmable state machine, that provides the flexibility of implementing a custom interface.
 The GPIF II segments the functionality into control and data intefaces.
 For the data interface, the LimeSDR-USB defines a 32-bit interface running at 100 MHz.
-The state transitions of the state machine are based on the input control signals from the GPIF II interface .
+The state transitions of the state machine are based on the input control signals from the GPIF II interface.
 The output control signals are driven by the state transitions of the internal state machine.\\
 
 LimeSDR-USB implements a Slave FIFO interface using the \ac{GPIF} II interface.
 The Slave FIFO interface allows the \ac{FPGA} to perform read/ write operations on the EZ-FX3 internal FIFO buffers directly.
-The control interface is used for addressing the internal FIFO buffers and signaling read and write operations.
+The control interface is used for addressing the FX3 FIFOs and signaling read and write operations.
 In addition, the control interface has flag signals to indicate events to the FIFO Slave Interface.
 The 32-bit data interface transfers the data according to the signaling and addressing used on the control interface.\\
 
@@ -634,38 +642,64 @@ In case of LimeSDR-USB, two \ac{DMA} channels are defined: TX \ac{DMA} channel a
 Each of channel have multiple \ac{DMA} buffers, and each buffer is allocated 4096 bytes.\\
 
 The sockets are internal to the FX3, so for external devices to access the \ac{DMA} buffers, GPIF threads are defined.
-They connect sockets with external pins, like for Slave FIFO interface, they connect the data interface of the GPIF II with GPIF II sockets.\\
+They connect sockets with external pins, like for Slave FIFO interface, they connect the GPIF II interface with GPIF II sockets.\\
 
 
-\subsection{LimeSDR USB dataflow.}
+\subsection{LimeSDR USB Software Architecture.}
+
+In this subsection, the report explains the driver of the LimeSDR-USB.
+The software architecture of the LimeSDR-USB is shown in Figure \ref{Lime_Software}.\\
+
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{Figure/Software_Architecture.jpg}
+\includegraphics[width=0.8\textwidth]{Figure/Lime_Software.png}
 \caption{LimeSDR USB software architecture}
+\label{Lime_Software}
 \end{figure}
 
-\begin{itemize}
-\item{\textit{TX Data Path:} Stream data from GNURadio is passed through Soapy drivers to the LimeSDR Streaming API. The API unwraps the data and the control flags and pushes it to the TX-FIFO. It also does the necessary data representation translation depending on the data format of the streamed data. For example, in case of complex data, it changes 32 bit I and Q value representation of GNU Radio to 16 bit I and Q values representation.  The values are pushed to the respective TX stream channel buffers(TXFIFO). The connection stream initializes the TX buffers and fills them with data from the TXFIFO. The Write function structures the data into FPGA data packet structure((Figure \ref{fpga_packet})) and combines multiple such packets into predefined batch size(initially 4). The buffer is processed by libusb to create bulk transfer packet and finally streamed to output data endpoint.}
+The "Streamer" block is the main software component responsible for interacting with the LimeSDR-USB.
+LimeSDR defines "dataPort" as an abstract interface, whose methods can be mapped to one specific interface implementation like \ac{PCIe} or USB depending on the configuration defined by the "Streamer" block.
+In case of LimeSDR-USB, the dataPort is configured to use \ac{USB} bus.
+For interacting with application software like GNU Radio "Stream Channels" are defined.
+They are basically FIFO's with control logic for receiving or sending data from the application software.
+To understand the functionality of the "Streamer" block, let's take a look at the TX data path.
+The RX Path is vice-versa of the TX Path.\\
 
-\item{\textit{RX Data Path: } The USB data is continuously streamed from the LimeSDR to the Connection stream buffers through libusb. The Read function waits for data to be available from a usb context for the endpoint it is listening to, then it transfer data from the endpoint, parses the FPGA packets (Figure \ref{fpga_packet}) to collect the data and pushes them to the RXFIFO. If the rx stream is configured to have particular receive time, it checks if that condition is satisfied. The LimeSDR streaming API collects the data from the RXFIFO and does the necessary data interpretation translation (reverse translation to the TX Data Path), finally streams the data to GNURadio. }
-\end{itemize}
+\paragraph{TX Data Path} The application software configures the TX Stream Channels through the Lime \ac{API}. 
+Then the TX FIFO's are initialized and the control parameter like batchsize( shown in Figure \ref{trans_loop}) of the \ac{FPGA} packets and the data format for the data to be stored in the FIFO is sent to the "Streamer".
+The Streamer parses these information and configures the hardware data path with the provided configuration.
+The "Streamer Transmit Loop" initalizes internal buffers which are used for sending data through the "dataPort".\\
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{Figure/DriverHost.png}
+\caption{Streamer Transmit Loop}
+\label{trans_loop}
+\end{figure}
+ 
+The application software pushes data to the TX "Stream Channel" shown as "IQ Data" in Figure \ref{trans_loop}.
+The "Streamer Transmit Loop" runs continuously and once there is data in the "Stream Channel" FIFOs it reads the data using the "Stream Channel Read" function.
+It converts the data, for example from 32-bit float data to 16 bit integer data, and copies the data to its internal buffers.
+It then packs the data into a FPGA data packet format shown as the middle component of Figure \ref{trans_loop}.
+Each \ac{FPGA} data packet contains flags and packet counter field followed by  4080 bytes of data.
+These \ac{FPGA} data packets are batched together as specified by the batchsize.
+This batch is sent to the USB Host Controller to be transmitted to the LimeSDR-USB using libusb.
 
-\subsubsection{LimeSDR USB packets and endpoints}
-LimeSDR uses four different endpoints for USB data transfer, these endpoints as Data Endpoint and Control Endpoint for both input and output directions. The control endpoints are used for configuring and retrieving data from the LMS7002M and NIOS Core on the FPGA. Data packets are used for the streaming data. 
+\paragraph{TX Control Path} The LimeSDR-USB is configured at initialization using the lms7 \ac{API}.
+The lms7 \ac{API} provides an abstraction layer for configuring the LimeSDR-USB.
+It provides the means to control the LMS7002M, Si5351 clock controller through the NIOS SPI interface.
+The lms7 API packs the control data into LMS64 control packets shown in figure \ref{lms_packet}.
+One LMS64C protocol packet (Figure \ref{lms_packet}) is maximum 64 bytes.
+If the data to be sent is larger than that the data field is segmented into several packets.
+The "LMS64C\_Protocol" keeps a packet buffer and adds the prepared packet to this buffer.
+These packets are then sent to the "connectionFX3" module which writes it to the control endpoint using the "dataPort".
 
-It uses two different packet structures for the LMS7002M Control Packets and the Stream Data Packets. Depending on the control command, different number of bytes are packed into one data element and the maximum number of blocks in a single packet is defined. One LMS64C protocol packet (Figure \ref{lms_packet}) is maximum 64 bytes, if the data to be sent is larger than that then the data field is segmented into several packets. The block count gives the number of data element in a single packet. The FPGA contains 4080 bytes of data along with 8 bytes of counter data that can be used for timestamps on the TX packets. The Lime driver uses synchronous bulk transfer for LMS Control packets and asynchronous bulk transfers for the FPGA packets.
+
+
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{Figure/LMS64C_Packet.png}
 \caption{LMS Control Packet Structure}
 \label{lms_packet}
-\end{figure}
-
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=0.6]{Figure/FPGA_Packet.png}
-\caption{FPGA Packet Structure}
-\label{fpga_packet}
 \end{figure}
 
 \section{Wime Project}
@@ -689,8 +723,8 @@ These network topologies helps in defining the role and type of device.
 \ac{FFD} can route information in addition to regular communication.
 Coordinator is a special \ac{FFD} which sets up the network and acts as the manager of the network.\\
 
-The IEEE \ac{PHY} specifies defines different radio channels and modulation techniques for these network nodes.
-It specifies \ac{O-QPSK}, \ac{BPSK}, \ac{ASK}, \ac{CSS} as physical layer modulation techniques.
+The IEEE 802.15.4 \ac{PHY} specifies defines different radio channels and modulation techniques for these network nodes.
+It specifies \ac{O-QPSK}, \ac{BPSK}, \ac{ASK}, \ac{CSS} etc. as physical layer modulation techniques.
 The main frequency band of interest is ISM band at 2.4 GHz where 20  channels are available globally.
 The channels are spaced at 5 MHz, having channel bandwidth of 2 MHz.\\
 
@@ -718,10 +752,10 @@ The function of each field is described below:
 \item{\textbf{Source PAN ID} is the \ac{PAN} ID of the sender.}
 \item{ \textbf{Source Address} is the \ac{mac} address of the originator of the frame.} 
 \end{itemize}}
-\item{\textbf{MAC payload} is the link layer frame which includes the data payload. }
-\item{\textbf{\ac{FCS}} is a 16-bit ITU-T \ac{CRC} calculated over the MHR and MAC payload fields.} 
+\item{\textbf{MAC Payload} is the link layer frame which includes the data payload. }
+\item{\textbf{\ac{FCS}} is a 16-bit ITU-T \ac{CRC} calculated over the MHR and MAC Payload fields.} 
 \end{itemize}
-The Frame Control specifies the type of the frame and how the rest of frame is structured like the source and destination addressing modes.
+
 
 Since, \ac{O-QPSK} modulation is being used in the Wime project, the next paragraph elaborates on the \ac{O-QPSK} modulation.
 
@@ -784,7 +818,7 @@ The implementation details of the PHY layer and the MAC layer is described below
 
 \item{\textbf{Modulation} The Wime \ac{mac} works with asynchronous mesages, whereas the \ac{PHY} is implemented with stream interfaces.
 The GNU Radio modulation flow graph is shown in Figure \ref{TX flow graph}.
-So, at first these asynchronous \ac{mac} messages are converted to a tagged stream by the "PDU to Tagged Stream block".
+At first, these asynchronous \ac{mac} messages are converted to a tagged stream by the "PDU to Tagged Stream block".
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{Figure/TXPath.png}
@@ -819,8 +853,7 @@ The decoded valid message is then outputted to the Wime \ac{mac}.}
 \item{\textbf{MAC} The Wime Project adds a very simple MAC which encapsulates upper layer packets with the MAC header and adds the \ac{FCS}.
 When receiving messages from the \ac{PHY}, it does a validity check on the received message.
 On successful validation of the received message, it strips away the \ac{mac} header.
-The \ac{mac} layer transmits the message immediately without any carrier sensing.
-The project also adds the Rime communication stack on top of the \ac{mac}.}
+The \ac{mac} layer transmits the message immediately without any carrier sensing.}
 \end{itemize}
 
 \section{Tools Used}
@@ -854,10 +887,10 @@ Data Length & Data Tag & Data\\
 \end{table}
 
 \begin{itemize}
-\item {\textit{URB Tag:} URB Identification number, it is usually the in kernel adress of the URB structure.}
-\item{\textit{Timestamp:} The timestamp for the URB event at the HCD in microseconds. It is measured by the usbmon main utility using \textit{gettimeofday()} function of \textit{time.h}.}
-\item{\textit{Event Type:} It specifies the event type of the HCD event. S - Submission C -Complete E - submission error.}
-\item{\textit{Address: } It consists of four fields separated by colons. The URB type and direction, bus number, device number, endpoint number. The URB type and direction specifies the type of USB transfer(can be both synchronous and asynchronous).\\
+\item {\textbf{URB Tag:} URB Identification number, it is usually the in kernel adress of the URB structure.}
+\item{\textbf{Timestamp:} The timestamp for the URB event at the HCD in microseconds. It is measured by the usbmon main utility using \textit{gettimeofday()} function of \textit{time.h}.}
+\item{\textbf{Event Type:} It specifies the event type of the HCD event. S - Submission C -Complete E - submission error.}
+\item{\textbf{Address: } It consists of four fields separated by colons. The URB type and direction, bus number, device number, endpoint number. The URB type and direction specifies the type of USB transfer(can be both synchronous and asynchronous).\\
 \begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|}
@@ -878,14 +911,14 @@ The USB device transfers data through a pipe to a memory buffer on the host and 
 \item{\textbf{Interrupt Transfers:} It is used for mainly sending small amounts of data infrequently or asynchronously.}
 \item{\textbf{Isochronous Transfers:} Isochronous transfers are mainly used for periodic, continuous streams of time sensitive data.} 
 \end{itemize}
-USB endpoint as explained by \cite{_usb_endpoint} , refers to the buffers on the USB device. The host computer irrespective of the host operating system can communicate by reading and writing to these buffers. They can be data endpoints and control endpoints.Data endpoints are used for transferring data whereas the control endpoint is used for configuration and device specific control.
+%USB endpoint as explained by \cite{_usb_endpoint} , refers to the buffers on the USB device. The host computer irrespective of the host operating system can communicate by reading and writing to these buffers. They can be data endpoints and control endpoints.Data endpoints are used for transferring data whereas the control endpoint is used for configuration and device specific control.
 }
 
-\item{\textit{Data Length:} For urb\_submit it gives the requested data length and for callbacks it is the actual data length.}
+\item{\textbf{Data Length:} For urb\_submit it gives the requested data length and for callbacks it is the actual data length.}
 
-\item{\textit{Data tag:} If this field is '=' then data words are present.}
+\item{\textbf{Data tag:} If this field is '=' then data words are present.}
 
-\item{\textit{Data:} The data words contains in the USB transfer packet.}
+\item{\textbf{Data:} The data words contains in the USB transfer packet.}
 \end{itemize}
 
 \subsubsection{Raw Binary}
@@ -924,3 +957,8 @@ struct usbmon_packet {
 
 
 \subsection{pidstat}
+Pidstat is a Linux tool provided the sysstat package.
+It can be used to monitor the resource usage of a Linux process/processes.
+It can be configured to collect information on CPU utilization, memory utilization, context switches and the time  used by the process at application level and the time used in kernel level.
+It collects the information at one second intervals and the time duration for one collection can be specified during the process invocation.
+

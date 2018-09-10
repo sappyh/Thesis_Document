@@ -217,22 +217,6 @@
       \verb http://www.jungo.com/st/support/documentation/windriver/10.2.0/wdusb_manual.mhtml/USB_data_transfer_types.html
       \endverb
     \endentry
-    \entry{_usb_endpoint}{online}{}
-      \field{sortinit}{U}
-      \field{sortinithash}{8145509bd2718876fc77d31fd2cde117}
-      \field{labeltitlesource}{title}
-      \field{langid}{english}
-      \field{title}{{USB} endpoints and their pipes}
-      \field{urlday}{11}
-      \field{urlmonth}{04}
-      \field{urlyear}{2018}
-      \verb{file}
-      \verb Snapshot:/home/saptarshi/Zotero/storage/8BMZZ3WE/usb-endpoints-and-their-pipes.html:text/html
-      \endverb
-      \verb{url}
-      \verb https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-endpoints-and-their-pipes
-      \endverb
-    \endentry
     \entry{_usbmon}{online}{}
       \field{sortinit}{U}
       \field{sortinithash}{8145509bd2718876fc77d31fd2cde117}
