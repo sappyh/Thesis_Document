@@ -6,24 +6,24 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.1}{\ignorespaces GNU Radio Block Types}}{14}
+\contentsline {table}{\numberline {2.1}{\ignorespaces GNU Radio Block Types}}{15}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.2}{\ignorespaces LimeSDR-USB specifications}}{17}
+\contentsline {table}{\numberline {2.2}{\ignorespaces LimeSDR-USB specifications}}{18}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.3}{\ignorespaces LimeSDR USB transfer endpoints}}{26}
+\contentsline {table}{\numberline {2.3}{\ignorespaces LimeSDR USB transfer endpoints}}{27}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.4}{\ignorespaces Text USB Trace Example.}}{36}
+\contentsline {table}{\numberline {2.4}{\ignorespaces Text USB Trace Example.}}{37}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.5}{\ignorespaces URB Type and Direction.}}{38}
-\defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.5}{\ignorespaces URB Type and Direction.}}{39}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {4.1}{\ignorespaces Transfer Direction and Threshold Value}}{45}
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {4.1}{\ignorespaces Transfer Direction and Threshold Value}}{48}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {5.1}{\ignorespaces Analytical USB Transfer Delay}}{47}
+\contentsline {table}{\numberline {5.1}{\ignorespaces Analytical USB Transfer Delay}}{50}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {5.2}{\ignorespaces Experimental results}}{48}
+\contentsline {table}{\numberline {5.2}{\ignorespaces Experimental results}}{51}

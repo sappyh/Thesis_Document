@@ -127,6 +127,59 @@
       \verb Nychis and Hottelier - Enabling MAC Protocol Implementations on Software-.pdf:/home/saptarshi/Documents/MasterThesis@RISE/Documents/Nychis and Hottelier - Enabling MAC Protocol Implementations on Software-.pdf:application/pdf
       \endverb
     \endentry
+    \entry{puschmann_implementation_2011}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=666d24cf9ab718ddb283e8ce951fe2d1}{%
+           family={Puschmann},
+           family_i={P\bibinitperiod},
+           given={André},
+           given_i={A\bibinitperiod}}}%
+        {{hash=762756d46a5b8e8f11e1845ff5c5df3a}{%
+           family={Kalil},
+           family_i={K\bibinitperiod},
+           given={Mohamed\bibnamedelima A.},
+           given_i={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=9bebd026f46214952c0e51aaf22fdbbc}{%
+           family={Mitschele-Thiel},
+           family_i={M\bibinithyphendelim T\bibinitperiod},
+           given={Andreas},
+           given_i={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{location}{1}{%
+        {Barcelona, Spain}%
+      }
+      \list{publisher}{1}{%
+        {ACM Press}%
+      }
+      \strng{namehash}{127ed7a543251553c3042b7f78104414}
+      \strng{fullhash}{127ed7a543251553c3042b7f78104414}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Software deﬁned radios provide a perfect playground for researchers to experiment with current and future wireless communication systems. However, the beneﬁts, especially for communication protocols, largely depend on non-functional requirements (i.e. temporal behavior) that have to be met by the system architecture. In this paper, we share our experience with a ﬂexible SDR framework named Iris. We present an implementation of a Send-and-Wait Automatic Repeat reQuest (ARQ) protocol as well as a virtual network driver component which, in conjunction with Iris, form the core of our software deﬁned radio networking testbed. To verify the practical suitability of the testbed and to evaluate the performance of the protocol, we are conducting end-toend throughput and delay benchmarks.}
+      \field{booktitle}{Proceedings of the 4th {International} {Conference} on {Cognitive} {Radio} and {Advanced} {Spectrum} {Management} - {CogART} '11}
+      \field{isbn}{978-1-4503-0912-7}
+      \field{title}{Implementation and evaluation of a practical {SDR} testbed}
+      \field{urlday}{14}
+      \field{urlmonth}{09}
+      \field{urlyear}{2018}
+      \field{year}{2011}
+      \field{pages}{1\bibrangedash 5}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1145/2093256.2093271
+      \endverb
+      \verb{file}
+      \verb Puschmann et al. - 2011 - Implementation and evaluation of a practical SDR t.pdf:/home/saptarshi/Zotero/storage/SETC5BDD/Puschmann et al. - 2011 - Implementation and evaluation of a practical SDR t.pdf:application/pdf
+      \endverb
+      \verb{url}
+      \verb http://dl.acm.org/citation.cfm?doid=2093256.2093271
+      \endverb
+    \endentry
     \entry{schmid_experimental_2007}{inproceedings}{}
       \name{author}{3}{}{%
         {{hash=b4e2a832aa14084c07e8248d12122d6c}{%
@@ -176,37 +229,39 @@
       \verb http://portal.acm.org/citation.cfm?doid=1287767.1287779
       \endverb
     \endentry
-    \entry{ulversoy_software_2010}{article}{}
-      \name{author}{1}{}{%
-        {{hash=284742ed8f869b0b8867f352b6f5f5e6}{%
-           family={Ulversoy},
-           family_i={U\bibinitperiod},
-           given={T.},
-           given_i={T\bibinitperiod}}}%
+    \entry{truong_investigating_2013}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=e904b25d07dfb9b691fa303677368f2e}{%
+           family={Truong},
+           family_i={T\bibinitperiod},
+           given={N.\bibnamedelimi B.},
+           given_i={N\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=56ebdac4330505069e9950f0d4768c63}{%
+           family={Yu},
+           family_i={Y\bibinitperiod},
+           given={C.},
+           given_i={C\bibinitperiod}}}%
       }
-      \strng{namehash}{284742ed8f869b0b8867f352b6f5f5e6}
-      \strng{fullhash}{284742ed8f869b0b8867f352b6f5f5e6}
-      \field{sortinit}{U}
-      \field{sortinithash}{8145509bd2718876fc77d31fd2cde117}
+      \strng{namehash}{435b69521afcc3c5d24b77e67d6cc128}
+      \strng{fullhash}{435b69521afcc3c5d24b77e67d6cc128}
+      \field{sortinit}{T}
+      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
       \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{abstract}{Software Defined Radio ({SDR}) may provide flexible, upgradeable and longer lifetime radio equipment for the military and for civilian wireless communications infrastructure. {SDR} may also provide more flexible and possibly cheaper multi-standard-terminals for end users. It is also important as a convenient base technology for the future context-sensitive, adaptive and learning radio units referred to as cognitive radios. {SDR} also poses many challenges, however, some of them causing {SDR} to evolve slower than otherwise anticipated. Transceiver development challenges include size, weight and power issues such as the required computing capacity, but also {SW} architectural challenges such as waveform application portability. {SDR} has demanding implications for regulators, security organizations and business developers.}
-      \field{issn}{1553-877X}
-      \field{journaltitle}{{IEEE} Communications Surveys Tutorials}
-      \field{number}{4}
-      \field{shorttitle}{Software Defined Radio}
-      \field{title}{Software Defined Radio: Challenges and Opportunities}
-      \field{volume}{12}
-      \field{year}{2010}
-      \field{pages}{531\bibrangedash 550}
-      \range{pages}{20}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Software-Defined Radio (SDR) is a radio technology that most of conventional radio components are implemented in software. Besides the advantages like re-configurability and flexibility, a SDR system has to face a critical challenge on real-time processing due to high jitter and latency. Thus, understanding latency in SDR systems is very important. This paper focuses on investigating the latency of a popular SDR platform - GNU Software Radio with a new Universal Software Radio Peripherals (USRP) device -USRP Embedded Series E100. This research investigates and analyzes the reasons of the delays by considering all the buffering mechanisms in the platform. After that, we verify and quantify them by using three experimental methods. The first method is to calculate the whole delay of the SDR system by measuring the round-trip time (RTT). The second method measures subparts of the whole latency by using timestamp during a packet transmission process. The third approach is designated to measure the latency of the hardware part and bus communication part. We believe this study offers the better understanding of the latency in a new embedded USRP series - USRP E100 with GNU Software Radio platform.}
+      \field{booktitle}{2013 {Eighth} {International} {Conference} on {Broadband} and {Wireless} {Computing}, {Communication} and {Applications}}
+      \field{month}{10}
+      \field{title}{Investigating {Latency} in {GNU} {Software} {Radio} with {USRP} {Embedded} {Series} {SDR} {Platform}}
+      \field{year}{2013}
+      \field{pages}{9\bibrangedash 14}
+      \range{pages}{6}
       \verb{doi}
-      \verb 10.1109/SURV.2010.032910.00019
+      \verb 10.1109/BWCCA.2013.11
       \endverb
       \verb{file}
-      \verb IEEE Xplore Abstract Record:/home/saptarshi/Zotero/storage/4DEUCTHW/5462981.html:text/html;IEEE Xplore Full Text PDF:/home/saptarshi/Zotero/storage/HYR6Q8KY/Ulversoy - 2010 - Software Defined Radio Challenges and Opportuniti.pdf:application/pdf
+      \verb IEEE Xplore Abstract Record:/home/saptarshi/Zotero/storage/994I2QSP/6690857.html:text/html;IEEE Xplore Full Text PDF:/home/saptarshi/Zotero/storage/TB9HDYU4/Truong and Yu - 2013 - Investigating Latency in GNU Software Radio with U.pdf:application/pdf
       \endverb
-      \keyw{Application software,cognitive radio,Cognitive radio,cognitive radios,Computer architecture,Context,{FCC},Field programmable gate arrays,Military communication,Military equipment,radio communication equipment,{SDR},software defined radio,Software defined radio,software engineering,software radio,Software radio,transceivers,Wireless communication}
+      \keyw{buffering mechanisms,bus communication part,Delay,Delays,Digital signal processing,E100,embedded systems,Field programmable gate arrays,GNU Radio,GNU software radio,Hardware,jitter,latency,Latency,Linux,packet transmission process,radio components,radio technology,real-time processing,round-trip time,SDR,Software,Software Defined Radio,software radio,Software radio,software-defined radio,universal software radio peripherals device,USRP,USRP Embedded Series E100,USRP embedded series SDR platform}
     \endentry
     \entry{_usb_data_transfer}{online}{}
       \field{sortinit}{U}
@@ -243,7 +298,6 @@
       \endverb
     \endentry
   \endsortlist
-  \missing{noauthor_ieee_nodate}
 \endrefsection
 \endinput
 

@@ -1,20 +1,18 @@
 [0] Config.pm:340> INFO - This is Biber 2.4
 [0] Config.pm:343> INFO - Logfile is 'Thesis.blg'
-[50] biber:287> INFO - === sön sep  9, 2018, 12:37:14
-[197] Biber.pm:348> INFO - Reading 'Thesis.bcf'
-[373] Biber.pm:742> INFO - Found 11 citekeys in bib section 0
-[380] Biber.pm:3151> INFO - Processing section 0
-[413] Biber.pm:3308> INFO - Looking for bibtex format file 'stateofart.bib' for section 0
-[447] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
-[468] bibtex.pm:974> INFO - Found BibTeX data source 'stateofart.bib'
-[545] Biber.pm:3308> INFO - Looking for bibtex format file 'USBMon.bib' for section 0
-[568] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
-[579] bibtex.pm:974> INFO - Found BibTeX data source 'USBMon.bib'
-[623] Utils.pm:147> WARN - I didn't find a database entry for 'noauthor_ieee_nodate' (section 0)
-[739] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[739] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[739] Biber.pm:3028> INFO - Sorting list 'nty/global' of type 'entry' with scheme 'nty' and locale 'en-US'
-[739] Biber.pm:3032> INFO - No sort tailoring available for locale 'en-US'
-[759] bbl.pm:519> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
-[806] bbl.pm:615> INFO - Output to Thesis.bbl
-[807] Biber.pm:109> INFO - WARNINGS: 1
+[43] biber:287> INFO - === mån sep 17, 2018, 10:42:47
+[149] Biber.pm:348> INFO - Reading 'Thesis.bcf'
+[311] Biber.pm:742> INFO - Found 11 citekeys in bib section 0
+[319] Biber.pm:3151> INFO - Processing section 0
+[355] Biber.pm:3308> INFO - Looking for bibtex format file 'stateofart.bib' for section 0
+[418] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
+[471] bibtex.pm:974> INFO - Found BibTeX data source 'stateofart.bib'
+[566] Biber.pm:3308> INFO - Looking for bibtex format file 'USBMon.bib' for section 0
+[582] bibtex.pm:1113> INFO - Decoding LaTeX character macros into UTF-8
+[591] bibtex.pm:974> INFO - Found BibTeX data source 'USBMon.bib'
+[725] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[725] UCollate.pm:65> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[725] Biber.pm:3028> INFO - Sorting list 'nty/global' of type 'entry' with scheme 'nty' and locale 'en-US'
+[725] Biber.pm:3032> INFO - No sort tailoring available for locale 'en-US'
+[744] bbl.pm:519> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
+[795] bbl.pm:615> INFO - Output to Thesis.bbl

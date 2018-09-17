@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.7.27)  9 SEP 2018 12:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.7.27)  17 SEP 2018 10:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1463,19 +1463,19 @@ LaTeX Warning: Label `message_source' multiply defined.
 )
 \openout1 = `Thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 332.
-LaTeX Font Info:    ... okay on input line 332.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 332.
-LaTeX Font Info:    ... okay on input line 332.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 332.
-LaTeX Font Info:    ... okay on input line 332.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 332.
-LaTeX Font Info:    ... okay on input line 332.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 332.
-LaTeX Font Info:    ... okay on input line 332.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 332.
-LaTeX Font Info:    ... okay on input line 332.
-LaTeX Font Info:    Try loading font information for T1+ppl on input line 332.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 350.
+LaTeX Font Info:    ... okay on input line 350.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 350.
+LaTeX Font Info:    ... okay on input line 350.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 350.
+LaTeX Font Info:    ... okay on input line 350.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 350.
+LaTeX Font Info:    ... okay on input line 350.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 350.
+LaTeX Font Info:    ... okay on input line 350.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 350.
+LaTeX Font Info:    ... okay on input line 350.
+LaTeX Font Info:    Try loading font information for T1+ppl on input line 350.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 )
@@ -1549,17 +1549,9 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'Thesis.bbl' found.
 
-(./Thesis.bbl
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                noauthor_ieee_nodate
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-)
-Package biblatex Info: Reference section=0 on input line 332.
-Package biblatex Info: Reference segment=0 on input line 332.
+(./Thesis.bbl)
+Package biblatex Info: Reference section=0 on input line 350.
+Package biblatex Info: Reference segment=0 on input line 350.
 \c@lstlisting=\count392
 \AtBeginShipoutBox=\box56
  (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/pdflscape.sty
@@ -1578,47 +1570,47 @@ nslations-basic-dictionary')
 File: Chapters/cover.pdf Graphic file (type pdf)
 
 <use Chapters/cover.pdf>
-Package pdftex.def Info: Chapters/cover.pdf used on input line 340.
+Package pdftex.def Info: Chapters/cover.pdf used on input line 358.
 (pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
 File: Chapters/cover.pdf Graphic file (type pdf)
  <use Chapters/cover.pdf>
-Package pdftex.def Info: Chapters/cover.pdf used on input line 340.
+Package pdftex.def Info: Chapters/cover.pdf used on input line 358.
 (pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
 
 <Chapters/cover.pdf, id=4, page=1, 597.51233pt x 845.03705pt>
 File: Chapters/cover.pdf Graphic file (type pdf)
 
 <use Chapters/cover.pdf, page 1>
-Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 340.
+Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 358.
 (pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
 File: Chapters/cover.pdf Graphic file (type pdf)
  <use Chapters/cover.pdf, page 1>
-Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 340.
+Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 358.
 (pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
 File: Chapters/cover.pdf Graphic file (type pdf)
 
 <use Chapters/cover.pdf, page 1>
-Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 340.
+Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 358.
 (pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
 File: Chapters/cover.pdf Graphic file (type pdf)
  <use Chapters/cover.pdf, page 1>
-Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 340.
+Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 358.
 (pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
 File: Chapters/cover.pdf Graphic file (type pdf)
 
 <use Chapters/cover.pdf, page 1>
-Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 340.
+Package pdftex.def Info: Chapters/cover.pdf, page1 used on input line 358.
 (pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
  [1
 
  <./Chapters/cover.pdf>]
-LaTeX Font Info:    Try loading font information for T1+phv on input line 345.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 363.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 345.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 363.
  (./Thesis.toc
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
 (Font)              Font shape `T1/ppl/b/n' tried instead on input line 5.
@@ -1648,12 +1640,12 @@ LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
 ] [8] (./Chapters/introduction.tex
 Chapter 1.
 
-Underfull \hbox (badness 10000) in paragraph at lines 2--8
+Underfull \hbox (badness 10000) in paragraph at lines 2--10
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 9--10
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
 
  []
 
@@ -1661,14 +1653,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--10
 File: Figure/SDRSystem.png Graphic file (type png)
 
 <use Figure/SDRSystem.png>
-Package pdftex.def Info: Figure/SDRSystem.png used on input line 13.
+Package pdftex.def Info: Figure/SDRSystem.png used on input line 15.
 (pdftex.def)             Requested size: 320.0935pt x 139.5916pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 19--20
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
 
  []
 
@@ -1676,27 +1668,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 19--20
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 21--22
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 26.
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
 
  []
 
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 29.
 
-Underfull \hbox (badness 10000) in paragraph at lines 25--26
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 27--30
+Underfull \hbox (badness 10000) in paragraph at lines 30--31
 
  []
 
 [2 <./Figure/SDRSystem.png>]
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 35.
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 37.
-
-Underfull \hbox (badness 10000) in paragraph at lines 40--41
+Underfull \hbox (badness 10000) in paragraph at lines 32--35
 
  []
 
@@ -1704,29 +1691,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 40--41
 File: Figure/BlindSpots.png Graphic file (type png)
 
 <use Figure/BlindSpots.png>
-Package pdftex.def Info: Figure/BlindSpots.png used on input line 44.
+Package pdftex.def Info: Figure/BlindSpots.png used on input line 38.
 (pdftex.def)             Requested size: 256.07741pt x 127.02199pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--53
+Underfull \hbox (badness 10000) in paragraph at lines 53--60
 
  []
 
-[3 <./Figure/BlindSpots.png>]
-LaTeX Font Info:    Try loading font information for OMS+ppl on input line 58.
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsppl.fd
-File: omsppl.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
-
-<Figure/RQ1.png, id=63, 778.91pt x 215.80624pt>
+[3 <./Figure/BlindSpots.png>] <Figure/RQ1.png, id=63, 778.91pt x 215.80624pt>
 File: Figure/RQ1.png Graphic file (type png)
- <use Figure/RQ1.png>
-Package pdftex.def Info: Figure/RQ1.png used on input line 61.
+
+<use Figure/RQ1.png>
+Package pdftex.def Info: Figure/RQ1.png used on input line 83.
 (pdftex.def)             Requested size: 320.0935pt x 88.68529pt.
-)
-(./Chapters/Background.tex [4 <./Figure/RQ1.png>]
+) (./Chapters/Background.tex [4 <./Figure/RQ1.png>]
+[5]
 Chapter 2.
 
 Underfull \hbox (badness 10000) in paragraph at lines 11--18
@@ -1744,14 +1723,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 19--24
 
  []
 
-[5
+[6
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 26--31
 
  []
 
-<Figure/CSMA.png, id=72, 793.96625pt x 793.96625pt>
+<Figure/CSMA.png, id=75, 793.96625pt x 793.96625pt>
 File: Figure/CSMA.png Graphic file (type png)
  <use Figure/CSMA.png>
 Package pdftex.def Info: Figure/CSMA.png used on input line 34.
@@ -1770,8 +1749,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 49--54
 
  []
 
-[6] [7 <./Figure/CSMA.png>]
-<Figure/Host_Phy.png, id=80, 739.76375pt x 734.745pt>
+[7]
+LaTeX Font Info:    Try loading font information for OMS+ppl on input line 67.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsppl.fd
+File: omsppl.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 67.
+ [8 <./Figure/CSMA.png>] <Figure/Host_Phy.png, id=83, 739.76375pt x 734.745pt>
 File: Figure/Host_Phy.png Graphic file (type png)
 
 <use Figure/Host_Phy.png>
@@ -1786,7 +1771,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 101--106
 
  []
 
-<Figure/RF_receiver.png, id=81, 773.89125pt x 222.8325pt>
+<Figure/RF_receiver.png, id=84, 773.89125pt x 222.8325pt>
 File: Figure/RF_receiver.png Graphic file (type png)
 
 <use Figure/RF_receiver.png>
@@ -1801,8 +1786,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 114--122
 
  []
 
-[8] [9 <./Figure/Host_Phy.png>]
-<Figure/DDS.png, id=91, 834.11626pt x 382.42876pt>
+[9] [10 <./Figure/Host_Phy.png>]
+<Figure/DDS.png, id=94, 834.11626pt x 382.42876pt>
 File: Figure/DDS.png Graphic file (type png)
  <use Figure/DDS.png>
 Package pdftex.def Info: Figure/DDS.png used on input line 133.
@@ -1813,18 +1798,18 @@ Overfull \hbox (6.4868pt too wide) in paragraph at lines 138--139
 led Os-cil-la-tor (NCO)
  []
 
-[10 <./Figure/RF_receiver.png> <./Figure/DDS.png>]
+[11 <./Figure/RF_receiver.png> <./Figure/DDS.png>]
 Overfull \hbox (5.25136pt too wide) in paragraph at lines 145--146
 []\T1/ppl/m/n/12 Since the Tun-ing Word Reg-is-ter is re-spon-si-ble for how fa
 st the phase changes,
  []
 
-[11]
+[12]
 Underfull \hbox (badness 10000) in paragraph at lines 194--197
 
  []
 
-[12]
+[13]
 Overfull \hbox (14.2149pt too wide) in paragraph at lines 198--205
 []\T1/ppl/m/n/12 Threads pro-vide a soft-ware method to im-ple-ment con-cur-ren
 t ex-e-cu-tion model.
@@ -1835,13 +1820,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 208--212
 
  []
 
-<Figure/GNURADIO_1.png, id=104, 824.07875pt x 512.91624pt>
+<Figure/GNURADIO_1.png, id=107, 824.07875pt x 512.91624pt>
 File: Figure/GNURADIO_1.png Graphic file (type png)
 
 <use Figure/GNURADIO_1.png>
 Package pdftex.def Info: Figure/GNURADIO_1.png used on input line 224.
 (pdftex.def)             Requested size: 384.1096pt x 239.07492pt.
- [13]
+ [14]
 Overfull \hbox (0.5872pt too wide) in paragraph at lines 236--247
  [][] 
  []
@@ -1851,7 +1836,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 251--259
 
  []
 
-[14 <./Figure/GNURADIO_1.png>]
+[15 <./Figure/GNURADIO_1.png>]
 Overfull \hbox (0.51233pt too wide) in paragraph at lines 260--265
 \T1/ppl/m/n/12 method is de-fined in the block in-ter-faces. Stream In-ter-face
 s are in-tended to stream
@@ -1867,7 +1852,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 266--273
 
  []
 
-<Figure/Block.png, id=112, 990.70125pt x 402.50375pt>
+<Figure/Block.png, id=115, 990.70125pt x 402.50375pt>
 File: Figure/Block.png Graphic file (type png)
  <use Figure/Block.png>
 Package pdftex.def Info: Figure/Block.png used on input line 277.
@@ -1886,12 +1871,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 288--298
 
  []
 
-[15]
+[16]
 Underfull \hbox (badness 10000) in paragraph at lines 299--302
 
  []
 
-[16 <./Figure/Block.png>]
+[17 <./Figure/Block.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 314--319
 
  []
@@ -1901,7 +1886,7 @@ Overfull \hbox (67.14836pt too wide) in paragraph at lines 330--340
  [][] 
  []
 
-<Figure/Lime_Hardware.png, id=120, 824.07875pt x 412.54124pt>
+<Figure/Lime_Hardware.png, id=124, 824.07875pt x 412.54124pt>
 File: Figure/Lime_Hardware.png Graphic file (type png)
 
 <use Figure/Lime_Hardware.png>
@@ -1916,7 +1901,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 359--363
 
  []
 
-[17] <Figure/Lms7002m-block-diagram.png, id=125, 1158.3275pt x 1364.09625pt>
+[18] <Figure/Lms7002m-block-diagram.png, id=128, 1158.3275pt x 1364.09625pt>
 File: Figure/Lms7002m-block-diagram.png Graphic file (type png)
 
 <use Figure/Lms7002m-block-diagram.png>
@@ -1937,12 +1922,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 376--381
 
  []
 
-[18 <./Figure/Lime_Hardware.png>]
+[19 <./Figure/Lime_Hardware.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 382--385
 
  []
 
-[19 <./Figure/Lms7002m-block-diagram.png (PNG copy)>]
+[20 <./Figure/Lms7002m-block-diagram.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 386--389
 
  []
@@ -1962,7 +1947,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 402--407
 
  []
 
-[20]
+[21]
 Underfull \hbox (badness 10000) in paragraph at lines 419--425
 
  []
@@ -1972,7 +1957,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 426--429
 
  []
 
-<Figure/DATA2PACKETS.png, id=136, 914.41624pt x 261.97874pt>
+<Figure/DATA2PACKETS.png, id=139, 914.41624pt x 261.97874pt>
 File: Figure/DATA2PACKETS.png Graphic file (type png)
 
 <use Figure/DATA2PACKETS.png>
@@ -1987,7 +1972,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 444--447
 
  []
 
-[21]
+[22]
 Overfull \hbox (4.76839pt too wide) in paragraph at lines 448--453
 []\T1/ppl/m/n/12 Figure 2.9[] shows the overview of the RX Path im-ple-men-ta-t
 ion on the LimeSDR-
@@ -2027,7 +2012,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 462--466
 
  []
 
-[22 <./Figure/DATA2PACKETS.png>]
+[23 <./Figure/DATA2PACKETS.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 467--474
 
  []
@@ -2048,7 +2033,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 482--487
 
  []
 
-[23]
+[24]
 Underfull \hbox (badness 10000) in paragraph at lines 497--499
 
  []
@@ -2063,9 +2048,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 525--526
 
  []
 
-[24]
+[25]
 Underfull \hbox (badness 10000) in paragraph at lines 535--537
 
+ []
+
+
+Overfull \hbox (18.93149pt too wide) in paragraph at lines 549--552
+\T1/ppl/m/n/12 fully con-fig-urable, gen-eral pro-grammable in-ter-face called 
+the []Gen-eral Pro-grammable
  []
 
 
@@ -2073,7 +2064,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 549--552
 
  []
 
-<Figure/FX3.png, id=153, 767.86874pt x 573.14125pt>
+<Figure/FX3.png, id=156, 767.86874pt x 573.14125pt>
 File: Figure/FX3.png Graphic file (type png)
  <use Figure/FX3.png>
 Package pdftex.def Info: Figure/FX3.png used on input line 555.
@@ -2098,12 +2089,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 571--576
 
  []
 
-[25]
+[26]
 Underfull \hbox (badness 10000) in paragraph at lines 593--597
 
  []
 
-[26 <./Figure/FX3.png>]
+[27 <./Figure/FX3.png>]
 Overfull \hbox (0.95277pt too wide) in paragraph at lines 598--600
 []\T1/ppl/m/n/12 The LimeSDR-USB uses Bulk Trans-fers for the con-trol trans-fe
 rs. It sends bursts
@@ -2129,7 +2120,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 617--622
 
  []
 
-[27]
+[28]
 Underfull \hbox (badness 10000) in paragraph at lines 627--632
 
  []
@@ -2160,7 +2151,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 650--652
 
  []
 
-<Figure/Lime_Software.png, id=164, 783.92876pt x 508.90125pt>
+<Figure/Lime_Software.png, id=167, 783.92876pt x 508.90125pt>
 File: Figure/Lime_Software.png Graphic file (type png)
 
 <use Figure/Lime_Software.png>
@@ -2175,7 +2166,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 660--667
 
  []
 
-[28] <Figure/DriverHost.png, id=168, 663.47874pt x 449.68pt>
+[29] <Figure/DriverHost.png, id=172, 663.47874pt x 449.68pt>
 File: Figure/DriverHost.png Graphic file (type png)
 
 <use Figure/DriverHost.png>
@@ -2190,13 +2181,13 @@ con-fig-ures the TX Stream Chan-nels through
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[29 <./Figure/Lime_Software.png>]
+[30 <./Figure/Lime_Software.png>]
 Overfull \hbox (8.88762pt too wide) in paragraph at lines 687--695
 \T1/ppl/m/n/12 lms7 []API. The lms7 []API pro-vides an ab-strac-tion layer for 
 con-fig-ur-ing the LimeSDR-
  []
 
-<Figure/LMS64C_Packet.png, id=174, 781.92125pt x 263.98625pt>
+<Figure/LMS64C_Packet.png, id=177, 781.92125pt x 263.98625pt>
 File: Figure/LMS64C_Packet.png Graphic file (type png)
 
 <use Figure/LMS64C_Packet.png>
@@ -2206,7 +2197,7 @@ Package pdftex.def Info: Figure/LMS64C_Packet.png used on input line 700.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[30 <./Figure/DriverHost.png>]
+[31 <./Figure/DriverHost.png>]
 Overfull \hbox (8.89958pt too wide) in paragraph at lines 711--715
 \T1/ppl/m/n/12 spec-i-fi-ca-tion aim-ing to be a ul-tra low-complexity, ultra-l
 ow power and low datarate
@@ -2227,7 +2218,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 721--725
 
  []
 
-[31 <./Figure/LMS64C_Packet.png>]
+[32 <./Figure/LMS64C_Packet.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 726--730
 
  []
@@ -2237,14 +2228,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 731--735
 
  []
 
-<Figure/DataFrame.png, id=183, 532.99126pt x 175.65625pt>
+<Figure/DataFrame.png, id=186, 532.99126pt x 175.65625pt>
 File: Figure/DataFrame.png Graphic file (type png)
 
 <use Figure/DataFrame.png>
 Package pdftex.def Info: Figure/DataFrame.png used on input line 738.
 (pdftex.def)             Requested size: 319.79723pt x 105.39455pt.
- [32 <./Figure/DataFrame.png>]
-<Figure/OQPSK.png, id=188, 363.3575pt x 201.75375pt>
+ [33 <./Figure/DataFrame.png>]
+<Figure/OQPSK.png, id=191, 363.3575pt x 201.75375pt>
 File: Figure/OQPSK.png Graphic file (type png)
  <use Figure/OQPSK.png>
 Package pdftex.def Info: Figure/OQPSK.png used on input line 768.
@@ -2254,7 +2245,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 784--788
 
  []
 
-[33 <./Figure/OQPSK.png>] <Figure/IQ_TC.png, id=193, 503.8825pt x 176.66pt>
+[34 <./Figure/OQPSK.png>] <Figure/IQ_TC.png, id=196, 503.8825pt x 176.66pt>
 File: Figure/IQ_TC.png Graphic file (type png)
 
 <use Figure/IQ_TC.png>
@@ -2265,14 +2256,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 812--816
 
  []
 
-<Figure/TXPath.png, id=194, 1571.8725pt x 569.12625pt>
+<Figure/TXPath.png, id=197, 1571.8725pt x 569.12625pt>
 File: Figure/TXPath.png Graphic file (type png)
  <use Figure/TXPath.png>
 Package pdftex.def Info: Figure/TXPath.png used on input line 824.
 (pdftex.def)             Requested size: 341.43437pt x 123.61896pt.
 
-[34 <./Figure/IQ_TC.png>]
-<Figure/RXPath.png, id=199, 1283.79625pt x 280.04625pt>
+[35 <./Figure/IQ_TC.png>]
+<Figure/RXPath.png, id=203, 1283.79625pt x 280.04625pt>
 File: Figure/RXPath.png Graphic file (type png)
 
 <use Figure/RXPath.png>
@@ -2290,8 +2281,8 @@ Overfull \hbox (3.7512pt too wide) in paragraph at lines 846--852
 l-lowed by Mueller
  []
 
-[35 <./Figure/TXPath.png> <./Figure/RXPath.png>]
-<Figure/USBMon.png, id=206, 532.99126pt x 382.42876pt>
+[36 <./Figure/TXPath.png> <./Figure/RXPath.png>]
+<Figure/USBMon.png, id=209, 532.99126pt x 382.42876pt>
 File: Figure/USBMon.png Graphic file (type png)
  <use Figure/USBMon.png>
 Package pdftex.def Info: Figure/USBMon.png used on input line 865.
@@ -2300,20 +2291,56 @@ Package pdftex.def Info: Figure/USBMon.png used on input line 865.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[36]
+[37]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[37 <./Figure/USBMon.png>]
+[38 <./Figure/USBMon.png>]
 LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 930.
- [38]) (./Chapters/Literature.tex [39]
+ [39]) (./Chapters/Literature.tex [40]
 Chapter 3.
-) (./Chapters/Methods.tex [40
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--8
+
+ []
+
+
+Overfull \hbox (8.40514pt too wide) in paragraph at lines 9--21
+[]\T1/ppl/m/n/12 Schmid et al [7] fo-cused on char-ac-ter-iz-ing the la-tency a
+nd its im-pact on through-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--21
+
+ []
+
+[41
 
 ]
+Underfull \hbox (badness 10000) in paragraph at lines 22--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--38
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--54
+
+ []
+
+[42]
+Underfull \hbox (badness 10000) in paragraph at lines 62--67
+
+ []
+
+) (./Chapters/Methods.tex [43]
 Chapter 4.
-[41
+[44
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 27--28
@@ -2330,7 +2357,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--32
 
  []
 
-<Figure/Message_Source.png, id=229, 684.5575pt x 215.80624pt>
+<Figure/Message_Source.png, id=238, 684.5575pt x 215.80624pt>
 File: Figure/Message_Source.png Graphic file (type png)
 
 <use Figure/Message_Source.png>
@@ -2340,7 +2367,7 @@ Package pdftex.def Info: Figure/Message_Source.png used on input line 35.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Figure/Setup2.png, id=230, 548.0475pt x 621.32124pt>
+<Figure/Setup2.png, id=239, 548.0475pt x 621.32124pt>
 File: Figure/Setup2.png Graphic file (type png)
  <use Figure/Setup2.png>
 Package pdftex.def Info: Figure/Setup2.png used on input line 45.
@@ -2349,97 +2376,98 @@ Package pdftex.def Info: Figure/Setup2.png used on input line 45.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[42]
+[45]
 
-LaTeX Warning: Reference `fpga_packet' on page 43 undefined on input line 60.
+LaTeX Warning: Reference `fpga_packet' on page 46 undefined on input line 60.
 
-[43 <./Figure/Message_Source.png>]
-<Figure/Sequence.png, id=238, 744.7825pt x 113.42375pt>
+[46 <./Figure/Message_Source.png>]
+<Figure/Sequence.png, id=247, 744.7825pt x 113.42375pt>
 File: Figure/Sequence.png Graphic file (type png)
 
 <use Figure/Sequence.png>
 Package pdftex.def Info: Figure/Sequence.png used on input line 80.
 (pdftex.def)             Requested size: 426.79135pt x 64.99834pt.
 
-<Figure/State_Machine.png, id=239, 513.92pt x 342.27875pt>
+<Figure/State_Machine.png, id=248, 513.92pt x 342.27875pt>
 File: Figure/State_Machine.png Graphic file (type png)
 
 <use Figure/State_Machine.png>
 Package pdftex.def Info: Figure/State_Machine.png used on input line 86.
 (pdftex.def)             Requested size: 256.95937pt x 171.13895pt.
- [44 <./Figure/Setup2.png>] [45 <./Figure/Sequence.png> <./Figure/State_Machine
-.png>]) [46]
+ [47 <./Figure/Setup2.png>] [48 <./Figure/Sequence.png> <./Figure/State_Machine
+.png>]) [49]
 Chapter 5.
-<Figure/results_setup.png, id=252, 532.99126pt x 337.26pt>
+<Figure/results_setup.png, id=262, 532.99126pt x 337.26pt>
 File: Figure/results_setup.png Graphic file (type png)
 
 <use Figure/results_setup.png>
-Package pdftex.def Info: Figure/results_setup.png used on input line 396.
+Package pdftex.def Info: Figure/results_setup.png used on input line 414.
 (pdftex.def)             Requested size: 266.49498pt x 168.62958pt.
- [47
+ [50
 
-] [48 <./Figure/results_setup.png>]
-<Figure/Staggering.png, id=261, 720.6925pt x 405.515pt>
+] [51 <./Figure/results_setup.png>]
+<Figure/Staggering.png, id=270, 720.6925pt x 405.515pt>
 File: Figure/Staggering.png Graphic file (type png)
 
 <use Figure/Staggering.png>
-Package pdftex.def Info: Figure/Staggering.png used on input line 430.
+Package pdftex.def Info: Figure/Staggering.png used on input line 448.
 (pdftex.def)             Requested size: 360.34537pt x 202.75699pt.
- [49 <./Figure/Staggering.png>]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 437.
+ [52 <./Figure/Staggering.png>]
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 455.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (15.69505pt too wide) in paragraph at lines 437--437
+Overfull \hbox (15.69505pt too wide) in paragraph at lines 455--455
 []\T1/ppl/m/it/12 Debugfs Doc-u-men-ta-tion\T1/ppl/m/n/12 . Linux Ker-nel Archi
 ves. \T1/ppl/m/sc/12 url\T1/ppl/m/n/12 : $\T1/pcr/m/n/12 https : / / www . kern
 el .
  []
 
 
-Overfull \hbox (24.70543pt too wide) in paragraph at lines 437--437
+Overfull \hbox (24.70543pt too wide) in paragraph at lines 455--455
 \T1/pcr/m/n/12 november -[] 2017 / internet -[] of -[] things -[] outlook$ \T1/
 ppl/m/n/12 (vis-ited on 08/01/2018). 
  []
 
-File: Chapters/cover.pdf Graphic file (type pdf)
-<use Chapters/cover.pdf>
-Package pdftex.def Info: Chapters/cover.pdf used on input line 443.
-(pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
-File: Chapters/cover.pdf Graphic file (type pdf)
- <use Chapters/cover.pdf>
-Package pdftex.def Info: Chapters/cover.pdf used on input line 443.
-(pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
-
-<Chapters/cover.pdf, id=268, page=2, 597.51233pt x 845.03705pt>
-File: Chapters/cover.pdf Graphic file (type pdf)
-
-<use Chapters/cover.pdf, page 2>
-Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 443.
-(pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
-File: Chapters/cover.pdf Graphic file (type pdf)
- <use Chapters/cover.pdf, page 2>
-Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 443.
-(pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
- [50
+[53
 
 ]
 File: Chapters/cover.pdf Graphic file (type pdf)
+ <use Chapters/cover.pdf>
+Package pdftex.def Info: Chapters/cover.pdf used on input line 461.
+(pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
+File: Chapters/cover.pdf Graphic file (type pdf)
+ <use Chapters/cover.pdf>
+Package pdftex.def Info: Chapters/cover.pdf used on input line 461.
+(pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
+
+<Chapters/cover.pdf, id=282, page=2, 597.51233pt x 845.03705pt>
+File: Chapters/cover.pdf Graphic file (type pdf)
 
 <use Chapters/cover.pdf, page 2>
-Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 443.
+Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 461.
+(pdftex.def)             Requested size: 597.51086pt x 845.03497pt.
+File: Chapters/cover.pdf Graphic file (type pdf)
+ <use Chapters/cover.pdf, page 2>
+Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 461.
+(pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
+ [54]
+File: Chapters/cover.pdf Graphic file (type pdf)
+
+<use Chapters/cover.pdf, page 2>
+Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 461.
 (pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
 File: Chapters/cover.pdf Graphic file (type pdf)
  <use Chapters/cover.pdf, page 2>
-Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 443.
+Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 461.
 (pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
 File: Chapters/cover.pdf Graphic file (type pdf)
 
 <use Chapters/cover.pdf, page 2>
-Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 443.
+Package pdftex.def Info: Chapters/cover.pdf, page2 used on input line 461.
 (pdftex.def)             Requested size: 597.53821pt x 845.07365pt.
- [51 <./Chapters/cover.pdf>] (./Thesis.aux)
+ [55 <./Chapters/cover.pdf>] (./Thesis.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -2451,13 +2479,13 @@ Package logreq Info: Writing requests to 'Thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 25485 strings out of 493029
- 465956 string characters out of 6136234
- 888858 words of memory out of 5000000
- 28635 multiletter control sequences out of 15000+600000
+ 25538 strings out of 493029
+ 467263 string characters out of 6136234
+ 889832 words of memory out of 5000000
+ 28688 multiletter control sequences out of 15000+600000
  36081 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 61i,18n,52p,10365b,3100s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 61i,18n,52p,10365b,3106s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist
@@ -2472,10 +2500,10 @@ e/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatin
 o/uplri8a.pfb>
-Output written on Thesis.pdf (59 pages, 1678829 bytes).
+Output written on Thesis.pdf (63 pages, 1684533 bytes).
 PDF statistics:
- 324 PDF objects out of 1000 (max. 8388607)
- 180 compressed objects within 2 object streams
+ 337 PDF objects out of 1000 (max. 8388607)
+ 189 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  176 words of extra memory for PDF output out of 10000 (max. 10000000)
 

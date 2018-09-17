@@ -2052,21 +2052,24 @@
   <bcf:section number="0">
     <bcf:citekey order="4">noauthor_internet_2017</bcf:citekey>
     <bcf:citekey order="5">nychis_enabling_nodate</bcf:citekey>
-    <bcf:citekey order="6">ulversoy_software_2010</bcf:citekey>
-    <bcf:citekey order="7">noauthor_ieee_nodate</bcf:citekey>
-    <bcf:citekey order="8">noauthor_limesdr_nodate</bcf:citekey>
-    <bcf:citekey order="9">schmid_experimental_2007</bcf:citekey>
-    <bcf:citekey order="10">schmid_experimental_2007</bcf:citekey>
-    <bcf:citekey order="11">schmid_experimental_2007</bcf:citekey>
+    <bcf:citekey order="6">schmid_experimental_2007</bcf:citekey>
+    <bcf:citekey order="7">schmid_experimental_2007</bcf:citekey>
+    <bcf:citekey order="8">schmid_experimental_2007</bcf:citekey>
+    <bcf:citekey order="9">noauthor_limesdr_nodate</bcf:citekey>
+    <bcf:citekey order="10">nychis_enabling_nodate</bcf:citekey>
+    <bcf:citekey order="11">noauthor_warp_nodate</bcf:citekey>
     <bcf:citekey order="12">nychis_enabling_nodate</bcf:citekey>
-    <bcf:citekey order="13">noauthor_warp_nodate</bcf:citekey>
+    <bcf:citekey order="13">nychis_enabling_nodate</bcf:citekey>
     <bcf:citekey order="14">nychis_enabling_nodate</bcf:citekey>
-    <bcf:citekey order="15">nychis_enabling_nodate</bcf:citekey>
-    <bcf:citekey order="16">nychis_enabling_nodate</bcf:citekey>
-    <bcf:citekey order="17">_usbmon</bcf:citekey>
-    <bcf:citekey order="18">_debugfs</bcf:citekey>
-    <bcf:citekey order="19">basak_usb_2018</bcf:citekey>
-    <bcf:citekey order="20">_usb_data_transfer</bcf:citekey>
+    <bcf:citekey order="15">_usbmon</bcf:citekey>
+    <bcf:citekey order="16">_debugfs</bcf:citekey>
+    <bcf:citekey order="17">basak_usb_2018</bcf:citekey>
+    <bcf:citekey order="18">_usb_data_transfer</bcf:citekey>
+    <bcf:citekey order="19">schmid_experimental_2007</bcf:citekey>
+    <bcf:citekey order="20">nychis_enabling_nodate</bcf:citekey>
+    <bcf:citekey order="21">schmid_experimental_2007</bcf:citekey>
+    <bcf:citekey order="22">truong_investigating_2013</bcf:citekey>
+    <bcf:citekey order="23">puschmann_implementation_2011</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="nty/global" type="entry" sortscheme="nty" sortnamekeyscheme="global">
   <bcf:sorting>

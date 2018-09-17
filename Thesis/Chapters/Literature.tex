@@ -1,7 +1,73 @@
 \chapter{Literature Study}
 
-What does this chapter include?
 This chapter introduces previous research work on the research question.
-The literature review is done to figure out methods used for measurement of latency.
+As there is no prior work done on the LimeSDR-USB platform, all the research work investigated will be using USRP as the \ac{sdr} platform.
+The previous work is analyzed to figure out the methods are used for measurement of the timing delays.
+The results of each of these work is analyzed to figure out the performance bottlenecks in each of these work.
+Finally, previous work is explored to find out the mitigation strategies used by them.\\
 
-How are the papers explored or analyzed? (Goals of this section)
+Schmid et al \cite{schmid_experimental_2007} focused on characterizing the latency and its impact on throughput for modern protocols like IEEE 802.15.4 in a Host\_PHY architecture.
+The work introduced the problem of blind spots and tries to figure out the impact of bus transfer latency.
+They measured the latency by using an external oscilloscope with one channel connected to the parallel port of the host computer and the other channel connected to one of the RF ports of the USRP.
+In their measurements they ignore the software processing delays and attribute their experimental results to only bus latency.
+But, the software processing delays is found to be quite significant in their later experiments which leads me to believe that the reported bus latency delays are higher than the actual values.
+A key takeaway from their results is on average the USB transfer depends on the USRP buffer size specified at startup.
+The bus latency is significant at lower sampling rates as it takes more time to fill up the USRP buffers.
+But, at higher sampling rates, the bus latency is negligible compared to the processing delay.
+The work measured round trip times but described neither the method nor the measurement setup.
+The paper ignored measuring the processing time at different software levels on the host-computer.
+This information might be useful for understanding what might be the bottleneck on the host computer side.
+They used their experimental results for the bus latency to assume that the rest is contributed by the software.\\
+
+Nychis et al \cite{nychis_enabling_nodate} argued the need for split-MAC approach, where time-sensitive \ac{mac} operations are moved to the \ac{FPGA} which are controlled by the host computer.
+%They refer to this design as split-MAC approach to \ac{sdr} system design.
+%LimeSDR has already implemented data packet meta-data, control channel and precise scheduling suggested by Nychis et al.
+Since this project concentrates on timing delay characterization, the discussion is only limited to the relevant delay analysis.\\
+
+They motivated their work by precise time information of delays at two levels: kernel and user space, kernel and FPGA.
+They timestamped the TX and RX chains at different points to quantitatively measure these two delays.
+For the Kernel to FPGA time, the work modified the kernel's USB driver and measured the time at the last point before the DMA Write Request or after DMA read request interrupts the driver.
+They measured the overall round trip time, by executing the USRP ping command.
+It is important to note that this measurement setup did not use the radio frontend of the USRP.
+So the reported bus transfer time is not controlled by the sampling rate as shown by Schmid et al \cite{schmid_experimental_2007}.
+Even in that case, the bus transfer time was the most significant.
+They changed the USB transfer size to 512 bytes from the default 4096 bytes.
+This led to a reduction in the Kernel to FPGA round trip time only by a factor of two which led them to believe USB transfer time contributes significantly to the measurement.
+Although kernel to FPGA time contributed significantly to the overall latency, it contributed a limited amount of jitter in their results.
+On the other hand, GNU Radio processing had high standard deviation.\\
+
+Truong et al \cite{truong_investigating_2013} investigated and analyzed the different sources of delays in an USRP Embedded E 100 \ac{sdr} platform.
+The USRP E series has an embedded processor which allows it to operate it in a standalone mode.
+Instead of communicating with a host computer through a communication bus, the E series uses a  \ac{GPMC} controller for connecting the embedded memory and the \ac{FPGA} buffers.
+They divided the latency into three parts: software,bus and hardware delays.
+Software delay is defined as the delay introduced by the software buffering scheme in GNU Radio and other host computer processes involved.
+Bus Delay is the delay introduced by the buffering in the \ac{UHD}.
+The hardware delays is caused mainly by buffering of data in the FPGA \ac{FIFO} buffers which is proportional to the USRP sample rate.
+They measured overall round trip times as well as individual component delays using timestamps at different steps.
+The timestamps are similar to the ones used by Nychis et.al.
+They used ping command to evaluate the overall latency.
+For the timestamp method, they use a GNU Radio flow-graph which they did not provide.
+One thing to note is that their measurement setup is highly unreliable as only 873 out of 5000 ping messages were successfully transmitted.   
+Finally, they showed the impact of UHD buffer size on latency., with lower buffer size leading to lower mean and standard deviation in the measured latency.
+Although the works stated it takes timestamps at different steps, the results for those were not presented completely.
+They identified host computer processing time as the main latency bottleneck which is understandable as they are using an embedded processor. \\
+
+
+
+
+%Surligas et al works on providing a \ac{sdr} platform for using heterogeneous wireless standards: 802.11 and 802.15.4.
+%The work provides a host-PHY architecture and extends the existing UCLA PHY with Acknowledgements and Channel Sensing.
+%They showed their implementation of 802.15.4 is able to exchange packets with Zolertia Z1 platform, but they do not concentrate on the delays inherent in this process.\\
+ 
+Puschmann et al \cite{puschmann_implementation_2011} developed a Send-and Wait \ac{ARQ} protocol  testbed using USRP 2 as the \ac{sdr} platform.
+They evaluated the testbed by measuring end to end throughput and latency.
+In this work, ping command was used for measuring the round trip times at data-link layer and the application layer.
+They investigated the impact of sample buffer size in the USRP2 driver on the round trip times.
+Lower sample buffer sizes led to lower round trip times with less jitter as the received samples do not need to wait unnecessarily in the queues.\\
+
+As highlighted by all these previous works, there is significant latencies in \ac{sdr} platform based communication systems.
+Previous works have tried to showcase delays in different segments in the processing chain but comprehensive evaluation is missing.
+Finally, most of the works tried to mitigate the buffering delays in the \ac{UHD} by modifying the UHD sample buffer size.
+Since, LimeSDR implements a different software architecture alternative mitigation techniques need to explored. 
+
+
