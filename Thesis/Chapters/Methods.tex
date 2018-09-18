@@ -11,14 +11,15 @@ A method was needed for measuring the time duration of the individual process as
 The LimeSDR doesn't have a real time clock on board, so in order for time measurement on the LimeSDR, it was needed to synchronize to synchronize different clock domains across a variable latency link.
 This process is complex and not feasible given the time constraint, so this project avoids doing any time measurement on the LimeSDR.
 Taking hints from the literature review, this project opts to timestamp the \ac{sdr} software processes on the host computer.
-This method is reliable and doesn't affect the measurements too much.\\
+This method is reliable and doesn't introduce affect the measurements significantly.\\
 
 Most of the previous studies used ping as the measurement tool.
 In this case, there are two host computer connected through two \ac{sdr} platforms.
 As the host computers will not be identical they will impact the collected measurement differently.
 It would not be possible to evaluate the impact of the host computer processing resources in this case.
 Another problem with this method is because this uses common frequency bands, communication among other devices can make the setup unreliable.
-Finally, measurement across two different platforms makes it different to correlate the measurements on the two computer as the clocks are not synchronized.
+As this project concentrates on the performance of the LimeSDR platform without considering the channel conditions, the impact of communication through the air medium can be safely ignored.
+Finally, measurement across two different platforms makes it difficult to correlate the measurements on the two computer as the clocks are not synchronized.
 Considering these factors, this project picked the loopback method.
 In this method, the TX and RX chains on the LimeSDR are shorted before the \ac{LNA} of the LMS7002M chip shown in Figure \ref{lms7002m}.
 This method uses the radio frontend of the LimeSDR which helps evaluate the impact of radio-frontend configuration on the performance.
@@ -27,6 +28,9 @@ This method uses the radio frontend of the LimeSDR which helps evaluate the impa
 
 
 \section{System Architecture}
+With the methodology in place, the measurement setup needs to be described.
+The measurement setup looks like 
+
 The experimental system is primarily based on the WIME project implementation of 802.15.4 protocol. It is adapted to use the LimeSDR board instead of USRP as the \ac{sdr} platform. The adaptations can be grouped as
 
 \begin{enumerate}
