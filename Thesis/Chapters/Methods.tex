@@ -1,4 +1,4 @@
-\chapter{Methods}
+\chapter{Timing Characterization}
 This chapter introduces the methodology and system architecture followed by the experimental designs for the quantitative analysis.
 The system architecture describes the GNU Radio flow-graph description, software and hardware used in this project. The experiments are presented in chronological order. In the first experiment, the performance of the system is measured with respect to broader parameters like sampling rate, data payload size and the number of message sent per second. The second experiment was designed evaluation of the impact of these parameters on the the different subsections of the data path. In experiment 3, the project looks at the impact of the size of the bus transfer on the overall delay.
 
@@ -39,6 +39,7 @@ The LimeSDR has been configured to run in the loopback configuration.\\
 \label{Real_Setup}
 \end{figure}
 
+
 The GNU Radio based communication system is primarily based on the on the WIME project implementation of 802.15.4 protocol. It is adapted to use the LimeSDR board instead of USRP as the \ac{sdr} platform. The adaptations can be grouped as:
 
 \begin{enumerate}
@@ -47,32 +48,54 @@ The GNU Radio based communication system is primarily based on the on the WIME p
 \item{Periodic Message Source}
 \end{enumerate}
 
-\paragraph{GNU Radio Blocks}
+\paragraph{GNU Radio Source and Sink Blocks}
 The USRP source and sink blocks are replaced by the gr-limesdr source and sink blocks for using the LimeSDR platform.
 Another alternate used in this project is the gr-osmosdr project sink and source blocks which used soapysdr to access the Lime API. The former was chosen as it directly interacts with the LimeAPI without using the adaptation layer presented by the soapysdr project. This gives much better control of the board control parameters and also saves subsequent \textit{memcpy} operations used by the soapysdr adaptation layer.\\
 
 In both these blocks, the loopback configuration is defined at initialization by setting the loopback register on the NIOS processor.
 This turns on the switch at the end of the \ac{LNA} which creates a data flow from the TX path to the RX data path on the LMS7002M.\\
 
+
 LimeSDR driver sends USB packets in chunks whose size is determined by the FPGA data packet size and the batchsize of FPGA data packet defined for the stream.
 In case, the GNU Radio packet data does not fill up the entire chunk the Streamer function of the driver waits for more data from the GNU Radio.
+Otherwise, it adds zeros after the end of the original data and sends the packet after a set timeout.\\
 
-The problem with this that when transmitting a packet using LimeSDR, it can result in the packet trans
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{Thesis/Figure/SilentProblem.png}
+\caption{Radio Silent Problem}
+\label{Radio_Silent}
+\end{figure}
 
-)
-    
+This implementation works well for continuous stream based protocols, but for packet based protocols like the IEEE 802.15.4 this leads to radio silence problem, as illustrated in Figure \ref{Radio_Silent}.
+In this figure, the LimeSDR over the air transmission over the air is shown.
+If the data contained in one packet doesn't satisfy the size requirement imposed by the Streamer, the radio becomes silent(shown as the gap in the figure) and the transmission breaks down.
+The receiver assumes that the radio signal for a packet is a single continuous stream, so if the radio signal is interrupted then it can not receive the packet properly.\\
+
+This project adds a GNU Radio stream tag called "End of Packet" to the sample stream from the 802.15.4 PHY block for solving this problem.
+In the gr-limesdr block, the tag instructs the Streamer function of the driver to immediately send the data to the LimeSDR by appending zeros at the end of the packet data.
+
 \paragraph{802.15.4 \ac{PHY} layer}
 
-The WIME project \ac{PHY} layer has been designed to only work with 4 MHz as the sampling rate, in this project, the \ac{PHY} layer has been modified to accommodate different sampling rates. \textbf{Describe the change}
+The WIME project \ac{PHY} layer has been designed to only work with 4 MHz as the sampling rate, in this project, the \ac{PHY} layer has been modified to accommodate different sampling rates as it helps in understanding the impact of sampling rate on the performance.\\
 
-\textbf{Describe the timing probe}
-\paragraph{Periodic Message Source}
+On the TX flowgraph of the GNU Radio 802.15.4, \ac{PHY} a sine wave generator is added which takes the frequency as input.
+The "Repeat" block interpolates a single chip by repeating it by the $set frequency/1 MHz$ as the modulator generates a signal of bandwidth 1 MHz.
+On the RX flowgraph, the clock recovery module decimates by $set frequency/2 MHz$ as the received signal has a bandwidth of 2 MHz.
 
-A periodic message source block was implemented in the GNU Radio, it takes in the message length and time period as parameters. Figure \ref{message_source} shows the working of the message source with respect to time. The data length controls the duty cycle of the signal by varying $\Delta T_{tx}$, which is the time is requires to transmit the message through USB.\\
+\paragraph{Periodic Message Source} \label{Periodic Message Source}
+This project needed a controllable excitation source for evaluating the experimental setup.
+A periodic message source block was implemented in the GNU Radio, it takes in the message length and time period as parameters.
+Figure \ref{message_source} shows the working of the message source with respect to time.
+The time period controls the time duration between two subsequent message generation.
+The data length controls the data payload for the \ac{mac} packet of the 802.15.4 packet.
+It indirectly controls the transmission time,$\Delta T_{tx}$, of the the message.
+The larger the message payload, the more time it will take to transmit through the setup. 
+\\
 
-The block notes down the global system time as $T_1$ when it publishes a message to its output port. When the block receives the message the time $T_1$ is written to a file for analysis with the reception time measured in the \ac{PHY} layer. As only valid messages are received by this block writing $T_1$ only on valid receive helps in measuring the time delay only for valid data points.\\
+% The block notes down the global system time as $T_1$ when it publishes a message to its output port. When the block receives the message the time $T_1$ is written to a file for analysis with the reception time measured in the \ac{PHY} layer. As only valid messages are received by this block writing $T_1$ only on valid receive helps in measuring the time delay only for valid data points.\\
 
-Since the time noted should be compared with those from usbmon, \textit{gettimeofday} was selected as the preferred method. The time period was set such that the transmitted message is received before sending the next message.\\
+% Since the time noted should be compared with those from usbmon, \textit{gettimeofday} was selected as the preferred method. The time period was set such that the transmitted message is received before sending the next message.\\
 
 \begin{figure}[h!]
 \centering
@@ -98,7 +121,7 @@ Since the time noted should be compared with those from usbmon, \textit{gettimeo
 The project uses the Wime Project implementation of 802.15.4 MAC and PHY layers in GNU Radio. For the purpose of measurement of round trip latency, a loop back experimentation setup(Figure \ref{setup_overview}) was implemented. A periodic message source generates messages and notes down the time T1. It is then processed and modulated by the 802.15.4 MAC and PHY respectively and sent through the OSMOCOM transreceiver to the LimeSDR. The RX and TX ports of the LMS7002M has been shorted and hence the original sent message loopbacks through the FPGA and comes back to the GNU Radio and is demodulated and processed by the PHY and MAC blocks respectively and is ultimately received by the periodic message source and the time is noted as T4.
 
 The usbmon kernel utility continuously monitors bus activity between the LimeSDR USB driver and USB Host Controller. It timestamps the transfers and generates event queues to be accessed from the user space. The timing measurements program parses the event queue to find the relevant packets and notes down their usbmon timestamps as T3 and T4 for transmit and receive packets respectively.  
-\subsection{Message Source} \label{message_source}
+\subsection{Message Source}
 
 \subsection{Timing Measurements Program}
 The timing measurements program uses ioctl to access the /dev/usbmonX character device. This allows the program to access the usbmon kernel utility event queue. The events are filtered to find packets with \textbf{0x01} \& \textbf{0x81} device endpoints. The data streams are parsed to find the relevant data fields from FPGA packets(Figure \ref{fpga_packet}), following that the data is converted from integer representation to complex floating point representation. The modulus of In Phase Sample's amplitude is used to determine if the data contained in the packet is useful or not. 
