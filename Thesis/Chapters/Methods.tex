@@ -27,24 +27,40 @@ This method uses the radio frontend of the LimeSDR which helps evaluate the impa
 
 
 
-\section{System Architecture}
-With the methodology in place, the measurement setup needs to be described.
-The measurement setup looks like 
+\section{Experimental Setup}
+The physical experimental setup is shown in Figure \ref{Real_Setup} to provide the broader picture of the setup.
+The host computer is running the GNU Radio communication system which interacts with the LimeSDR platform through \ac{USB} 3.0 connection.
+The LimeSDR has been configured to run in the loopback configuration.\\
 
-The experimental system is primarily based on the WIME project implementation of 802.15.4 protocol. It is adapted to use the LimeSDR board instead of USRP as the \ac{sdr} platform. The adaptations can be grouped as
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{Thesis/Figure/MeasurementSetup.png}
+\caption{Measurement Setup}
+\label{Real_Setup}
+\end{figure}
+
+The GNU Radio based communication system is primarily based on the on the WIME project implementation of 802.15.4 protocol. It is adapted to use the LimeSDR board instead of USRP as the \ac{sdr} platform. The adaptations can be grouped as:
 
 \begin{enumerate}
-\item{GNU Radio blocks}
+\item{GNU Radio Source and Sink blocks}
 \item{802.15.4 \ac{PHY} layer}
 \item{Periodic Message Source}
 \end{enumerate}
 
 \paragraph{GNU Radio Blocks}
+The USRP source and sink blocks are replaced by the gr-limesdr source and sink blocks for using the LimeSDR platform.
+Another alternate used in this project is the gr-osmosdr project sink and source blocks which used soapysdr to access the Lime API. The former was chosen as it directly interacts with the LimeAPI without using the adaptation layer presented by the soapysdr project. This gives much better control of the board control parameters and also saves subsequent \textit{memcpy} operations used by the soapysdr adaptation layer.\\
 
-For using the LimeSDR platform the USRP Sink and Source blocks are replaced by the grlimesdr project source and sink blocks. Another alternate used in this project is the gr-osmosdr project sink and source blocks which used soapysdr to access the Lime API. The former was chosen as it directly interacts with the LimeAPI without using the adaptation layer presented by the soapysdr project. This gives much better control of the board control parameters and also saves subsequent memcpy operations used by the soapysdr glue layer. (\textbf{Maybe present the RTT values for using the two different blocks and show that the limesdr block is better.}
+In both these blocks, the loopback configuration is defined at initialization by setting the loopback register on the NIOS processor.
+This turns on the switch at the end of the \ac{LNA} which creates a data flow from the TX path to the RX data path on the LMS7002M.\\
+
+LimeSDR driver sends USB packets in chunks whose size is determined by the FPGA data packet size and the batchsize of FPGA data packet defined for the stream.
+In case, the GNU Radio packet data does not fill up the entire chunk the Streamer function of the driver waits for more data from the GNU Radio.
+
+The problem with this that when transmitting a packet using LimeSDR, it can result in the packet trans
 
 )
-
+    
 \paragraph{802.15.4 \ac{PHY} layer}
 
 The WIME project \ac{PHY} layer has been designed to only work with 4 MHz as the sampling rate, in this project, the \ac{PHY} layer has been modified to accommodate different sampling rates. \textbf{Describe the change}
