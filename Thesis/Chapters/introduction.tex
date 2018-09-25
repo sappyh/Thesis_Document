@@ -27,23 +27,32 @@ A fundamental challenge of \ac{sdr} system is computational horsepower, because 
 \section{Problem Context}
 Wireless devices share the wireless channel with other devices. The wireless protocol \ac{mac} layer is responsible for moderating access to the wireless channel. It typically uses \ac{tdma} and \ac{csma} to allocate the use of the channel. \ac{tdma} protocols schedule the allocation of the entire channel to one of the devices for a particular time duration. This requires global time synchronization among the devices so that the devices can understand when to transmit and receive. \ac{csma}, on the other hand uses the channel on an opportunistic basis, with the devices sensing if the channel is free or not.\\
 
-\subsection{CSMA}
-As highlighted by \cite{schmid_experimental_2007}, \ac{sdr} based systems don't comply with the stringent timing constraints imposed by modern \ac{mac} protocols. Furthermore, the presence of long bus communication and processing delays create blind spots\cite{schmid_experimental_2007} in carrier sensing. In Figure \ref{blind_spots}, the \ac{sdr} system is receiving a packet being transmitted on the air medium. Since there is communication and processing delays, the \ac{cpu} of the \ac{sdr} system  receives the packet completely at $t_1$ delayed from $t_0$ when the packet transfer ends on the air medium.\\
+As highlighted by \cite{schmid_experimental_2007}, \ac{sdr} based systems don't comply with the stringent timing constraints imposed by modern \ac{mac} protocols. Furthermore, the presence of long bus communication and processing delays create blind spots\cite{schmid_experimental_2007} in carrier sensing. 
+In Figure \ref{blind_spots}, the two problems originating from long delays have been shown.
+The left hand side image shows the problem of blind spots when using channel sensing for packet transmission.
+The \ac{sdr} system wants to transmit a packet, so it uses channel sensing to detect when the channel is free.
+An over the air packet ends at time $t_0$, this information is detected by the \ac{cpu} of the \ac{sdr} after a certain delay, the channel sensing process keeps checking on the availability of the channel.
+The channel information from time $t_1$ is used by the \ac{cpu} to infer that the channel is free and it starts the transmission.
+The TX packet reaches the air medium at time $t_2$, in case of \ac{sdr} systems this delay,$t_2-t_1$, can be quite significant.
+This can result in collision with other nodes transmitting as because of the communication and processing delays, the system is blind to real time channel situation.
+In case of regular radio chips, the channel sensing logic is located very close to the \ac{RF} frontend and the delay $t_2 - t_1$ is quite negligible thereby resulting in smaller blind spots.\\
 
-Once the packet has been received, the system wants to let the transmitting system about the successful reception by sending the \ac{ack} packet. If it detects the medium is free using carrier sensing, it would start transmitting.
-But because of the delays, it would make this decision based on past information which has been delayed by $t_1 - t_0$.
-This makes the system blind towards the real time channel situation when making the decision to transmit and might lead to a collision. \\ 
+Another problem has been illustrated in the right hand side image of Figure \ref{blind_spots}.
+Because of larger communication and processing delays, it takes significantly longer for the \ac{sdr} system to acknowledge a received packet.
+This acknowledgement time is referred to as \ac{IFS}, the software implementation also introduces jitter.
+For a low powered radio node in \ac{IOT} applications, this jitter causes the radio to be turned on for significantly longer time.
+The battery is drained away faster thereby undermining the purpose of minimal maintenance in \ac{IOT} systems.
+Another problem with longer \ac{IFS} is lower spectral efficiency where the radio channel is unused for longer periods of time.\\ 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.6\textwidth]{Figure/BlindSpots.png}
-\caption{Blind Spots Illustration(adapted from \cite{schmid_experimental_2007}).}
+\includegraphics[width=\textwidth]{Figure/BlindSpots.png}
+\caption{Problem Context Illustration(adapted from \cite{schmid_experimental_2007}).}
 \label{blind_spots}
 \end{figure}
 
-Hence when designing \ac{mac} protocols, these delays needs to be taken into account to avoid collisions.
+Hence when designing \ac{mac} protocols, characteristics of these delays needs to be taken into account to avoid collisions.
 This necessitates a closer understanding of these delays and how different system parameters affect these delays.
-
 %\subsection{TDMA}
 %\ac{tdma} based protocols are controlled by time slots, hence there is need for precise scheduling to ensure that the transmissions happen in the correct time-slot. The delays and imprecise scheduling can be tolerated by making the time-slots longer but that degrades the efficiency of the overall network. Modern contention based protocols(\ac{csma}) also require precise timing to implement inter-frame spacing.\\
 
@@ -59,10 +68,10 @@ For the feasibility of this goal, the cost effectiveness of the radio-head needs
 LimeSDR \cite{noauthor_limesdr_nodate} provides a cost-effective \ac{sdr} platform, which supports the desired frequency bands making it the ideal choice as the project's radio-head.\\
 
 Low power wireless devices are one of the main focus areas for the 5G-Coral project.
-IEEE 802.15.4 is one of most popular the network specifications for \ac{LPWAN} i.e \ac{IOT} systems.
+IEEE 802.15.4 is the most popular network specifications for \ac{LPWAN} i.e \ac{IOT} systems.
 It specifically defines the Physical Layer and the \ac{mac} layer of the network stack.
-So there is a need to identify the performance bottlenecks of \ac{sdr} implementation of IEEE 802.15.4 for the successful deployment of the 5G-Coral project.
-As there are no previous studies on the LimeSDR platform, this project evaluates the timing bottlenecks.
+In order to successfully deploy flexible radio-head for \ac{LPWAN} devices, we need to understand the limitations and timings bottlenecks for this kind of system.
+The lack of previous studies on the LimeSDR platform presents a knowledge gap which is necessary to fill for future deployments using this platform.
 
 %The lack of previous research on the characteristics of the platform made it the ideal choice for my \ac{sdr} platform.\\
 
@@ -76,9 +85,8 @@ As there are no previous studies on the LimeSDR platform, this project evaluates
 \section{Research Question}
 %\begin{itemize}
 %\item{
-Taking into consideration the problem and project context, I formulated this research question:
---- Need to work on this part
-What are the timing delays in  LimeSDR based IEEE 802.15.4 network ?
+Taking into consideration the problem and project context, we formulated this research question:
+What are the characteristics of the delays introduced by different components in LimeSDR based IEEE 802.15.4 network?
 %}
 \begin{figure}[!h]
 \centering
@@ -91,7 +99,7 @@ The research question is explained using Figure \ref{rq1}.
 The Host Side processing delay is introduced by running the software implementation of the 802.15.4 \ac{PHY} and \ac{mac} layers.
 The bus communication delay represents the delay caused by the \ac{USB} 3.0 bus transfers.
 The \ac{sdr} processing delay is the time required by the LimeSDR platform for transmission or reception of radio signals.
-The objective of this thesis is to quantitatively evaluate these delays and the impact of different network and \ac{sdr} configuration parameters.
+The objective of this thesis is to quantitatively evaluate these delays and the impact of different network and \ac{sdr} configuration parameters on these delays.
 %\item{ How to implement precise scheduling in LimeSDR based IEEE 802.15.4 communication system? }
 %\end{itemize}
 

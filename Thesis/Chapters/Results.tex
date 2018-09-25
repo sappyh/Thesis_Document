@@ -1,0 +1,47 @@
+\chapter{Results and Analysis}
+
+This chapter presents the results of the experiments described in the Chapter 3.
+The results are presented in the order of the experiments described previously.
+
+\section{Experiment 1}
+Figure (results\_machine1) and () shows the results of Experiment 1 for the laptop and desktop respectively.
+The standard deviations of these measurements have been not shown in the figures to provide a clearer picture, they have been mentioned in Table .
+In these figures, the x-axis shows the sampling rate as exponents of two, the y-axis shows the mean latency of packets.
+The measurements for each message size has been connected with dotted lines for clearer representation of the results for a particular.
+All these measurements are discrete and the continuity showed by the line may not hold for other sampling rates.\\
+
+The laptop with the lower processing resources showed wide variation of latency across both the sampling rates and message sizes.
+The results show that lower sampling rates and lower message sizes gives the least latency.
+This gives us an indication that we need higher processing resources in order to handle protocols with higher bandwidth requirement.
+This result clearly shows the need to do component analysis to pinpoint the components attributing the maximum delay in this loopback datapath.\\
+
+The desktop computer with higher clock speed shows more consistent results for the 4 MHz sampling rate case for all message sizes.
+This validates our initial assumption of the our latency definition being independent of the data payload size.
+For lower message sizes sampling rate of 8 MHz shows the best results, while diverging with increased data payload size.
+The reasoning of this need to be analyzed with component timing analysis.
+The 16 MHz sampling rate for all message sizes struggles, successfully receiving roughly 25 \% of all the messages sent.
+Even those latency measurements, struggle with high mean and jitter.\\
+
+The results for 4MHz case has been summarized in Table .
+The higher clock speed and two more cores of the desktop computer leads to lower latency and jitter, while the laptop struggles processing the continuous data stream leading with significantly higher jitter.
+The results of experiment 1 clearly highlight the impact of processing resources on the latency measurements.
+
+\section{Experiment 2}
+
+Figure () and () shows the results of the component time analysis for the laptop and desktop respectively.
+We used bubble plot for showing the component delays, the x-axis shows the data payload size and the y-axis shows the component delays in $\mus$.
+The height of each bubble shows the mean latency, whereas the area of the bubbles show the difference in latency between the 95 percentile value and the 5 percentile value.
+This helps us see the variation of component delays across data samples.
+The larger the bubble, higher the latency contributed by it.\\
+
+The trends are similar across both the graphs, with the TX software delays($T_4 - T_1$) shows a increase with message size.
+This is understandable as the larger the data payload the larger is the amount of data the TX software chain needs to process.
+\textbf{Quantitative value to show the impact of processing resources.}
+The RX software delay($T_8 - T_5$) is more or less constant across the message sizes.
+It is primarily because of our definition of $T_8$, so the RX software needs to process the same amount of data regardless of the data payload size.
+The desktop computer performs slightly better compared to the desktop computer, taking approximately (insert value) less time.\\
+
+The LimeSDR loopback time shows a strange trend of decreasing with message sizes, since the RX path is designed to have uniform data rate, we hypothsize this pattern is caused by the the buffering of data in the LimeSDR \ac{FPGA} and Cypress EZ-FX3.
+So lower amount of data needs to shift across these buffers before finally reaching the TX Path for transmission, whereas the larger message sizes fills up the buffer faster and it has to shift for significantly shorter time.\\
+Our uniform results across message sizes for 4MHz sampling rate for the desktop computer can be attributed to compensation of the TX processing delay by the LimeSDR loopback time.
+In case of the laptop, although the LimeSDR loopback time decreases the increase in the TX processing time increases faster and hence the total latency increases with data payload size.

@@ -16,14 +16,14 @@ These frames carry meta-data in the form of frame headers.
 Different protocols use different frame format and headers  as it helps differentiate one protocol from another.
 These headers help the receiver in learning where the incoming data packet is coming from, who is it meant for, how to decode and arrange the contents of the data packets etc.\\
 
-\ac{PHY} layer is the lowest layer (L1) of the \ac{OSI} model,it interacts with the physical communication channel directly.
+The \ac{PHY} layer is the lowest layer (L1) of the \ac{OSI} model,it interacts with the physical communication channel directly.
 It specifies the type of data transfer(serial/parallel) and data rate of the protocol.
-\ac{PHY} layer defines the process of transmitting raw bits through the physical medium.
+The \ac{PHY} layer defines the process of transmitting raw bits through the physical medium.
 The bit-stream is grouped into code words and converted to symbols, which are then modulated to a physical signal for transmission over the transmission medium.
 \ac{PHY} layers also provides physical transmission link information like carrier sense, collision detection and \ac{LQI}  to the upper layers. \\
 
 
-\ac{mac} layer, \ac{L2} of the \ac{OSI} model, is responsible for defining the the methods for sharing and using the common transmission medium among multiple devices.
+\ac{mac} layer, \ac{L2} of the \ac{OSI} model, is responsible for defining the methods for sharing and using the common transmission medium among multiple devices.
 %\ac{mac} layer addresses are used to to check if the incoming packet is meant for the device.
 In case of outgoing packets, the \ac{mac} layer adds the \ac{mac} address of the destination device to the packet header.
 It adds the synchronization preamble and \ac{FCS} for checking transmission error.
@@ -36,7 +36,7 @@ Retransmission in case of dropped packets and acknowledgement to successfully re
 \label{Csma_flow}
 \end{figure}
 
-\ac{csma} is \ac{L2} protocol of the OSI Model. 
+\ac{csma} is a \ac{L2} protocol in the OSI Model. 
 %It is a method for handling multiple access of a shared medium.
 It mainly comes in two varieties: \ac{CSMA/CD}  and \ac{CSMA/CA}.
 The flow graphs of both are shown in Figure \ref{Csma_flow}.
@@ -62,7 +62,7 @@ The coordinator generates beacon signals periodically to maintain relative time 
 
 \subsection{\ac{sdr} Platforms}
 
-\ac{sdr} represents a new paradigm of communication system design where the system is flexible to adapt to the needs of the end-user as also the radio channel conditions. Nychis et.al \cite{nychis_enabling_nodate} classifies \ac{sdr} based communication systems into two main architectures.
+\ac{sdr} presents a new paradigm of communication system design where the system is flexible to adapt to the needs of the end-user as also the radio channel conditions. Nychis et.al \cite{nychis_enabling_nodate} classifies \ac{sdr} based communication systems into two main architectures.
 \begin{itemize} 
 \item{\textit{Host-PHY Architecture:} This is the most common architecture, enabling design and development of the entire system in software.
 It provides the maximum flexibility in terms of design and implementation choices, also there is added benefit of easy upgrades.
@@ -91,8 +91,7 @@ Figure \ref{host_PHY} shows the typical design of communication systems in this 
 \end{figure}
 
 
-Since the process for transmission and reception processes are very similar , this report concentrates on the explaining the reception process of 
-\ac{sdr} platforms.
+Since the process for transmission and reception processes are reverse of one another , this report concentrates on the explaining the reception process of \ac{sdr} platforms.
 
 \paragraph{\ac{sdr} Platform:} It is the hardware that provides access to the wireless medium in a flexible manner.
 \ac{RF} signals are transmitted and received by the platform, it converts these analog signals to digital samples and transfers them to the host computer.
@@ -102,7 +101,7 @@ The main building blocks of these platforms are shown in Figure \ref{host_PHY}.
 They are attached to wide-band antennas for receiving and transmitting over a broad range of frequencies.
 Taking the case of reception of RF signal, the signal received from the antenna is amplified by a \ac{LNA}.
 The \ac{LNA} amplifies a low power signal without significantly degrading the signal to noise ratio.
-Once amplified, the signal to passed to a \ac{RF} receiver, where the \ac{RF} signal is demodulated either to a intermediate frequency or baseband signal depending on whether the the receiver is a Zero-IF receiver or Super-heterodyne receiver respectively.\\
+Once amplified, the signal is passed to a \ac{RF} receiver, where the \ac{RF} signal is demodulated either to an intermediate frequency or baseband signal depending on whether the the receiver is a Zero-IF receiver or Super-heterodyne receiver respectively.\\
 
 \begin{figure}[h!]
 \centering
@@ -115,8 +114,8 @@ Figure \ref{rf_receiver} shows a simple \ac{RF} receiver in which the \ac{LNA} o
 The mixer is a signal processing block used for translating the input signal to another frequency range.
 The mixer uses a locally generated carrier frequency for the translation. 
 If the input \ac{RF} signal has a frequency of $f_{rf}$, and the local oscillator frequency is $f_{lo}$ then the mixer will produce a signal with frequency components $f_{rf}-f_{lo}$ and $f_{rf}+f_{lo}$.
-This output signal is then passed through a band-pass filter with $f_{rf}-f_{lo}$ as center frequency, this will reject the unwanted $f_rf+f_lo$.
-If we assume $f_{rf}=f_{lo}$, the bandpass filter will become a low pass filter and the output signal will be the baseband signal.
+This output signal is then passed through a band-pass filter with $f_{rf}-f_{lo}$ as center frequency, this will reject the unwanted $f_{rf}+f_{lo}$.
+If we assume $f_{rf}=f_{lo}$, the bandpass filter will be equivalent to a low pass filter and the output signal will be the baseband signal.
 This is the case in Zero-IF receiver architecture.
 In super heterodyne receiver architecture, a number of intermediate frequency stages are used before generation of the baseband signal.\\
 
@@ -131,7 +130,7 @@ Most \ac{sdr} use \ac{DDS} as the frequency synthesizer, which uses a highly sta
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{Figure/DDS.png}
-\caption{\ac{DDS}.}
+\caption{DDS}
 \label{dds}
 \end{figure}
 
@@ -665,7 +664,7 @@ They are basically FIFO's with control logic for receiving or sending data from 
 To understand the functionality of the "Streamer" block, let's take a look at the TX data path.
 The RX Path is vice-versa of the TX Path.\\
 
-\paragraph{TX Data Path} The application software configures the TX Stream Channels through the Lime \ac{API}. 
+\paragraph{TX Data Path} \label{TX Data Path} The application software configures the TX Stream Channels through the Lime \ac{API}. 
 Then the TX FIFO's are initialized and the control parameter like batchsize( shown in Figure \ref{trans_loop}) of the \ac{FPGA} packets and the data format for the data to be stored in the FIFO is sent to the "Streamer".
 The Streamer parses these information and configures the hardware data path with the provided configuration.
 The "Streamer Transmit Loop" initalizes internal buffers which are used for sending data through the "dataPort".\\
