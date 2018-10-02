@@ -12,7 +12,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage[counterclockwise, figuresleft]{rotating}
-
+\usepackage{diagbox}
 \addbibresource{stateofart.bib}
 \addbibresource{USBMon.bib} % The file containing our references, in BibTeX format
 
@@ -396,6 +396,7 @@
 \input{Chapters/Background.tex}
 \input{Chapters/Literature.tex}
 \input{Chapters/Methods.tex}
+\input{Thesis/Chapters/Mitagtion.tex}
 \input{Thesis/Chapters/Results.tex}
 
 
@@ -467,7 +468,9 @@
 
 \printbibliography[heading=bibintoc] % Print the bibliography (and make it appear in the table of contents)
 
+\newpage
 \appendix
+\input{Thesis/Chapters/Appendix.tex}
 
 % \chapter{Unnecessary Appended Material}
 

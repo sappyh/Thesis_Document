@@ -1,4 +1,4 @@
-\chapter{Methods}
+\chapter{Timing Characterization of the LimeSDR-USB platform}
 This chapter introduces the methodology and system architecture followed by the experimental designs for the quantitative analysis.
 The system architecture describes the GNU Radio flow-graph description, software and hardware used in this project. The experiments are presented in chronological order. In the first experiment, the performance of the system is measured with respect to broader parameters like sampling rate and data payload size. The second experiment was designed evaluation of the impact of these parameters on the the different subsections of the data path. In experiment 3, the project looks at the impact of the USB transfer size on the overall delay.
 
@@ -175,7 +175,7 @@ delete t2[i]
 \end{algorithm}
 It is assumed that the time period of the message source is greater than the latency.\\
 
-\subsection{Experiment Design}
+\subsection{Experiment Design} \label{exp1}
 The impact of amount of data sent to the LimeSDR and the impact of higher sampling rate on the latency needs to be evaluated.
 \begin{itemize}
     \item {\textbf{Objective} These parameters would help quantitatively analyze if this system design can also be applied for running higher bandwidth protocols like IEEE 802.11ac.
@@ -401,7 +401,7 @@ This process is similar for the TX data path.
 \label{data}
 \end{algorithm}
 
-\subsection{Experiment Design}
+\subsection{Experiment Design} \label{exp2}
 This experiment aims to find out the delays in different software and hardware components in the system architecture shown in Figure \ref{component_setup}.
 \begin{itemize}
     \item {\textbf{Objective} This experiment will provide comprehensive understanding of the system and how different input parameters and host computer configuration affect the system performance.
@@ -427,16 +427,13 @@ As some of the collected time samples can't be correlated because of the limitat
 This results in 999 time samples for our analysis.
 \end{itemize}
 
-\section{Experiment 3: Impact of USB Transfer Size on the component delays}
+\section{Experiment 3: Impact of USB Transfer Size on the component delays} \label{exp3}
 
-Following the results shown in (ref Results), the LimeSDR loopback time is quite significant.
-Although the software delays are higher, the difference in results across the two host computer provides us with enough reason to argue that these delays are because of the limitations of the host computer hardware configuration.
-These can be mitigated to some extent by buying higher processing resources.
-For this reason,we decided to focus on the LimeSDR delay and study it in more details.
-We hypothesized that increasing USB transfer size will lead to higher LimeSDR loopback delays which results in higher latency.
-An experiment was designed to test this hypothesis, by varying the batchsize of the LimeSDR FPGA data packets.
+It is necessary to understand how the amount of data in one bus transfer affects the overall latency and the LimeSDR loopback delay as most of the previous of the previous works highlighted that bus transfer delays are quite significant.
+But the study of the impact of bus transfer size on the latency is missing in these previous works.
+An experiment was designed for this purpose by varying the batchsize of the LimeSDR FPGA data packets.
 
-\subsection{ Experiment Design}
+% \subsection{ Experiment Design}
 \begin{itemize}
     \item \textbf{Objective} This experiment is designed to understand the impact of USB transfer sizes on the latency in the experimental setup shown in Figure \ref{component_setup}.
     \item \textbf{Input Parameters} The LimeSDR uses a parameter to set the batchsize of the LimeSDR FPGA data packets depending on the sampling rate, ensuring data from higher sampling rates configurations don't overflow the buffers.
@@ -445,6 +442,8 @@ An experiment was designed to test this hypothesis, by varying the batchsize of 
     \item \textbf{Output Metric} The latency and component delays.
     \item \textbf{Design of Experiment} The experiment collects 999 latency and component delays over 5000 seconds. The time period of the message source is set to 500ms, the message source generates 56 bytes data payload.
 \end{itemize}
+
+
 
 
 % For measuring the GNU Raadio TX processing time, 

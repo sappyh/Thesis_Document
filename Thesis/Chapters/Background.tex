@@ -2,13 +2,13 @@
 This chapter introduces the necessary background information needed for understanding the rest of the report.
 First section, provides a broad introduction to \ac{sdr} systems, GNU Radio Software Tool and \ac{PHY} and \ac{mac} layers of the network stack.
 The second section introduces the LimeSDR platform and its hardware and software architecture.
-Wime Project and IEEE 802.15.4 is explained in the third section.
-Finally, the fourth section introduces the tools used in the methods chapter.
+IEEE 802.15.4 is explained in the third section followed by WIME Project description in the fourth section.
+Finally, the fifth section introduces the tools used in the methods chapter.
 
 
 \section{Essential Concepts}
-\subsection{\ac{PHY} and \ac{mac} Layers}
-\ac{OSI} Model (ISO/IEC 7498-1:1994) presents the abstract model for networking, that is used for most communication systems design.
+\subsection{PHY and MAC Layers}
+\ac{OSI} Model (ISO/IEC 7498-1:1994)\cite{noauthor_iso/iec_nodate} presents the abstract model for networking, that is used for most communication systems design.
 The abstract model is divided into 7 layers,  where entity in each layer implements the functionality of the layer and interacts directly with the layer beneath it.
 This added functionality can be used by the upper layers.
 Data from the user application is encapsulated by each subsequent layers of the \ac{OSI} model into their frame format.
@@ -60,7 +60,7 @@ The coordinator generates beacon signals periodically to maintain relative time 
  
  
 
-\subsection{\ac{sdr} Platforms}
+\subsection{SDR Platforms}
 
 \ac{sdr} presents a new paradigm of communication system design where the system is flexible to adapt to the needs of the end-user as also the radio channel conditions. Nychis et.al \cite{nychis_enabling_nodate} classifies \ac{sdr} based communication systems into two main architectures.
 \begin{itemize} 
@@ -207,7 +207,7 @@ In the next section, the report goes into detail about GNU Radio.
 GNU Radio is an open-source digital signal processing framework, which has been rapidly evolving with a large active community.
 The software framework can be used for both simulation and prototyping real-world application scenarios. 
 It  provides a graphical interface for designing signal processing chains  as well as extensive library of signal processing blocks like filters, synchronizers, demodulators etc.
-The ease of use of the framework, extensive library as well as hardware support for most \ac{sdr} platforms has led to diverse application use cases such as RFID, 802.11, cellular networks.\\
+The ease of use of the framework, extensive library as well as hardware support for most \ac{sdr} platforms has led to diverse application use cases such as RFID \cite{buettner_software_2011}, 802.11 \cite{bloessl_towards_2013} and cellular networks \cite{demel_lte_2015}.\\
 
 
 GNU Radio is designed to stream large amounts of data in real-time between parallel computational nodes.
@@ -221,7 +221,7 @@ From the block designer point of view, these blocks can be viewed to be executin
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.9\textwidth]{Figure/GNURADIO_1.png}
-\caption{GNU Radio Software Architecture.}
+\caption{Example of GNU Radio flowgraph.}
 \label{gnuradio_arch}
 \end{figure}
 
@@ -268,53 +268,56 @@ Stream tags are attached with stream data samples and provide additional informa
 It can be used both for passing control flags as well as metadata information like the \ac{PDU} size, timing information etc.
 These stream tags are propagated to the next blocks and is updated by the data rate changes.
 For example, if the block takes it 2 samples as input and produces 4 samples as output, its data rate is 2.
-In this case, if the input stream had a stream tag at position "x" then the the location in the output stream would be "2x". \\
+In this case, if the input stream had a stream tag at position $x$ then the the location in the output stream would be $2x$. \\
 
 
+The flow graph describes the flow of data between different blocks.
+Flow graphs make it easier to design complex signal processing algorithms by combining simpler blocks.
+This provides modularity and scalability to the algorithm development process.
+Generally blocks are designed in C++ to enable fine grained control and faster execution.
+The flowgraphs are described as instantiation of these C++ blocks with inter block signalling defined by Python's Qt framework.\\
+
+\paragraph{GNU Radio Block Architecture}
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.9\textwidth]{Figure/Block.png}
-\caption{Architecture of GNU Radio block}
+\caption{Architecture of GNU Radio blocks(Adapted from Johnathan Corgan slides \cite{corgan_gnu_2015})}
 \label{block_arch}
 \end{figure}
 
 Figure \ref{block_arch} shows the general architecture of a GNU Radio block. 
-Each block has associated buffers for the stream interfaces, two computational components, namely the \textit{work} function and the \textit{message handler} function.
+Each block has associated buffers for the stream interfaces, two computational components, namely the \texttt{work} function and the \texttt{message handler} function.
 A run time scheduler is associated with each block for controlling the execution of block during runtime. The runtime scheduler has its own signaling mechanism for interacting with schedulers of other blocks.
 This signaling mechanisms are hidden to the flow graph designer, and are used for flow control.
 The blocks providing the inputs to the current block are called upstream blocks, while those that are fed by the output of this block are called downstream block.\\
 
 For the sake of simplicity, it is assumed that the current block in Figure \ref{block_arch} has one upstream block and one downstream block.
 This implies that the block has a single input buffer and a single output buffer.
-The \textit{work} function describes the implementation of the signal processing algorithm.
-On starting execution, the \textit{work} function accesses data from the circular input buffer, which is same as the output buffer for the upstream block.
+The \texttt{work} function describes the implementation of the signal processing algorithm.
+On starting execution, the \texttt{work} function accesses data from the circular input buffer, which is same as the output buffer for the upstream block.
 Both the upstream block and the current blocks maintains a pointer to the last used data element position. 
 Once completion of execution, the upstream block writes new elements to the input buffer of the current block and updates its the write data pointer.
-The upstream block notifies the current block using the notify\_ downstream() method that new input data elements have been written.
+The upstream block notifies the current block using the \texttt{notify\_ downstream()} method that new input data elements have been written.
 The scheduler for the current block checks if there is sufficient new data for a single execution.
 It then starts the execution of the current block once the input buffer has sufficient data.
 On successful execution, it updates the read data pointer, writes the data elements into the output buffer and updates the write pointer.\\
 
 Since, most filter design rely on history of previous inputs, the scheduler also notifies the upstream block on reading the data from the buffer to notify that its output might have been modified.
 The current block scheduler notifies the downstream block that new data elements are available when it writes to the output buffer.
-The \textit{message handler} function works similarly, in this case the upstream block scheduler uses notify\_msg() method for signaling that a new message may be available.\\
+The \texttt{message handler} function works similarly, in this case the upstream block scheduler uses \texttt{notify\_msg()} method for signaling that a new message may be available.\\
 
-The flow graph describes the flow of data between different blocks.
-Flow graphs make it easier to design complex signal processing algorithms by combining simpler blocks.
-This provides modularity and scalability to the algorithm development process.
-Generally blocks are designed in C++ to enable fine grained control and faster execution.
-Python's QT framework defines a signals and slot mechanism for communicating events between different objects.
-Slots are instantiation of C++ objects, which in this case are the the processing blocks.
-When the internal state of the block is changed, it emits a signal which notifies other slots an event has occurred.
-This mechanism is used for describing the flow graphs.
+% Python's QT framework defines a signals and slot mechanism for communicating events between different objects.
+% Slots are instantiation of C++ objects, which in this case are the the processing blocks.
+% When the internal state of the block is changed, it emits a signal which notifies other slots an event has occurred.
+% This mechanism is used for describing the flow graphs.
 
 
 \paragraph{Scheduler}
 The scheduler is the control unit for the flow graph.
 At initialization, the scheduler allocates the buffers and instantiates each block in its own thread.
 At runtime, it does memory management for each block, determines the requirements that are set by the block such as number of items to be processed in one execution, alignment of data in the buffers etc.
-Once the requirements are satisfied, it passes the read and write pointers to the \textit{work} function and starts the one execution.
-Once the \textit{work} function finishes its execution, the scheduler takes in the returned information and updates the state of the block and the appropriate pointers.\\
+Once the requirements are satisfied, it passes the read and write pointers to the \texttt{work} function and starts the one execution.
+Once the \texttt{work} function finishes its execution, the scheduler takes in the returned information and updates the state of the block and the appropriate pointers.\\
 
 
 \section{LimeSDR-USB}
@@ -330,7 +333,7 @@ In the next subsections, the report discusses the hardware and software architec
 \hline
 Feature & Description\\
 \hline
-Software Configurable RF Transreceiver & LMS7002 MIMO \ac{FPRF}\\
+Software Configurable RF Transreceiver & LMS7002 MIMO FPRF\\
 \ac{FPGA} & Altera Cyclone IV EP4CE40F23 \\
 Bus Controller & Cypress USB 3.0 CYUSB3014-BZXC\\
 
@@ -350,8 +353,8 @@ Bus Controller & Cypress USB 3.0 CYUSB3014-BZXC\\
 \end{figure}
 
 Figure \ref{lime_hw_arch} shows the block diagram of a LimeSDR-USB board.
-For the sake of simplicity the diagram shows the major components, namely the LMS7002M \ac{FPRF}, \ac{FPGA} and the Cypress FX3 Bus Controller.
-Other components will be introduced in correspondence to their application with these major components.
+For the sake of simplicity the diagram shows the major components, namely the LMS7002M \ac{FPRF} \cite{noauthor_lms7002m_nodate}, \ac{FPGA} and the Cypress FX3 Bus Controller.
+% Other components will be introduced in correspondence to their application with these major components.
 
 \subsubsection{LMS7002M} 
 
@@ -360,58 +363,19 @@ It provides continuous coverage in the 100kHZ- 3.8GHz frequency range, with on c
 It is designed for a broad range of applications, ranging from broadband wireless communication, cellular communications, \ac{sdr} applications etc.
 The hardware mainly consists of three main sub-components: analog processing chain, data converters and digital processing chain.\\
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.9\textwidth]{Figure/Lms7002m-block-diagram.png}
-\caption{Block Diagram of LMS7002M.}
-\label{lms7002m}
-\end{figure}
 
-LMS7002M offers full duplex communication link on both the TX and RX chains.
-Each of the RX chains has three separate \ac{RF} ports tuned for narrow band low frequency, narrow band high frequency and wide band operations.
-Similarly, the TX Chains are connected two separate \ac{RF} ports tuned for high frequency and low frequency operations.
-This separation is done for better impedance matching at the boundary of the antennas.\\
-
-Figure \ref{lms7002m} shows the functional block diagram for a LMS7002M \ac{FPRF}.
-Since, both the RX and TX paths are identical, the report concentrates on only one RX path.
-The output from the \ac{RF} RX ports are fed into the \ac{LNA} inorder to minimize injecting too much noise at the beginning of the chain.
-The receiver follows the architecture shown in Figure \ref{rf_receiver}, with a RX mixer, followed by filter and a \ac{PGA} combined in a Zero-IF architecture.
-The RX \ac{PGA} outputs the analog baseband signal.\\
-
-LMS7002M uses a fractional N-\ac{PLL} architecture for the local oscillator frequency synthesis.
-\ac{PLL} is used extensively in \ac{RF} circuits for making sure the generated local oscillator signal and the reference signal have the same phase and frequency.
-PLLs are essentially negative feedback systems, so when the input signal differs a lot from the output signal, the control logic tries to lower the error (\textit{input-output)}.\\
-
-Integer N- \ac{PLL} architectures are used to generate high frequency signals from low frequency reference clocks, by using a frequency divider in the negative loopback path.
-The frequency divider is basically a counter, that outputs every "N" (division factor of the loop) clock cycles of the output signal.
-But since the output signal frequency will be multiples of the reference clock, the output signal resolution is determined by the  reference clock.\\
-
-So to have a high frequency as well as a high resolution, the divider counter should be very large in size.
-To counter the problem, fractional N-{PLL} architectures were designed where the output signal frequency can also be a fractional multiple of the input signal frequency.
-This helps in increasing the frequency resolution without the need for a large divisor counter.
-The input and output frequency relationship for a fractional  N-\ac{PLL} can be summarized by: $f_{out}=f_{ref}(N+k/M)$, where N is the integer divider factor, k is the fractional divider factor and $1/M$ gives the output frequency resolution.
-Both the integer and fractional divider factor are determined by the size of the counters used.
-In case of LimeSDR, the reference signal fed to the PLL varies from to 10 to 52 MHz.
-The output signal can vary from 30 to 3800 MHz, with a frequency resolution of 24.8 Hz.\\
-
-Once the \ac{RF} demodulation is completed by the analog processing chain, the analog signal is sent to the data converters and converted to digital data samples.
-The sampling rate for the data conversion is determined by the required \ac{RF} channel bandwidth.
-The digital samples are sent to the \ac{TSP} for further processing.\\
-
-The \ac{TSP} uses advanced signal processing algorithms like IQ DC offset correction, IQ phase correction for correcting the received samples.
-An interpolation and decimation filter is added to the \ac{TSP} for the TX and RX chains respectively.
-These filters are implemented with a chain of five fixed co-efficient half band \ac{FIR} filters, which allows interpolation and decimation factors of 1,2,4,8,16.
-Interpolation and Decimation allows the baseband to run at a lower data rate while still running the data converters at higher sampling rates, enabling the quantization noise to be spread over larger frequency range.
-Automatic Gain Control is also implemented by the the \ac{TSP}.\\
-
+The LMS7002M analog processing chain is responsible for the \ac{RF} transceiver's modulation and demodulation functionality.
+It uses Zero-IF as the RF transceiver's architecture, with programmable gain controllers and filters for tuning the performance of the transceiver.
+It provides fast data converters for converting signals from analog to digital domain and vice-versa.
+The data converters provide a resolution of 12 bits for high dynamic range of the incoming and outgoing signals.
+The digital processing chain provides configurable filters for interpolation and decimation of digital samples along with automatic gain control.\\
 
 LMS7002M interfaces can be segmented into control interfaces and data interfaces.
 The control interfaces are used for initialization, calibration and on the fly reconfiguration of the LMS7002M parameters.
 The data interface is used for exchanging \ac{IQ} samples with the baseband modem.
-For the data interface, LMS7002M uses the LimeLight interface which implements a 12 bit JESD \ac{DDR} interface for each RX/TX chain as shown in Figure \ref{lms7002m}.
+For the data interface, LMS7002M uses the LimeLight interface which implements a 12 bit JESD \ac{DDR} interface for each RX/TX chains.
 The LMS7002M has a on-chip micro-controller which can be used for configuration and control of the LMS7002M chip.
-It also provides a \ac{SPI} interface for offloading the control and configuration functionality to the baseband modem.
-
+It also provides a \ac{SPI} interface for offloading the control and configuration functionality to the baseband modem.\\
 
 \subsubsection{FPGA}
 
@@ -426,122 +390,7 @@ The \ac{FPGA} interfaces are designed to handle the segregation of control and d
 The data paths (TX path and RX path) uses a 12-bit parallel interface to stream data to and from the LimeLight interface of the LMS7002M.
 The control path of the \ac{FPGA} has a NIOS processor which interacts directly with the USB Slave Interface and controls the \ac{RF} parameters through an \ac{SPI} interface.\\
 
-The \ac{FPGA} RX path converts samples to packets which takes significant buffering time.
-As this report concentrates on study of timing delays, it is necessary to take a closer look at the \ac{FPGA} implementation and understand the buffering process.
-In contrast, \ac{FPGA} TX path converts packets to samples and there is no need for buffering.
-So in the next paragraph, the report describes the \ac{FPGA} RX path in detail.
- 
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=\textwidth]{Figure/DATA2PACKETS.png}
-\caption{LimeSDR FPGA RX Path}
-\label{RX_Path}
-\end{figure}
-
-\paragraph{RX Path:}
-\ac{VHDL} entities are primary level of \ac{RTL} abstraction, they define the hardware functionality in response to input signals.
-\ac{VHDL} signals on the other hand, carry information from one entity to another.
-This paragraph uses quoted text and italics to represent entities (blocks) and signals respectively.\\
-
-Figure \ref{RX_Path} shows the overview of the RX Path implementation on the LimeSDR-USB \ac{FPGA}.
-Sample data from the LMS7002M is captured by the "LMS7002\_DDIN", which uses an ALT DDIO IP block to capture in-phase and quadrature samples at double data rate.
-This means that incoming data stream is latched both at the positive and negative edges of the clock.
-"LMS7002\_DDIN" separates the sample data collected at the postive and negative edge into two different components: \textit{DIQ\_H} and \textit{DIQ\_L} repectively.
-It introduces one clock delay between the input,LMS7002M Sample Stream, and the \textit{DIQ\_L}, \textit{DIQ\_H} outputs.\\
-
-The "RXIQ" block is responsible for arranging the individual components into a single data stream of In-phase component of a sample followed by its Quadrature component.
-It takes four component data coming from the "LMS7002\_DDIN" block and arranges arranges them into the sequence \textit{DIQ\_L},\textit{DIQ\_H}, \textit{DIQ\_L}, \textit{DIQ\_H}.
-"RXIQ" takes one clock cycle for latching the inputs.
-It takes three clock cycles for producing the structure.
-Finally, the output is latched after one clock cycle from the internal output register.
-It writes this structure every two clock cycles to the "FIFO" by enabling the \textit{wrreq} signal.
-This means effectively one IQ sample is then sent to the "FIFO" every clock cycle. \\
-
-The first "SMPL\_COUNTER" is a 64-bit counter which increases its count every time "RXIQ" asserts the \textit{wrreq} for writing new data samples to the "FIFO". 
-The count is sent to the TX Path to track the number of produced samples. 
-The second "SMPL\_COUNTER" is also a 64 bit counter which is enabled when the data is read from the "FIFO" by the "DATA2PACKETS" block.
-It increases its count every clock cycle when the \textit{rdreq} signal is '1'.\\
-
-The "FIFO" is implemented using the same read and write clocks, generated by the FPGA RX \ac{PLL}.
-The read enable is controlled by the "RXIQ" using the \textit{wrreq} signal, so two new samples are written in two clock cycles of the RX PLL.
-On the write side, the "DATA2PACKETS" controls the write enable signal (\textit{rdreq}).
-The "FIFO" receives 48-bit data samples, stores it a \ac{FIFO} structure and keeps track of how many samples have been loaded into the \ac{FIFO}.
-The "FIFO" takes one clock cycle for latching the input.
-The counter for the number of elements is updated five clock cycles after the data has been latched.
-\\
-
-The "DATA2PACKETS" block is responsible for converting data samples into packets.
-It mainly consists of two \ac{FSM}.
-The first  \ac{FSM} controls the read and write signal for the input and output blocks.
-It monitors the amount of data in the "FIFO", and when it is greater than the amount of data in one packet it asserts the \textit{rdreq} signal.
-It takes two clock cycles for the "DATA2PACKETS" to register that the number of data elements in the "FIFO" is sufficient for one \ac{FPGA} packet.
-The first \ac{FSM} takes two more clock cycles to generate the \textit{rdreq} signal after that.\\ 
-
-The second \ac{FSM} arranges the data in the FPGA data packet structure (Figure \ref{trans_loop}).
-It latches the value of the sample count from the second "SMPL\_COUNTER" when the first \ac{FSM} asserts the \textit{rdreq} signal.
-It adds the sample count and different flags as meta-data for each \ac{FPGA} packet. 
-Once, the first \ac{FSM} determines there is enough space to write the data in the FX3 buffer, it enables the \textit{wrreq} signal and writes 64 bits of data every clock cycle.
-The second \ac{FSM} takes 6 clock cycles to output the first data element read from the "FIFO" after the \textit{rdreq} has been generated by the first \ac{FSM}.\\
-
-\paragraph{RX Path Delays}
-The delays introduced by the individual blocks has been highlighted in the previous paragraph.
-\begin{itemize}
-\item{Delay introduced by the "LMS7002\_DDDIN" block : 1 clock cycle}
-\item{Delay introduced by the "RXIQ" block: 5 clock cycles ; 1 clock cycle each for input and output latching, and 3 clock cycles for the structure formation.}
-\item{Delay introduced by the "FIFO" block: 6 clock cycles ; 1 clock cycle for input latching; 5 clock cycles for the increment of internal counter}
-\item{Delay introduced the the "DATA2PACKETS" block: 10 clock cycles ; 4 clock for generation of \textit{rdreq} signal and 6 clock cycles for output of the first data element read from the "FIFO"}
-\end{itemize}
-
-The report will refer to these block delays as constant delays.
-The constant delay is 22 clock cycles for even index samples, and 21 clock cycles for odd index samples. It can be summarized as:\\
-
-\begin{subequations} \label{eq1}
-\begin{align}
-	sampl_{rel} = sampl_{abs} \ mod \ N \label{eq1.1}\\ 
-  packet\_number= \floor*{\frac{sampl_{abs}}{N}} \label{eq1.2}\\
-  \Delta_{constant} = \frac{22 - \floor*{sampl_{rel} \ mod \ 2 }}{f_s} \label{eq1.3}
-\end{align}
-  
-\end{subequations}
-
-N = Number of samples in one packet; N= even, $f_s$ is the \ac{FPGA} RX PLL frequency, $sampl_{rel}$ is the relative sample index and $sampl_{abs}$ is the absolute sample index in Equation \ref{eq1}
-
-For example, with N=1020, $sampl_{abs}$ = 8000, packet\_number would be $\floor*{\frac{8000}{1020}} = 7$, and $sampl_{rel}$ would be  $8000 \ mod \ 1020 = 860$. \\
- 
-In addition to the constant delays, there are two more delays that need to considered.
-They are Queuing Delay and the Streaming Delay.
-The data elements in the "FIFO" has to wait until there is sufficient data for a single packet.
-This waiting time is being referred to as Queuing Delay.
-The Queuing Delay is dependent on the absolute sample number.
-If the element is the $N^{th}$ sample, it has to wait for N clock cycles, where N is the number of samples in one packet.
-If the element is the $N-1^{th}$ sample, it needs to wait only for one more cycle, that is two clock cycles.
-
-\begin{equation} \label{eq2}
-\Delta_{queuing} = \frac{N - 2 \times \floor*{\frac{sampl_{rel}}{2}}}{f_s}
-\end{equation}
-
-In Equation \ref{eq2}, N = Number of samples in one packet, $f_s$ is the \ac{FPGA} RX PLL frequency, and $samp_{rel}$ is defined by equation \ref{eq1.1}. \\
-
-The "DATA2PACKETS" block outputs two samples in one clock cycle, hence the data will be streamed out sequentially.
-The time a element has to wait to be streamed is being referred as the streaming delay.
-The streaming delay is also dependent on the arrival time of the sample which is equivalent to the absolute sample number.
-If the element is the $N^{th}$ sample, it is the first data element of a packet, it doesn't need to wait for any sample to be streamed ahead of it, so it has zero streaming delay.
-On the other hand, the $N-1^{th}$ sample needs to wait for N-3 samples to streamed first, before it is outputted together with the $N-2^{th}$ sample.
-
-\begin{equation}\label{eq3}
-\Delta_{streaming} =\frac{\floor*{\frac{sampl_{rel}}{2}}}{f_s}
-\end{equation} 
-In Equation \ref{eq3}, N = Number of samples in one packet,  $f_s$ is the \ac{FPGA} RX PLL frequency, and $samp_{rel}$ is defined by equation \ref{eq1.1}. \\
-
-The total delay can be calculated as :\\
-\begin{subequations}\label{eq4}
-\begin{align}
-\Delta_{total}= \Delta_{constant} + \Delta_{queuing} + \Delta_{streaming} \\
-\Delta_{total}= \frac{22 +  N - \floor*{\frac{sampl_{rel}}{2}} - \floor*{sampl_{rel} \ mod \ 2}}{f_s}
-\end{align}
-\end{subequations}
-
+--Have to mention few lines here.
 
 
 \subsubsection{Cypress EZ-FX3}
@@ -701,12 +550,7 @@ These packets are then sent to the "connectionFX3" module which writes it to the
 \label{lms_packet}
 \end{figure}
 
-\section{Wime Project}
-Wime Project was created with the objective of providing experimentation as a wireless communication system performance evaluation tool.
-The project focuses on evaluation of physical layer strategies using USRP \ac{sdr} platform.
-It provides a 802.15.4 testbed which is inter-operable with the the off-the shelf TelosB nodes running the Contiki operating system.
-
-\subsection{IEEE 802.15.4}
+\section{IEEE 802.15.4}
 The IEEE 802.15.4 is a \ac{LR-WPAN} specification aiming to be a ultra low-complexity, ultra-low power and low datarate specification.
 It specifies the \ac{PHY} and \ac{mac} for \ac{LR-WPAN}s.
 It forms the basis for network protocols like \ac{6LoWPAN}, Zigbee, WirelessHart.
@@ -807,7 +651,11 @@ The quadrature component is delayed by $T_c$ as shown in Figure \ref{IQ_TC}.
 \label{IQ_TC}
 \end{figure}
 
-\subsection{Wime Project GNU Radio Implementation}
+\section{Wime Project}
+Wime Project was created with the objective of providing experimentation as a wireless communication system performance evaluation tool.
+The project focuses on evaluation of physical layer strategies using USRP \ac{sdr} platform.
+It provides a 802.15.4 testbed which is inter-operable with the the off-the shelf TelosB nodes running the Contiki operating system.
+
 Wime Project is build on the UCLA 802.15.4 PHY implementation designed  by Thomas Schmid.
 It ports the existing implementation to the modern GNU Radio software framework.
 It furthermore extends the PHY implementation with a \ac{mac} layer and adds Rime Stack as a network layer.

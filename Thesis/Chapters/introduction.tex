@@ -25,21 +25,22 @@ A fundamental challenge of \ac{sdr} system is computational horsepower, because 
 
 
 \section{Problem Context}
-Wireless devices share the wireless channel with other devices. The wireless protocol \ac{mac} layer is responsible for moderating access to the wireless channel. It typically uses \ac{tdma} and \ac{csma} to allocate the use of the channel. \ac{tdma} protocols schedule the allocation of the entire channel to one of the devices for a particular time duration. This requires global time synchronization among the devices so that the devices can understand when to transmit and receive. \ac{csma}, on the other hand uses the channel on an opportunistic basis, with the devices sensing if the channel is free or not.\\
+Wireless devices share the wireless channel with other devices. The wireless protocol's \ac{mac} layer is responsible for moderating access to the wireless channel. It typically uses \ac{tdma} or \ac{csma} to allocate the use of the channel. \ac{tdma} protocols schedule the allocation of the entire channel to one of the devices for a particular time duration. This requires global time synchronization among the devices so that the devices can understand when to transmit and receive. \ac{csma}, on the other hand uses the channel on an opportunistic basis, with the devices sensing if the channel is free or not.\\
 
 As highlighted by \cite{schmid_experimental_2007}, \ac{sdr} based systems don't comply with the stringent timing constraints imposed by modern \ac{mac} protocols. Furthermore, the presence of long bus communication and processing delays create blind spots\cite{schmid_experimental_2007} in carrier sensing. 
-In Figure \ref{blind_spots}, the two problems originating from long delays have been shown.
+In Figure \ref{blind_spots}, the two problems originating from long delays are shown.
 The left hand side image shows the problem of blind spots when using channel sensing for packet transmission.
 The \ac{sdr} system wants to transmit a packet, so it uses channel sensing to detect when the channel is free.
-An over the air packet ends at time $t_0$, this information is detected by the \ac{cpu} of the \ac{sdr} after a certain delay, the channel sensing process keeps checking on the availability of the channel.
+An over the air packet ends at time $t_0$, this information is detected by the \ac{cpu} of the \ac{sdr} system after a certain delay, the channel sensing process keeps checking on the availability of the channel.
 The channel information from time $t_1$ is used by the \ac{cpu} to infer that the channel is free and it starts the transmission.
 The TX packet reaches the air medium at time $t_2$, in case of \ac{sdr} systems this delay,$t_2-t_1$, can be quite significant.
 This can result in collision with other nodes transmitting as because of the communication and processing delays, the system is blind to real time channel situation.
 In case of regular radio chips, the channel sensing logic is located very close to the \ac{RF} frontend and the delay $t_2 - t_1$ is quite negligible thereby resulting in smaller blind spots.\\
 
-Another problem has been illustrated in the right hand side image of Figure \ref{blind_spots}.
+Another problem is illustrated in the right hand side image of Figure \ref{blind_spots}.
 Because of larger communication and processing delays, it takes significantly longer for the \ac{sdr} system to acknowledge a received packet.
-This acknowledgement time is referred to as \ac{IFS}, the software implementation also introduces jitter.
+This acknowledgement time is referred to as \ac{IFS}.
+The software implementation also introduces jitter in the {IFS}.
 For a low powered radio node in \ac{IOT} applications, this jitter causes the radio to be turned on for significantly longer time.
 The battery is drained away faster thereby undermining the purpose of minimal maintenance in \ac{IOT} systems.
 Another problem with longer \ac{IFS} is lower spectral efficiency where the radio channel is unused for longer periods of time.\\ 
@@ -51,7 +52,7 @@ Another problem with longer \ac{IFS} is lower spectral efficiency where the radi
 \label{blind_spots}
 \end{figure}
 
-Hence when designing \ac{mac} protocols, characteristics of these delays needs to be taken into account to avoid collisions.
+Hence characteristics of these delays needs to be taken into account to design \ac{mac} protocols which can take advantage of the flexibility provided by the \ac{sdr} platform by understanding the limitations of the platform.
 This necessitates a closer understanding of these delays and how different system parameters affect these delays.
 %\subsection{TDMA}
 %\ac{tdma} based protocols are controlled by time slots, hence there is need for precise scheduling to ensure that the transmissions happen in the correct time-slot. The delays and imprecise scheduling can be tolerated by making the time-slots longer but that degrades the efficiency of the overall network. Modern contention based protocols(\ac{csma}) also require precise timing to implement inter-frame spacing.\\
@@ -60,10 +61,9 @@ This necessitates a closer understanding of these delays and how different syste
 
 \section{Project Context}
 
-The project was conducted at RISE SICS as part of the 5G-Coral project.
+The project was conducted at RISE SICS as part of the 5G-Coral project \cite{noauthor_5g-coral_nodate}.
 5G-Coral is an European Union H-2020 project which envisions a convergent radio access network.
-The project envisions numerous small multi-\ac{RAT} gateway.
-The radio-head should be flexible to handle traffic from different devices running different protocols to enable convergent access.
+The project visualizes numerous small multi-\ac{RAT} gateway handling traffic from different devices running different protocols to enable convergent access.
 For the feasibility of this goal, the cost effectiveness of the radio-head needs to be taken into account.
 LimeSDR \cite{noauthor_limesdr_nodate} provides a cost-effective \ac{sdr} platform, which supports the desired frequency bands making it the ideal choice as the project's radio-head.\\
 
