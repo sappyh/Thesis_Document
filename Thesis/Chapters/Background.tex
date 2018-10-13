@@ -28,36 +28,6 @@ The bit-stream is grouped into code words and converted to symbols, which are th
 In case of outgoing packets, the \ac{mac} layer adds the \ac{mac} address of the destination device to the packet header.
 It adds the synchronization preamble and \ac{FCS} for checking transmission error.
 Retransmission in case of dropped packets and acknowledgement to successfully received packets are handled by this layer.\\
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.9\textwidth]{Figure/CSMA.png}
-\caption{CSMA flow graph.}
-\label{Csma_flow}
-\end{figure}
-
-\ac{csma} is a \ac{L2} protocol in the OSI Model. 
-%It is a method for handling multiple access of a shared medium.
-It mainly comes in two varieties: \ac{CSMA/CD}  and \ac{CSMA/CA}.
-The flow graphs of both are shown in Figure \ref{Csma_flow}.
-In the older \ac{CSMA/CD}, the nodes checks the idleness of the channel after the frame is ready.
-If idle it starts transmission.
-During transmission, it monitors the medium for collision.
-If collision is detected, it employs a collision recovery process, where it sends a jam signal to signal other nodes that a collision has occurred.
-Then it waits for a  random delay and starts transmission again.\\
-
-\ac{CSMA/CA} tries to avoid collision, it starts off similar to \ac{CSMA/CD} where it senses to check when the channel is idle.
-If found idle, it starts transmission.
-It is difficult for wireless nodes to detect collisions simultaneously during transmission.
-Therefore, it relies on an \ac{ack} message from the receiving node to check if the data packet was received.
-If \ac{ack} is not received, the node assumes a collision has occurred and  uses exponential back-off to determine when the next time to re initiate transmission.\\
-
-
-\ac{tdma} is also a \ac{L2} protocol, where a coordinator schedules medium access to the nodes in a periodic manner.
-Communication happens in time-slots.
-Each node in the network is given exclusive access to transmit during its time slot.
-The coordinator generates beacon signals periodically to maintain relative time synchronization. On receiving the beacons, the nodes adjust their transmit clocks so that they have the correct estimate of their time-slots.
- 
  
 
 \subsection{SDR Platforms}
@@ -228,54 +198,13 @@ From the block designer point of view, these blocks can be viewed to be executin
 \paragraph{Blocks and Flow Graphs}
 
 The computational nodes in the flow-graph are the GNU Radio processing blocks.
-Each block describes how the input elements to the block, are converted to output elements in the \textit{work} function.
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-Number of input elements & Number of output elements & Name\\
-\hline
-N & 0 & Sink Block\\
-0 & N & Source Block\\
-N & 1 & Interpolation block\\
-1 & N & Decimation block\\
-M & N & General Block\\
-\hline
-\end{tabular}
-\caption{GNU Radio Block Types}
-\label{block_type}
-\end{table} 
-
-The relationship of input and output elements defines the type of the GNU Radio processing block as shown in Table \ref{block_type}.
-The type of block indicates the scheduler on how the block processes information.
-There are two types of blocks: \textit{Synchronous block} and \textit{block}.
-For synchronous blocks, there is a rational relationship between the input and output elements.
-The sink, source, interpolation block and decimation block in Table \ref{block_type} are synchronous blocks.
-The key difference between different block types is in how the scheduler handles the input and output buffers of each block.
-For the synchronous blocks, the scheduler implicitly handles the input and output pointers to the buffers.
-For general blocks, the \textit{work} function needs to explicitly pass the information on how many elements it consumed and produced.\\
-
-Since in GNU Radio flow graph, data is passed from one node to another, the method of passing the data among different blocks needs to be defined.
-This method is defined in the block interfaces.
-Stream Interfaces are intended to stream large amounts of data between blocks with variable processing rates.
-They use large buffers to pass the data from one node to another.
-Stream interfaces work well for samples, bits etc. but they are not the right method to pass metadata, control information or bursts of data between blocks as it involves significant overhead.\\
-
-GNU Radio recently added the message passing interface for handling asynchronous message passing.
-GNU Radio also supports stream tags for handling metadata as it is closely associated with the stream data samples.
-Stream tags are attached with stream data samples and provide additional information associated with the sample.
-It can be used both for passing control flags as well as metadata information like the \ac{PDU} size, timing information etc.
-These stream tags are propagated to the next blocks and is updated by the data rate changes.
-For example, if the block takes it 2 samples as input and produces 4 samples as output, its data rate is 2.
-In this case, if the input stream had a stream tag at position $x$ then the the location in the output stream would be $2x$. \\
-
+Each block describes how the input elements to the block, are converted to output elements in the \texttt{work} function.\\
 
 The flow graph describes the flow of data between different blocks.
 Flow graphs make it easier to design complex signal processing algorithms by combining simpler blocks.
 This provides modularity and scalability to the algorithm development process.
 Generally blocks are designed in C++ to enable fine grained control and faster execution.
-The flowgraphs are described as instantiation of these C++ blocks with inter block signalling defined by Python's Qt framework.\\
+The flowgraphs are described as instantiation of these C++ blocks with inter block signalling defined by Python's Qt framework \cite{noauthor_signals_nodate}.\\
 
 \paragraph{GNU Radio Block Architecture}
 \begin{figure}[h!]
@@ -286,7 +215,7 @@ The flowgraphs are described as instantiation of these C++ blocks with inter blo
 \end{figure}
 
 Figure \ref{block_arch} shows the general architecture of a GNU Radio block. 
-Each block has associated buffers for the stream interfaces, two computational components, namely the \texttt{work} function and the \texttt{message handler} function.
+Each block has associated buffers for the interfaces, two computational components, namely the \texttt{work} function and the \texttt{message handler} function.
 A run time scheduler is associated with each block for controlling the execution of block during runtime. The runtime scheduler has its own signaling mechanism for interacting with schedulers of other blocks.
 This signaling mechanisms are hidden to the flow graph designer, and are used for flow control.
 The blocks providing the inputs to the current block are called upstream blocks, while those that are fed by the output of this block are called downstream block.\\
@@ -390,11 +319,11 @@ The \ac{FPGA} interfaces are designed to handle the segregation of control and d
 The data paths (TX path and RX path) uses a 12-bit parallel interface to stream data to and from the LimeLight interface of the LMS7002M.
 The control path of the \ac{FPGA} has a NIOS processor which interacts directly with the USB Slave Interface and controls the \ac{RF} parameters through an \ac{SPI} interface.\\
 
---Have to mention few lines here.
+% --Have to mention few lines here.
 
 
 \subsubsection{Cypress EZ-FX3}
-LimeSDR-USB uses a Cypress EZ-FX3 as \ac{USB} 3.0 peripheral controller.
+LimeSDR-USB uses a Cypress EZ-FX3 \cite{noauthor_ez-usb_nodate} as \ac{USB} 3.0 peripheral controller.
 It has a fully configurable, general programmable interface called the \ac{GPIF} II which allows integration with any processor like \ac{ASIC}, \ac{FPGA}, Image Sensors etc.
 It also provides low speed interfaces like \ac{I2C}, \ac{SPI} for the low-speed \ac{IO} operations.\\
 
@@ -652,11 +581,11 @@ The quadrature component is delayed by $T_c$ as shown in Figure \ref{IQ_TC}.
 \end{figure}
 
 \section{Wime Project}
-Wime Project was created with the objective of providing experimentation as a wireless communication system performance evaluation tool.
+Wime Project \cite{noauthor_wime_nodate} was created with the objective of providing experimentation as a wireless communication system performance evaluation tool.
 The project focuses on evaluation of physical layer strategies using USRP \ac{sdr} platform.
-It provides a 802.15.4 testbed which is inter-operable with the the off-the shelf TelosB nodes running the Contiki operating system.
+It provides a 802.15.4 testbed which is inter-operable with the the off-the shelf TelosB nodes running the Contiki operating system as shown by Bastil et al \cite{bloessl_towards_2013}.\\
 
-Wime Project is build on the UCLA 802.15.4 PHY implementation designed  by Thomas Schmid.
+Wime Project is build on the UCLA 802.15.4 PHY implementation \cite{ucla_phy} designed  by Thomas Schmid.
 It ports the existing implementation to the modern GNU Radio software framework.
 It furthermore extends the PHY implementation with a \ac{mac} layer and adds Rime Stack as a network layer.
 The implementation details of the PHY layer and the MAC layer is described below.\\
@@ -704,108 +633,25 @@ The \ac{mac} layer transmits the message immediately without any carrier sensing
 \end{itemize}
 
 \section{Tools Used}
+In this section, the report provides a very short introduction to the tools used during the project. 
+
 \subsection{USBMon}
-It is kernel facility provided to collect I/O traces on the USB Bus\cite{_usbmon}. USBMon reports the requests made to and by the USB Host Controller Drivers(HCD). It provides two kinds of API's : binary and character. The binary API is accessed by character devices located in the /dev namespace. The character API provides human readability and uniform format for the traces.The kernel data from the USBMon text data is made available to the userspace using debugfs\cite{_debugfs} utility.
+It is kernel facility provided to collect I/O traces on the USB Bus\cite{_usbmon}. USBMon reports the requests made to and by the USB Host Controller Drivers(HCD).
+The overall software architecture is shown in \ref{usbmon_arch}.
+It provides two kinds of API's : binary and character. The binary API is accessed by character devices located in the /dev namespace. The character API provides human readability and uniform format for the traces.The kernel data from the USBMon text data is made available to the userspace using debugfs\cite{_debugfs} utility.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{Figure/USBMon.png}
 \caption{USBMon Architecture(Adapted from \cite{basak_usb_2018}).}
+\label{usbmon_arch}
 \end{figure}
-
-\subsubsection{Text Data Format}
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-URB Tag & Timestamp & Event Type & Address & URB Status\\
-\hline
-ffff8fbdbbae4000 & 2942307806 & S & Bo:3:008:15 & -115\\ 
-\hline
-\end{tabular}
-\begin{tabular}{|c|c|c|}
-\hline
-Data Length & Data Tag & Data\\
-\hline
-64 & = & 21000100 00000000 002a0484 00000000 000000\\
-\hline
-\end{tabular}
-\caption{Text USB Trace Example.}
-\end{table}
-
-\begin{itemize}
-\item {\textbf{URB Tag:} URB Identification number, it is usually the in kernel adress of the URB structure.}
-\item{\textbf{Timestamp:} The timestamp for the URB event at the HCD in microseconds. It is measured by the usbmon main utility using \textit{gettimeofday()} function of \textit{time.h}.}
-\item{\textbf{Event Type:} It specifies the event type of the HCD event. S - Submission C -Complete E - submission error.}
-\item{\textbf{Address: } It consists of four fields separated by colons. The URB type and direction, bus number, device number, endpoint number. The URB type and direction specifies the type of USB transfer(can be both synchronous and asynchronous).\\
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-Bi & Bo & Bulk Input and Output.\\
-Ci & Co & Control Input and Output.\\
-Ii & Io & Interrupt Input and Output.\\
-Zi & Zo & Isochronous Input and Output.\\
-\hline
-\end{tabular}
-\caption{URB Type and Direction.}
-\end{table}\\
-The USB device transfers data through a pipe to a memory buffer on the host and endpoint on the device. The type of data transfer depends on the endpoint and the requirements of the function. The transfer types are as follows\cite{_usb_data_transfer}:
-
-\begin{itemize}
-\item{\textbf{Control Transfers:} It is mainly used for configuration, command and status operations.}
-\item{\textbf{Bulk Transfers:} Bulk Transfer are used for bulky,non-periodic non time-sensitive burst transmissions.}
-\item{\textbf{Interrupt Transfers:} It is used for mainly sending small amounts of data infrequently or asynchronously.}
-\item{\textbf{Isochronous Transfers:} Isochronous transfers are mainly used for periodic, continuous streams of time sensitive data.} 
-\end{itemize}
-%USB endpoint as explained by \cite{_usb_endpoint} , refers to the buffers on the USB device. The host computer irrespective of the host operating system can communicate by reading and writing to these buffers. They can be data endpoints and control endpoints.Data endpoints are used for transferring data whereas the control endpoint is used for configuration and device specific control.
-}
-
-\item{\textbf{Data Length:} For urb\_submit it gives the requested data length and for callbacks it is the actual data length.}
-
-\item{\textbf{Data tag:} If this field is '=' then data words are present.}
-
-\item{\textbf{Data:} The data words contains in the USB transfer packet.}
-\end{itemize}
-
-\subsubsection{Raw Binary}
-The overall data format is same as the text data, the data is available in raw binary by accessing character devices at /dev/usbmonX. The data can be read by using \textit{read} with \textit{ioctl} or by mapping the buffer using \textit{mmap}. The usbmon events are buffered in the following format:
-
-\begingroup
-\centering\scriptsize\begin{lstlisting}
-struct usbmon_packet {
-	u64 id;			/*  0: URB ID - from submission to callback */
-	unsigned char type;	/*  8: Same as text; extensible. */
-	unsigned char xfer_type; /*    ISO (0), Intr, Control, Bulk (3) */
-	unsigned char epnum;	/*     Endpoint number and transfer direction */
-	unsigned char devnum;	/*     Device address */
-	u16 busnum;		/* 12: Bus number */
-	char flag_setup;	/* 14: Same as text */
-	char flag_data;		/* 15: Same as text; Binary zero is OK. */
-	s64 ts_sec;		/* 16: gettimeofday */
-	s32 ts_usec;		/* 24: gettimeofday */
-	int status;		/* 28: */
-	unsigned int length;	/* 32: Length of data (submitted or actual) */
-	unsigned int len_cap;	/* 36: Delivered length */
-	union {			/* 40: */
-		unsigned char setup[SETUP_LEN];	/* Only for Control S-type */
-		struct iso_rec {		/* Only for ISO */
-			int error_count;
-			int numdesc;
-		} iso;
-	} s;
-	int interval;		/* 48: Only for Interrupt and ISO */
-	int start_frame;	/* 52: For ISO */
-	unsigned int xfer_flags; /* 56: copy of URB's transfer_flags */
-	unsigned int ndesc;	/* 60: Actual number of ISO descriptors */
-};	
-\end{lstlisting}
-\endgroup
 
 
 \subsection{pidstat}
+In order to quantitatively evaluate the impact of processing resources we use \texttt{pidstat}.
 Pidstat is a Linux tool provided the sysstat package.
 It can be used to monitor the resource usage of a Linux process/processes.
 It can be configured to collect information on CPU utilization, memory utilization, context switches and the time  used by the process at application level and the time used in kernel level.
-It collects the information at one second intervals and the time duration for one collection can be specified during the process invocation.
+It collects the information at specified time intervals and the time duration for one collection can be specified during the process invocation.
 

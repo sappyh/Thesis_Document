@@ -1,0 +1,22 @@
+\chapter{Conclusion}
+
+The main goal of this Master’s thesis was to have a deeper understanding of characteristics of the time delays introduced by different components in LimeSDR based 802.15.4 network. To achieve this goal, we first implemented a GNU Radio based 802.15.4 MAC and PHY stack for the LimeSDR platform. We defined timestamps as our method for studying the delays contributed by the various software components. Reduction of LimeSDR FPGA packet size was chosen as the suitable mitigation technique following the delay analysis. \\
+
+For the delay analysis, we chose to study the latency and component delays with respect to MAC payload size and sampling rate of the LimeSDR platform. The conducted experiments allow us to draw a general conclusion that increasing the amount of data increases the latency due to the larger software processing delays on the host computer. Our experiments show that both of our host computer are not suitable for running higher bandwidth protocols. We observed higher USB Transfer size negatively affects the overall latency because of longer buffering delays on the LimeSDR.\\
+
+We chose to focus on the LimeSDR loopback delay as our delay analysis indicated that this is a fundamental delay of the LimeSDR platform and will be true for all implementations using the LimeSDR. The GNU Radio scheduler was tweaked to find a system configuration which results in the lowest latency. In order to evaluate the impact of processing resources we ran our experiments on two host computers, explicitly measuring the percentage of CPU usage on our final experiment.
+The best system configuration for the two host computers, laptop and desktop, decreased the mean latency by 12.3\% and 37.79\% compared to the default configuration of the LimeSDR platform.
+This helps us lower the \ac{IFS} and increase the spectral efficiency.
+The jitter in latency was also decreased by 20.06\% and 40.09\% for the laptop and desktop computer respectively which helps in improving the energy efficiency with more deterministic transmissions.\\
+
+
+Software Defined Radio systems move from streaming architecture of traditional radio to one of general purpose processing. We try to compensate the increase in latency because of this transition by reducing the buffering delays and moving it closer to the streaming architecture. But decreasing the buffering delays increases the processing overhead as multiple execution calls are necessary for processing the same amount of data. For lowest latency, a balance needs to be formed between reducing the buffering delays and increasing the processing overhead. Host computer with higher processing resources can compensate this extra overhead and can reduce the overall latency significantly.\\
+
+In this study, the impact of other radio nodes and radio channel conditions were not investigated. Because of the inherent delays discussed in this report, LimeSDR based systems might have difficulty in reliable transmissions in highly congested radio environment, which will increase the number of re-transmissions and overall latency. If the network does not take into consideration of the presence of these inherent delays, the overall network performance can also be affected. Also, in this study we focused on solving the delay problem for a low data rate network. This solution may not be feasible for higher data rate networks as it might lead to buffer overflow problems.\\
+
+The evaluation of the network performance for our implementation needs to be investigated in future studies.
+The implementation also lacks channel sensing functionality which is needed for reducing the impact on the overall network performance.
+Future studies can also look at the feasibility of our mitigation techniques for higher data rate protocols.
+In this project, we study the effect of coarsely tuning of the GNU buffer sizes without taking into consideration of the processing time of the individual processing blocks.
+We believe the GNU Radio flowgraph can further be optimized by taking these into consideration and fine tuning the buffer sizes of individual blocks for better latency performance.
+

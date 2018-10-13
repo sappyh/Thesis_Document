@@ -42,7 +42,7 @@ Figure \ref{RX_Path} shows the overview of the RX Path implementation on the Lim
 The hardware logic is described as a number of processing blocks connected via signals to make the design modular and understandable.
 This paragraph uses quoted text and italics to represent processing blocks and signals respectively.\\
 
-Sample data from the LMS7002M is captured by the "LMS7002\_DDIN", which uses an ALT DDIO IP (ref alt ddio ip) block to capture in-phase and quadrature samples at double data rate.
+Sample data from the LMS7002M is captured by the "LMS7002\_DDIN", which uses an ALT DDIO IP \cite{noauthor_double_nodate} block to capture in-phase and quadrature samples at double data rate.
 % This means that incoming data stream is latched both at the positive and negative edges of the clock.
 "LMS7002\_DDIN" latches the sample data collected at the postive and negative edge of the clock into two different components: \textit{DIQ\_H} and \textit{DIQ\_L} repectively.
 It introduces one clock delay between the LMS7002M Sample Stream, and the \textit{DIQ\_L}, \textit{DIQ\_H} outputs.\\

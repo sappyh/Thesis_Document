@@ -1,6 +1,8 @@
 \chapter{Timing Characterization of the LimeSDR-USB platform}
 This chapter introduces the methodology and system architecture followed by the experimental designs for the quantitative analysis.
-The system architecture describes the GNU Radio flow-graph description, software and hardware used in this project. The experiments are presented in chronological order. In the first experiment, the performance of the system is measured with respect to broader parameters like sampling rate and data payload size. The second experiment was designed evaluation of the impact of these parameters on the the different subsections of the data path. In experiment 3, the project looks at the impact of the USB transfer size on the overall delay.
+The system architecture describes the GNU Radio flow-graph description, software and hardware used in this project.
+In the first experiment, the performance of the system is measured with respect to broader parameters like sampling rate and data payload size. The second experiment was designed for evaluation of the impact of these parameters on the the different subsections of the data path.
+In experiment 3, we look at the impact of the USB transfer size on the overall delay.
 
 \section{Methodology}
 This project uses quantitative experimental design method.
@@ -22,12 +24,12 @@ As this project concentrates on the performance of the LimeSDR platform without 
 Finally, measurement across two different platforms makes it difficult to correlate the measurements on the two computer as the clocks are not synchronized.
 Considering these factors, this project picked the loopback method.
 In this method, the TX and RX chains on the LimeSDR are shorted before the \ac{LNA} of the LMS7002M chip shown in Figure \ref{lms7002m}.
-This method uses the radio frontend of the LimeSDR which helps evaluate the impact of radio-frontend configuration on the performance.
+This method uses the radio frontend of the LimeSDR which helps evaluate the impact of radio frontend configuration on the performance.
 
 
 
 
-\section{Experimental Setup}
+\section{Experimental Setup and Implementation}
 The physical experimental setup is shown in Figure \ref{Real_Setup} to provide the broader picture of the setup.
 The host computer is running the GNU Radio communication system which interacts with the LimeSDR platform through \ac{USB} 3.0 connection.
 The LimeSDR has been configured to run in the loop back configuration.\\
@@ -49,8 +51,8 @@ The LimeSDR has been configured to run in the loop back configuration.\\
 
 The software flow diagram for the experimental setup is shown in Figure \ref{Experimental_Setup_Flow_Digram}.
 This diagram in conjunction to the dataflow diagram (Figure \ref{Dataflow}) gives the complete picture of the experimental setup.
-In figure \ref{Experimental_Setup_Flow_Digram}, the GNU Radio runs the communication system which is primarily based on the WIME project implementation of 802.15.4 protocol.
-A message source block, described in \ref{Periodic Message Source}, is added which helps in generate controlled excitation signal for evaluating the experimental setup.
+In figure \ref{Experimental_Setup_Flow_Digram}, the GNU Radio runs the communication system which is primarily based on the WIME project implementation of the 802.15.4 protocol.
+A message source block, described in \ref{Periodic Message Source}, is added which helps to generate controlled excitation signal for evaluating the experimental setup.
 It generates the payload for the \ac{mac} layer of the Wime 802.15.4 MAC, which adds the MAC header and the \ac{CRC} for the MAC packet.
 The Wime 802.15.4 PHY adds the preamble and the length fields for the physical layer packet.
 This physical layer packet is modulated through the O-QPSK modulation.
@@ -60,6 +62,9 @@ It generates the FPGA packets in batches, with the batchsize defined at initiali
 The formatted packets are forwarded to libusb which generates the USB transaction and finally the host controller transfers the data to the LimeSDR.
 Each USB transaction has a token defining the direction of the transfer, followed by the bursts of USB data packets.
 The size of the USB data packets is defined by the USB descriptor of the LimeSDR Cypress EZ FX3 during device registration.
+The LimeSDR platform was configured to work in loopback mode, with the TX and RX chains on the LimeSDR shorted.
+Once the data moves to the RX Path of the LimeSDR FPGA it is transferred through the Cypress EZ FX3 to the host computer where it moves from the USB host controller to the GNU Radio RX flowgraph in the reverse order of the TX data flow described before.
+
 
 \begin{figure}[h!]
 \centering
@@ -80,15 +85,15 @@ Furthermore, the entire experimental setup needed some alterations to facilitate
 \end{enumerate}
 
 \paragraph{GNU Radio Source and Sink Blocks}
-The USRP source and sink blocks are replaced by the gr-limesdr source and sink blocks for using the LimeSDR platform.
-Another alternative used in this project is the gr-osmosdr sink and source blocks which used soapysdr to access the Lime API. The former was chosen as it directly interacts with the LimeAPI without using the adaptation layer presented by the soapysdr project. This gives much better control of the board control parameters and also saves multiple \textit{memcpy} operations used by the soapysdr adaptation layer.\\
+The USRP source and sink blocks are replaced by the \texttt{gr-limesdr} source and sink blocks for using the LimeSDR platform.
+Another alternative used in this project is the gr-osmosdr sink and source blocks which used soapysdr to access the Lime API. The former was chosen as it directly interacts with the LimeAPI without using the adaptation layer presented by the soapysdr project. This gives much better control of the board control parameters and also saves multiple \textit{memcpy} operations used by the \texttt{soapysdr} adaptation layer.\\
 
 In both these blocks, the loopback configuration is defined at initialization by setting the loopback register on the NIOS processor.
 This turns on the switch at the end of the \ac{LNA} which creates a data flow from the TX path to the RX data path on the LMS7002M.\\
 
 
 LimeSDR driver sends USB packets in bursts whose size is determined by the FPGA data packet size and the batchsize of FPGA data packet defined for the stream.
-In case, the GNU Radio packet data size is less than the size of a burst, the Streamer function of the driver waits for more data from the GNU Radio.
+In case the GNU Radio packet data size is less than the size of a burst, the Streamer function of the driver waits for more data from the GNU Radio.
 It pads zeros after the end of the original data and sends the burst data after a set timeout.\\
 
 \begin{figure}[h!]
@@ -132,19 +137,56 @@ The larger the message payload, the more time it will take to transmit through t
 \end{figure}
 
 \subsection{Hardware and Software Used}
+The project uses two host computers in order to evaluate the impact of the host computer processing resources on the characteristics of the time delays.
+We refer to the two host computers as 'laptop' and 'desktop computer', the hardware specifications for these are shown in Table \ref{hardware}.
+The desktop processor has better processing resources because of higher CPU clock speed and two more CPU cores.
+It uses Ubuntu 16.04.5 LTS as the operating system whereas the laptop uses Elementary OS built on Ubuntu 16.04.5 LTS as its operating system.\\
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+        Resource & Laptop & Desktop Computer\\
+        \hline
+         CPU & Intel® Core™ i5-4300U CPU &  Intel® Core™ i5-3470 CPU \\
+         CPU Clock Speed & 1.9 GHz & 3.2 GHz \\
+         CPU Cores & 2 & 4\\
+         CPU Threads & 4 & 4\\
+         RAM & 7,9 GB & 15.6 GB \\
+         \hline
+    \end{tabular}
+    \caption{Hardware Specifications}
+    \label{hardware}
+\end{table}
+
+To ensure that the experimental setup on the two host computers are as similar as possible, we configure them with the same software configuration, which is shown in Table \ref{software}.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+         Linux Kernel &   Linux 4.15.0-24-generic \\
+         GNU Radio version & 3.7.12.0 \\
+         LimeSuite version &  18.06.1-g58ab1c3c \\
+         LimeSDR GW version &   2.17\\
+         sysstat version &  11.2.0-1ubuntu0.2\\
+         \hline
+    \end{tabular}
+    \caption{Software Specifications}
+    \label{software}
+\end{table}
 
 \section{Experiment 1: Impact of network parameters on latency}
 
-The first experiment is designed to evaluate the impact of network parameters on the the latency.
+The first experiment is designed to evaluate the impact of network parameters such as data payload size and sampling rate of the protocol on the the latency.
 Before going into the details of the experiment, this report needs to explain this project's definition of latency.
 
-\subsection{Latency}
+\subsection{Latency Measurement}
 In general, the latency is defined as the time it takes a packet to reach the receiver from the transmitter.
 In this project, the transmission time is defined the time the packet enters the 802.15.4 \ac{mac}.
 And, the reception time is defined as the time the SFD is detected in the received packet by the 802.15.4 PHY packet detector.\\
 
 This latency definition is asymmetric, and it ignores the processing time of received packers in the \ac{mac} layer. So all the reported values are lower than the those for MAC layer latency.
-This is done to eliminate the impact of throughput on the latency measurements, as the study concentrates mainly on the time delay analysis.\\
+This is done to eliminate the impact of data payload size on the latency measurements, as the study concentrates mainly on the time delay analysis.\\
 
 The periodic message source notes down the global system time as $T_1$ when it publishes a message to its output port.
 This value is written to a file when the message source receives the payload from the MAC, this ensures that time for data packets successfully decoded by the \ac{mac} is only noted.
@@ -173,7 +215,8 @@ delete t2[i]
 \EndFor
 \end{algorithmic}
 \end{algorithm}
-It is assumed that the time period of the message source is greater than the latency.\\
+The experiment assumes that the time period of the message source is greater than the latency.
+It is enforced through the design of our experiment by configuring the message source with significantly higher time period than the latency.\\
 
 \subsection{Experiment Design} \label{exp1}
 The impact of amount of data sent to the LimeSDR and the impact of higher sampling rate on the latency needs to be evaluated.
@@ -186,7 +229,7 @@ In ideal case, the latency shouldn't be dependent on the amount of data or the s
     \item {The length of the messages generated by the periodic message source block.
     Since the PHY payload for 802.15.4 should be less than 128 bytes, the message source data length plus MAC header should be less than that.
     The maximum message source data length comes to be 112 bytes with MAC header of 15 bytes.
-    The project decided to spread the message source length across the entire available range from one to 112.
+    We decided to spread the message source length across the entire available range from one to 112.
     We choose four different message sizes: 1 byte ,37 bytes,74 bytes and 112 bytes.}
     \item {The sampling rate, which defines the interpolation and decimation ratio in the 802.15.4 physical layer.
     It also configures the FPGA sampling clock.
@@ -234,7 +277,7 @@ This project defines seven different time delays for this purpose.
 \label{component_setup}
 \end{figure}
 
-The measurement setup for this experiment has been shown in Figure \ref{component_setup}.
+The measurement setup for this experiment is shown in Figure \ref{component_setup}.
 This setup is more or less similar to our initial setup, with the timestamp data points enumerated as per the delays mentioned previously.
 The timestamps $T_1$ and $T_2$ described in Experiment 1, will henceforth be referred to as $T_1$ and $T_8$ respectively for the rest of the report.
 The project concentrated on finding the last execution statement applied to the data in each component,shown in Figure \ref{component_setup}, using static code analysis.
@@ -439,7 +482,7 @@ An experiment was designed for this purpose by varying the batchsize of the Lime
     \item \textbf{Input Parameters} The LimeSDR uses a parameter to set the batchsize of the LimeSDR FPGA data packets depending on the sampling rate, ensuring data from higher sampling rates configurations don't overflow the buffers.
     By varying this parameter we select three different batchsizes:
     one(minimum possible), four(default) and eight(maximum possible).
-    \item \textbf{Output Metric} The latency and component delays.
+    \item \textbf{Output Metric} The latency and component delays are measured as defined in Experiment 1 and Experiment 2.
     \item \textbf{Design of Experiment} The experiment collects 999 latency and component delays over 5000 seconds. The time period of the message source is set to 500ms, the message source generates 56 bytes data payload.
 \end{itemize}
 

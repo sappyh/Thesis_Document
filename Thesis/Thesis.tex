@@ -369,6 +369,9 @@
 
 \includepdf[pages={1}]{Chapters/cover.pdf}
 %\titlepage
+\begin{abstract}
+    \input{Chapters/Abstract.tex}
+\end{abstract}
 
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
@@ -398,73 +401,9 @@
 \input{Chapters/Methods.tex}
 \input{Thesis/Chapters/Mitagtion.tex}
 \input{Thesis/Chapters/Results.tex}
+\input{Thesis/Chapters/Conclusion.tex}
 
 
-
-% \chapter{Results and Analysis}
-% \subsection{Analytical Method}
-% The 802.15.4 PHY layer expands 1 byte of message data to 128 bytes, so the maximum packet length of 127 bytes becomes produces sample data of size
-% $127*128=16256 bytes=15.875KB$\\. The FPGA packet format adds 16 bytes overhead for every 4080 bytes so the overhead for 16256 bytes would be 64bytes. So the overall transfer size would be 16320 bytes. This would require four FPGA packets so the actual size of the USB transfer would be 16384 bytes
-% Now for sampling rate of 1MHz $\equiv$ 1MSPS, the actual data transfer is 1.5 MBps since the LMS7002M has 12 bits ADC and DAC. 
-% \begin{table}[!h]
-% \centering
-% \begin{tabular}{|c|c|}
-% \hline
-% Sampling Rate & USB Transfer delay \\
-% \hline
-% 5 MHz & 4369.07 $\mu$s\\
-% 10 MHz & 2184.53 $\mu$s\\
-% 15 MHz & 1456.35 $\mu$s\\
-% 20 MHz & 1092.27 $\mu$s\\
-% \hline
-% \end{tabular}
-% \caption{Analytical USB Transfer Delay}
-% \label{back_env}
-% \end{table}
-
-% \subsection{Experimental Results}
-% \begin{figure}
-% \centering
-% \includegraphics[scale=0.5]{Figure/results_setup.png}
-% \caption{Results Setup}
-% \label{res_set}
-% \end{figure}
-% Figure \ref{res_set} shows the different terminology used in the results, with the TX \& RX software delay is the delay caused by the GNU Radio and LimeSDR driver processing, the Kernel RTT Time includes the buffer delay in the LimeSDR and the USB communication delay. Total RTT Time = Kernel RTT Time + TX Software Delay + RX Software Delay. All the timing measurements are done on Lenovo Thinpad X240 with Dual-Core Intel® Core™ i5-4300U CPU @ 1.90GHz and 4GB RAM. The setup use Limesuite version 17.12.0 and gateware version 2.12.
-% \begin{table}
-% \centering
-% \label{res}
-% \begin{tabular}{|l|c|c|c|c|}
-% \hline
-% Sampling Rate(MHz)                                                  & 5    & 10   & 15   & 20   \\
-% \hline
-% Total RTT mean ($\mu$s)                                                      & 5360 & 3606 & 3065 & 4485 \\ \hline
-% Total RTT std deviation ($\mu$s)   & 326  & 472  & 262  & 1273 \\ \hline
-% Kernel RTT mean ($\mu$s)                                                     & 4113 & 1937 & 1354 & 762  \\ \hline
-% Kernel RTT std deviation ($\mu$s) & 1201 & 330  & 232  & 298  \\ \hline
-% TX chain mean ($\mu$s)                                                       & 470  & 675  & 831  & 1586 \\ \hline
-% TX chain std deviation ($\mu$s)    & 60   & 1165 & 186  & 860  \\ \hline
-% RX chain mean ($\mu$s)                                                       & 1100 & 1122 & 871  & 1769 \\ \hline
-% RX chain std deviation ($\mu$s)                                              & 472  & 1764 & 262  & 1036\\ \hline
-% \end{tabular}
-% \caption{Experimental results}
-% \end{table}
-
-
-
-% \subsection{Analysis}
-% \begin{itemize}
-% \item {The results show a monotonic drop in the kernel USB timings with increase in sampling rate and monotonic increase for RX and TX delay (Exception: 15 MHz). This indicates with increase in sampling rate, the buffers are getting overloaded and hence an increase in processing delay compared to bus communication delay.}
-% \item {Another thing that I noticed was at high sampling rate the round trip time increases with time, again pointing to buffer delay on the RX chain.}
-% \item {My measurement program becomes highly unstable at higher sampling rates, for example for 20MHz, I captured 610 packets of which I could correlate only 160 packets. This is mainly because the usbmon event queues overflow and hence my timing measurement program misses some relevant events and reports wrong timing information. One method I plan on using is flushing the buffers before the message source generates the message since each measurement is independent of the previous in a TDMA protocol.  }
-% \item {The analytical values for the RTT time( Table \ref{back_env}) is more than the actual value that usbmon reported(Table \ref{res}), my hypothesis is that this happens due to my assumption that all the data in the LimeSDR TX buffer is popped before the relevant RX data is popped back in the RX buffers on the LimeSDR side. But in actual operation even before all the TX data has been popped, the loopback data is being pushed to the RX buffers. This is demonstrated using figure \ref{staggering} where its shows the state of the RX and TX buffers with respect to time. \textit{t1} shows the instant when all the relevant data has been popped from the TX buffers and \textit{t2} shows the instant when the relevant RX data is popped from the buffers. For my assumption \textit{t1} should be equal to \textit{t2}, but here  $t2<t1$ hence the reported values are less than those of the analytical model. With increase in sampling rate the difference between t2 and t1 increases. There is a need to address this issue to ensure reliability of the measurement method.
-% \begin{figure}
-% \centering
-% \hspace{1cm}\includegraphics[scale=0.5]{Figure/Staggering.png}
-% \caption{Overlapping of buffers on LimeSDR}
-% \label{staggering}
-% \end{figure}
-% }
-% \end{itemize}
 
 \printbibliography[heading=bibintoc] % Print the bibliography (and make it appear in the table of contents)
 
