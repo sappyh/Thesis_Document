@@ -7,8 +7,10 @@ Finally, the fifth section introduces the tools used in the methods chapter.
 
 
 \section{Essential Concepts}
+This section introduces generalized concepts for understanding communication system design using \ac{sdr} platforms. In the first subsection, PHY and MAC layers of the network stack is described followed by general architecture and functioning of \ac{sdr} platforms. Finally, since in this project GNU Radio is used as the software framework we provide the background information necessary for understanding our methods.
+
 \subsection{PHY and MAC Layers}
-\ac{OSI} Model (ISO/IEC 7498-1:1994)\cite{noauthor_iso/iec_nodate} presents the abstract model for networking, that is used for most communication systems design.
+\ac{OSI} Model \cite{noauthor_iso/iec_nodate} presents the abstract model for networking, that is used for most communication systems design.
 The abstract model is divided into 7 layers,  where entity in each layer implements the functionality of the layer and interacts directly with the layer beneath it.
 This added functionality can be used by the upper layers.
 Data from the user application is encapsulated by each subsequent layers of the \ac{OSI} model into their frame format.
@@ -46,7 +48,7 @@ However, they are much more flexible compared to commercial \ac{NIC}.
 \textit{Wireless Open Access Research Platform}(WARP) \cite{noauthor_warp_nodate} is an example of system based on this type of architecture.}
 
 \end{itemize}
-Since host-PHY \cite{nychis_enabling_nodate} is the most commonly used architecture (\textbf{cite sources}), the report concentrates on explaining the functionality of \ac{sdr} systems using this architecture.
+Since host-PHY \cite{nychis_enabling_nodate} is the commonly used architecture as shown by different use cases such as RFID \cite{buettner_software_2011}, 802.11 \cite{bloessl_towards_2013} and cellular networks \cite{demel_lte_2015}, the report concentrates on explaining the functionality of \ac{sdr} systems using this architecture.
 Figure \ref{host_PHY} shows the typical design of communication systems in this architecture. The system can be broadly divided into two main components:
 \begin{enumerate}
 \item{\ac{sdr} Platform.}
@@ -60,14 +62,15 @@ Figure \ref{host_PHY} shows the typical design of communication systems in this 
 \label{host_PHY}
 \end{figure}
 
-
-Since the process for transmission and reception processes are reverse of one another , this report concentrates on the explaining the reception process of \ac{sdr} platforms.
+Although the process of transmission and reception are logically reverse of one another, the reception process is more complicated and the flexibility of \ac{sdr} platforms can be attributed mainly to the flexibility provided by the receive chain of these platforms.
+Hence, this report concentrates on explaining the reception process of \ac{sdr} platforms.
+% Since the process for transmission and reception processes are logically reverse of one another , this report concentrates on the explaining the reception process of \ac{sdr} platforms.
 
 \paragraph{\ac{sdr} Platform:} It is the hardware that provides access to the wireless medium in a flexible manner.
 \ac{RF} signals are transmitted and received by the platform, it converts these analog signals to digital samples and transfers them to the host computer.
 The main building blocks of these platforms are shown in Figure \ref{host_PHY}.
 \begin{itemize}
-\item{\textbf{Software Configurable \ac{RF} trans-receiver}} This is the heart of \ac{sdr} platforms and provides \ac{RF} modulation and demodulation capability.
+\item{\textbf{Software Configurable \ac{RF} trans-receiver}}  This is the heart of \ac{sdr} platforms and provides \ac{RF} modulation and demodulation capability.
 They are attached to wide-band antennas for receiving and transmitting over a broad range of frequencies.
 Taking the case of reception of RF signal, the signal received from the antenna is amplified by a \ac{LNA}.
 The \ac{LNA} amplifies a low power signal without significantly degrading the signal to noise ratio.
@@ -422,7 +425,7 @@ The sockets are internal to the FX3, so for external devices to access the \ac{D
 They connect sockets with external pins, like for Slave FIFO interface, they connect the GPIF II interface with GPIF II sockets.\\
 
 
-\subsection{LimeSDR USB Software Architecture.}
+\subsection{LimeSDR USB Software Architecture}
 
 In this subsection, the report explains the driver of the LimeSDR-USB.
 The software architecture of the LimeSDR-USB is shown in Figure \ref{Lime_Software}.\\
@@ -583,7 +586,7 @@ The quadrature component is delayed by $T_c$ as shown in Figure \ref{IQ_TC}.
 \section{Wime Project}
 Wime Project \cite{noauthor_wime_nodate} was created with the objective of providing experimentation as a wireless communication system performance evaluation tool.
 The project focuses on evaluation of physical layer strategies using USRP \ac{sdr} platform.
-It provides a 802.15.4 testbed which is inter-operable with the the off-the shelf TelosB nodes running the Contiki operating system as shown by Bastil et al \cite{bloessl_towards_2013}.\\
+It provides a 802.15.4 testbed which is inter-operable with the the off-the shelf TelosB nodes running the Contiki operating system as shown by Bastil et al \cite{bloessl2013gnu}.\\
 
 Wime Project is build on the UCLA 802.15.4 PHY implementation \cite{ucla_phy} designed  by Thomas Schmid.
 It ports the existing implementation to the modern GNU Radio software framework.
@@ -648,7 +651,7 @@ It provides two kinds of API's : binary and character. The binary API is accesse
 \end{figure}
 
 
-\subsection{pidstat}
+\subsection{Pidstat}
 In order to quantitatively evaluate the impact of processing resources we use \texttt{pidstat}.
 Pidstat is a Linux tool provided the sysstat package.
 It can be used to monitor the resource usage of a Linux process/processes.

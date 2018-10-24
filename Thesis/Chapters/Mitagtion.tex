@@ -1,4 +1,4 @@
-\chapter{Mitigation methods}
+\chapter{Mitigation Methods}
 This chapter introduces our mitigation strategies for lowering the overall latency.
 We decided to focus on decreasing the LimeSDR loopback delay and the GNU radio processing delays as it is evident from our results that they are the major contributors to the overall latency.
 The chapter first investigates the reasons for the LimeSDR loopback delay, followed by discussion of our method of decreasing the LimeSDR FPGA packet size.
@@ -7,8 +7,7 @@ The design of the experiment for evaluation of our strategies is discussed in th
 
 \section{LimeSDR loopback delay}
 We found the LimeSDR loopback delay is quite significant in our results from Experiment 2.
-Although the software delays are also high, the difference in results across the two host computer provides us with enough reason to argue that these delays are because of the limitations of the host computer hardware configuration.
-These can be mitigated to some extent by buying higher processing resources.
+The software processing delays are also significant but the difference in results across the two host computers provides us with enough reason to argue that these delays are because of limited host computer processing capability and can be mitigated to some extent by upgrading the host computer.
 The LimeSDR loopback delay is constant across both the host computers and hence can be classified as a property of the LimeSDR-USB platform.
 We decided to focus on the LimeSDR loopback delay as it is a fundamental delay of the platform and will affect the performance of any system designed using the LimeSDR-USB platform.\\
 

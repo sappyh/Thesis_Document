@@ -6,7 +6,7 @@ The communication needs for a field temperature sensor differs from those of an 
 Hence, there is need for research and development of communication protocols that satisfy these diverse device communication needs. 
 The evaluation of these experimental protocols is difficult because of the need of specialized radio hardware.
 Simulation is widely used to evaluate these protocols but they fall short on modeling of real world performance.
-\ac{sdr} devices can be a powerful platform for enabling the real-world evaluation of these protocols.\\
+\ac{sdr} devices can be a powerful platform for enabling the real-world evaluation of these protocols as suggested by Ulversoy \cite{ulversoy2010software}.\\
 
 \ac{sdr} are flexible radio platforms where most of the communication systems functionality is designed in software. Typically, \ac{sdr} platforms have on board radio front-end equipped with wide band antennas and analog signal processing chain for tuning the carrier frequency and desired bandwidth. High speed data converters convert the incoming analog signals into the digital domain and vice-versa. In traditional radios, the digital processing chain of a wireless protocol physical layer is implemented on the same chip as the radio front-end and analog signal processing functions. \ac{sdr}, on the other hand, in host-PHY \cite{nychis_enabling_nodate} architecture transfers the converted data to a general purpose computing platform using bus transfer (USB, PCIe).  The digital processing chain is designed in software, thus allowing for flexibility in the protocol design, enabling experimentation in decoding and modulation techniques. \ac{sdr} also allows for careful analysis of RF signals as the raw sample data is made available to the host.\\
 
@@ -27,13 +27,13 @@ A fundamental challenge of \ac{sdr} system is computational horsepower, because 
 \section{Problem Context}
 Wireless devices share the wireless channel with other devices. The wireless protocol's \ac{mac} layer is responsible for moderating access to the wireless channel. It typically uses \ac{tdma} or \ac{csma} to allocate the use of the channel. \ac{tdma} protocols schedule the allocation of the entire channel to one of the devices for a particular time duration. This requires global time synchronization among the devices so that the devices can understand when to transmit and receive. \ac{csma}, on the other hand uses the channel on an opportunistic basis, with the devices sensing if the channel is free or not.\\
 
-As highlighted by \cite{schmid_experimental_2007}, \ac{sdr} based systems don't comply with the stringent timing constraints imposed by modern \ac{mac} protocols. Furthermore, the presence of long bus communication and processing delays create blind spots\cite{schmid_experimental_2007} in carrier sensing. 
+As highlighted by \cite{schmid_experimental_2007}, \ac{sdr} based systems don't comply with the stringent timing constraints imposed by modern \ac{mac} protocols. Furthermore, the presence of long bus communication and processing delays create blind spots \cite{schmid_experimental_2007} in carrier sensing. 
 In Figure \ref{blind_spots}, the two problems originating from long delays are shown.
 The left hand side image shows the problem of blind spots when using channel sensing for packet transmission.
 The \ac{sdr} system wants to transmit a packet, so it uses channel sensing to detect when the channel is free.
 An over the air packet ends at time $t_0$, this information is detected by the \ac{cpu} of the \ac{sdr} system after a certain delay, the channel sensing process keeps checking on the availability of the channel.
 The channel information from time $t_1$ is used by the \ac{cpu} to infer that the channel is free and it starts the transmission.
-The TX packet reaches the air medium at time $t_2$, in case of \ac{sdr} systems this delay,$t_2-t_1$, can be quite significant.
+The TX packet reaches the air medium at time $t_2$, in case of \ac{sdr} systems this delay, $t_2-t_1$, can be quite significant.
 This can result in collision with other nodes transmitting as because of the communication and processing delays, the system is blind to real time channel situation.
 In case of regular radio chips, the channel sensing logic is located very close to the \ac{RF} frontend and the delay $t_2 - t_1$ is quite negligible thereby resulting in smaller blind spots.\\
 
@@ -103,8 +103,8 @@ The objective of this thesis is to quantitatively evaluate these delays and the 
 %\item{ How to implement precise scheduling in LimeSDR based IEEE 802.15.4 communication system? }
 %\end{itemize}
 
-\section{Report Outline}
-The remainder of the report is structured as follows. \textit{Chapter 2} introduces the relevant background information for understanding the rest of the report.
+\section{Thesis Outline}
+The thesis is structured as follows. \textit{Chapter 2} introduces the relevant background information for understanding the rest of the report.
 Relevant previous work will be introduced in \textit{Chapter 3}.
 \textit{Chapter 4} introduces the experimental setup and the methods used in the measurement of the timing delays.
 The methods used in mitigation of these delays will be introduced in \textit{Chapter 5}.

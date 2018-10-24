@@ -1,0 +1,23 @@
+Massive deployment of diverse ultra-low power wireless devices necessitates the rapid development of communication protocols.
+Software Define Radio(SDR) provides a flexible platform for deploying and evaluating real-world performance of these protocols.
+But SDR platform based communication systems suffer from high and unpredictable delays because of shifting the hardware logic to a general purpose computing platform.
+There is lack of comprehensive understanding of the characteristics of the delays experienced by these systems for new SDR platforms like LimeSDR.
+This knowledge gap needs to be filled in order to reduce these delays and better design protocols which can take advantage of these platforms.
+This thesis concentrates on filling this knowledge gap for LimeSDR based IEEE 802.15.4 network.\\
+
+We design a GNU Radio based IEEE 802.15.4 experimental setup based on the WIME project implementation, where the data path is timestamped at various points of interest to get comprehensive understanding of the characteristics of the delays.
+% We focus our analysis on the host computer processing delays both on the TX and RX data paths, and the LimeSDR loopback delay on two different host computers to understand the impact of host computer processing resources on these component delays.
+Our analysis show GNU Radio processing and LimeSDR loopback time are the major delays in these data paths, with the LimeSDR loopback time increasing with increase of USB transfer size.
+We attribute this characteristic of the LimeSDR loopback time to increase in the buffering time of the samples as we are using a low data rate protocol.
+Decreasing the USB transfer size will lead to less buffering time but increases the processing overhead because of increased context switches and inter block signalling in GNU Radio.
+The USB transfer packet size was modified to investigate which USB transfer size provides the best balance between buffering delay and the processing overhead.\\
+% Two experiments were designed for analyzing the impact of both network parameters and systems parameters on these delays.
+% Finally, we design an experiment to evaluate our mitigation method by analyzing the change in the characteristics of the component delays for different USB transfer size.\\
+
+Our experiments show that for the best measured configuration the mean and jitter of latency decreases by 37 \% and 40\% respectively for the host computer with higher processing resources.
+The host computer with lower processing resources also decreases the mean and jitter of latency by 12 \% and 20 \% respectively.
+The best case configuration for the two host computers is highly dependent on the available processing resources.
+The host computer with higher processing resources was able to decrease the buffering time further hence higher improvement in latency.
+We also show that the throughput is not affected by this modifications.
+In this project we do not consider the actual RF performance of the LimeSDR, also the balance point is dependent on the data rate of the protocol hence will differ for different protocols.
+Both of these needs to be investigated in future studies. \\
