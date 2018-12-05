@@ -1,36 +1,38 @@
 \chapter{Timing Characterization of the LimeSDR-USB platform}
-This chapter introduces the methodology and system architecture followed by the experimental designs for the quantitative analysis.
+This chapter introduces the methodology and system architecture, followed by the experimental designs for the quantitative analysis.
 The system architecture describes the GNU Radio flow-graph description, software and hardware used in this project.
-In the first experiment, the performance of the system is measured with respect to broader parameters like sampling rate and data payload size. The second experiment was designed for evaluation of the impact of these parameters on the the different subsections of the data path.
+In the first experiment, the performance of the system is measured with respect to broader parameters like sampling rate, and data payload size. The second experiment was designed for evaluation of the impact of these parameters on the the different subsections of the data path.
 In experiment 3, we look at the impact of the USB transfer size on the overall delay.
 
-\section{Methodology}
-This project uses quantitative experimental design method.
+\section{Methodology and Literature Reflection}
+This project uses a quantitative experimental design method.
 The characterization of timing delays needs to have quantitative measurements as they would help compare it to the specified standards and define the limitations concretely.
 This project concentrates on designing experiments for understanding the causal effect of system parameters on the measurements.\\
 
-A method was needed for measuring the time duration of the individual process as this project aims for timing characterization of signal processing chains.
-The LimeSDR doesn't have a real time clock on board, so in order to measure time on the LimeSDR, it was needed to synchronize different clock domains across a variable latency link.
-This process is complex and not feasible given the time constraint, so this project avoids doing any time measurement on the LimeSDR.
-Taking hints from the literature review, this project opts to timestamp the \ac{sdr} software processes on the host computer.
-This method is reliable and doesn't affect the measurements significantly.\\
+As this project aims for timing characterization of signal processing chains, a  method was needed for measuring the time duration of the individual processes.
+The LimeSDR does not have a real time clock on board, so in order to measure time on the LimeSDR, synchronization of different clock domains across a variable latency link was needed.
+This process is complex, and not feasible given the time constraint.
+Therefore, this project avoids doing any time measurement on the LimeSDR.
+Considering the methods used for delay characterization from the literature review, this project opts to timestamp the \ac{sdr} software processes on the host computer.
+This method is reliable, and does not affect the measurements significantly.\\
 
 Most of the previous studies used ping as the measurement tool.
 In this case, there are two host computer connected through two \ac{sdr} platforms.
-As the host computers will not be identical they will impact the collected measurement differently.
+As the host computers will not be identical, they will impact the collected measurement differently.
 It would also not be possible to evaluate the impact of the host computer processing resources in this case.
-Another problem with this method is the use of common frequency bands, communication among other devices can make the setup unreliable.
-As this project concentrates on the performance of the LimeSDR platform without considering the channel conditions, the impact of communication through the air medium can be safely ignored.
-Finally, measurement across two different platforms makes it difficult to correlate the measurements on the two computer as the clocks are not synchronized.
-Considering these factors, this project picked the loopback method.
+Another problem with this method is the use of common frequency bands.
+Communication among other devices can make the setup unreliable.
+As this project concentrates on the performance of the LimeSDR platform without considering the radio channel conditions, the impact of communication through the air medium can be safely ignored.
+Finally, measurement across two different platforms makes it difficult to correlate the measurements on the two computers, as the clocks are not synchronized.
+Considering these factors, this project picks the loop back method.
 In this method, the TX and RX chains on the LimeSDR are shorted before the \ac{LNA} of the LMS7002M chip shown in Figure \ref{lms7002m}.
-This method uses the radio frontend of the LimeSDR which helps evaluate the impact of radio frontend configuration on the performance.
+This method uses the radio front-end of the LimeSDR, which helps evaluate the impact of radio front-end configuration on the performance.
 
 
 
 
 \section{Experimental Setup and Implementation}
-The physical experimental setup is shown in Figure \ref{Real_Setup} to provide the broader picture of the setup.
+The physical experimental setup is shown in Figure \ref{Real_Setup} to provide a broader picture of the setup.
 The host computer is running the GNU Radio communication system which interacts with the LimeSDR platform through \ac{USB} 3.0 connection.
 The LimeSDR has been configured to run in the loop back configuration.\\
 
@@ -50,20 +52,22 @@ The LimeSDR has been configured to run in the loop back configuration.\\
 
 
 The software flow diagram for the experimental setup is shown in Figure \ref{Experimental_Setup_Flow_Digram}.
-This diagram in conjunction to the dataflow diagram (Figure \ref{Dataflow}) gives the complete picture of the experimental setup.
-In figure \ref{Experimental_Setup_Flow_Digram}, the GNU Radio runs the communication system which is primarily based on the WIME project implementation of the 802.15.4 protocol.
-A message source block, described in \ref{Periodic Message Source}, is added which helps to generate controlled excitation signal for evaluating the experimental setup.
-It generates the payload for the \ac{mac} layer of the Wime 802.15.4 MAC, which adds the MAC header and the \ac{CRC} for the MAC packet.
-The Wime 802.15.4 PHY adds the preamble and the length fields for the physical layer packet.
+This diagram in conjunction to the data flow diagram (Figure \ref{Dataflow}) gives the complete picture of the experimental setup.
+In Figure \ref{Experimental_Setup_Flow_Digram}, the GNU Radio runs the communication system which is primarily based on the Wime project implementation of the 802.15.4 protocol.
+A message source block, described in Section \ref{Periodic Message Source}, is added to help generate controlled excitation signal for evaluating the experimental setup.
+It generates the payload for the \ac{mac} layer of the Wime 802.15.4 MAC, which adds the MAC header, and the \ac{CRC} for the MAC packet.
+The Wime 802.15.4 PHY adds the preamble, and the length fields for the physical layer packet.
 This physical layer packet is modulated through the O-QPSK modulation.
-The GNU Radio processes these samples in chunks, the chunk size defined by the block's scheduler.
-The samples generated by this GNU Radio process is passed to the LimeSDR driver which does the process described in \ref{TX Data Path}.
-It generates the FPGA packets in batches, with the batchsize defined at initialization.
-The formatted packets are forwarded to libusb which generates the USB transaction and finally the host controller transfers the data to the LimeSDR.
+The GNU Radio processes these samples in chunks, the chunk size is defined by the block's scheduler.
+The samples generated by this GNU Radio process is passed to the LimeSDR driver which does the process described in Section \ref{TX Data Path}.
+It generates the FPGA packets in batches, with the batch size defined at initialization.
+The formatted packets are forwarded to the Linux USB library, libusb, which generates the USB transaction.
+Finally the host controller transfers the data to the LimeSDR.
 Each USB transaction has a token defining the direction of the transfer, followed by the bursts of USB data packets.
-The size of the USB data packets is defined by the USB descriptor of the LimeSDR Cypress EZ FX3 during device registration.
-The LimeSDR platform was configured to work in loopback mode, with the TX and RX chains on the LimeSDR shorted.
-Once the data moves to the RX Path of the LimeSDR FPGA it is transferred through the Cypress EZ FX3 to the host computer where it moves from the USB host controller to the GNU Radio RX flowgraph in the reverse order of the TX data flow described before.
+The size of the USB data packets is defined by the USB descriptor of the LimeSDR Cypress EZ-USB FX3 during device registration.
+The LimeSDR platform was configured to work in loop back mode, with the TX and RX chains on the LimeSDR shorted.
+Once the data moves to the RX Path of the LimeSDR FPGA it is transferred through the Cypress EZ FX3 to the host computer.
+It moves from the USB host controller to the GNU Radio RX flow graph in the reverse order of the TX data flow described before.
 
 
 \begin{figure}[h!]
@@ -76,7 +80,8 @@ Once the data moves to the RX Path of the LimeSDR FPGA it is transferred through
 
 \subsection{Adaptations}
 The Wime project implementation needed to be modified to use LimeSDR instead of USRP as the \ac{sdr} platform.
-Furthermore, the entire experimental setup needed some alterations to facilitate the experiemental process.These adaptations can be grouped as:
+Furthermore, the entire experimental setup needed some alterations to facilitate the experimental process.
+These adaptations can be grouped as:
 
 \begin{enumerate}
 \item{GNU Radio Source and Sink blocks}
@@ -86,15 +91,16 @@ Furthermore, the entire experimental setup needed some alterations to facilitate
 
 \paragraph{GNU Radio Source and Sink Blocks}
 The USRP source and sink blocks are replaced by the \texttt{gr-limesdr} source and sink blocks for using the LimeSDR platform.
-Another alternative used in this project is the gr-osmosdr sink and source blocks which used soapysdr to access the Lime API. The former was chosen as it directly interacts with the LimeAPI without using the adaptation layer presented by the soapysdr project. This gives much better control of the board control parameters and also saves multiple \textit{memcpy} operations used by the \texttt{soapysdr} adaptation layer.\\
+Another alternative used in this project is the \texttt{gr-osmosdr} sink and source blocks which used \texttt{soapysdr} libraries to access the Lime API.
+The former was chosen as it directly interacts with the LimeAPI without using the adaptation layer presented by the \texttt{soapysdr} project. This gives much better control over the board control parameters, and also saves multiple \textit{memcpy} operations used by the \texttt{soapysdr} adaptation layer.\\
 
-In both these blocks, the loopback configuration is defined at initialization by setting the loopback register on the NIOS processor.
+In both these blocks, the loop back configuration is defined at initialization by setting the loop back register on the NIOS processor.
 This turns on the switch at the end of the \ac{LNA} which creates a data flow from the TX path to the RX data path on the LMS7002M.\\
 
 
-LimeSDR driver sends USB packets in bursts whose size is determined by the FPGA data packet size and the batchsize of FPGA data packet defined for the stream.
+LimeSDR driver sends USB packets in bursts whose size is determined by the FPGA data packet size and the batch size of FPGA data packet defined for the stream.
 In case the GNU Radio packet data size is less than the size of a burst, the Streamer function of the driver waits for more data from the GNU Radio.
-It pads zeros after the end of the original data and sends the burst data after a set timeout.\\
+It pads zeros after the end of the original data, and sends the burst data after a set timeout.\\
 
 \begin{figure}[h!]
 \centering
@@ -105,27 +111,28 @@ It pads zeros after the end of the original data and sends the burst data after 
 
 This implementation works well for continuous stream based protocols, but for packet based protocols like the IEEE 802.15.4 this leads to radio silence problem, as illustrated in Figure \ref{Radio_Silent}.
 In this figure, an example LimeSDR transmission over the air is shown.
-If the data contained in one packet doesn't satisfy the size requirement imposed by the LimeSDR driver, the radio becomes silent(shown as the gap in the figure) and the transmission breaks down.
-The receiver assumes that the radio signal for a packet is a single continuous stream, so if the radio signal is interrupted then it can not receive the packet properly.\\
+If the data contained in one packet does not satisfy the size requirement imposed by the LimeSDR driver, the radio becomes silent(shown as the gap in the figure), and the transmission breaks down.
+The receiver assumes that the radio signal for a packet is a single continuous stream, so if the radio signal is interrupted, then it can not receive the packet properly.\\
 
 This project adds a GNU Radio stream tag called "End of Packet" to the end of sample stream from the 802.15.4 PHY block for solving this problem.
-In the gr-limesdr block, the tag instructs the Streamer function of the driver to immediately send the data to the LimeSDR by appending zeros at the end of the packet data.
+In the \texttt{gr-limesdr} block, the tag instructs the "Streamer" function of the driver to immediately send the data to the LimeSDR by appending zeros at the end of the packet data.
 
 \paragraph{802.15.4 \ac{PHY} layer}
 
 The WIME project \ac{PHY} layer has been designed to only work with 4 MHz as the sampling rate, in this project, the \ac{PHY} layer has been modified to accommodate different sampling rates as it helps in understanding the impact of sampling rate on the performance.\\
 
-On the TX flowgraph of the GNU Radio 802.15.4, \ac{PHY} a sine wave generator is added which takes the desired frequency as input.
+On the TX flow graph of the GNU Radio 802.15.4, \ac{PHY} a sine wave generator is added which takes the desired frequency as input.
+This desired frequency is referred to as $set frequency$.
 The "Repeat" block interpolates a single chip by repeating it $set frequency/1 MHz$ times as the modulator generates a signal of bandwidth 1 MHz.
-On the RX flowgraph, the clock recovery module decimates by $set frequency/2 MHz$ as the received signal should have a bandwidth of 2 MHz.
+On the RX flow graph, the clock recovery module decimates by $set frequency/2 MHz$ as the received signal should have a bandwidth of 2 MHz.
 
 \paragraph{Periodic Message Source} \label{Periodic Message Source}
 This project needed a controllable excitation source for evaluating the experimental setup.
 A periodic message source block was implemented in the GNU Radio, it takes in the message length and time period as parameters.
 Figure \ref{message_source} shows the working of the message source with respect to time.
 The time period controls the time duration between two subsequent message generation.
-The data length controls the data payload size of the 802.15.4 \ac{mac} packet.
-It indirectly controls the transmission time,$\Delta T_{tx}$, of the the message.
+The data length controls the data payload size of the 802.15.4 \ac{mac} layer packet.
+It indirectly controls the transmission time, $\Delta T_{tx}$ , of the the message.
 The larger the message payload, the more time it will take to transmit through the setup. 
 \\
 
@@ -139,7 +146,7 @@ The larger the message payload, the more time it will take to transmit through t
 \subsection{Hardware and Software Used}
 The project uses two host computers in order to evaluate the impact of the host computer processing resources on the characteristics of the time delays.
 We refer to the two host computers as 'laptop' and 'desktop computer', the hardware specifications for these are shown in Table \ref{hardware}.
-The desktop processor has better processing resources because of higher CPU clock speed and two more CPU cores.
+The desktop processor has better processing resources, because of higher CPU clock speed, and two more CPU cores.
 It uses Ubuntu 16.04.5 LTS as the operating system whereas the laptop uses Elementary OS built on Ubuntu 16.04.5 LTS as its operating system.\\
 \begin{table}[h!]
     \centering
@@ -181,22 +188,25 @@ The first experiment is designed to evaluate the impact of network parameters su
 Before going into the details of the experiment, this report needs to explain this project's definition of latency.
 
 \subsection{Latency Measurement}
-In general, the latency is defined as the time it takes a packet to reach the receiver from the transmitter.
-In this project, the transmission time is defined the time the packet enters the 802.15.4 \ac{mac}.
-And, the reception time is defined as the time the SFD is detected in the received packet by the 802.15.4 PHY packet detector.\\
+In general, latency is defined as the time it takes a packet to reach the receiver from the transmitter.
+In this project, the transmission time is defined as the time the packet enters the 802.15.4 \ac{mac}.
+The reception time is defined as the time the \ac{SFD} is detected in the received packet by the 802.15.4 PHY packet detector.\\
 
-This latency definition is asymmetric, and it ignores the processing time of received packers in the \ac{mac} layer. So all the reported values are lower than the those for MAC layer latency.
+This latency definition is asymmetric, as it ignores the processing time of received packers in the \ac{mac} layer. So all the reported values are lower than the those for MAC layer latency.
 This is done to eliminate the impact of data payload size on the latency measurements, as the study concentrates mainly on the time delay analysis.\\
 
 The periodic message source notes down the global system time as $T_1$ when it publishes a message to its output port.
 This value is written to a file when the message source receives the payload from the MAC, this ensures that time for data packets successfully decoded by the \ac{mac} is only noted.
-The packet detector in the RX flow-graph detects the SFD and notes down the time as $T_2$.
+The packet detector in the RX flow graph detects the SFD, and notes down the time as $T_2$.
 When the entire packet is successfully decoded by the packet detector, it writes this time to another file.
 The decoding of the entire packet makes sure that the program only writes the time for a physical layer packet not whenever it detects the preamble sequence.\\
 
-Since the time noted should be compared with those from usbmon, $clock\_{gettime}$ was selected as the preferred method. 
-The difference $T_2 - T_1$ will give the latency as per this project's definition.
-As two different processes are measuring the time-stamps, the correct $T_1$ and $T_2$ needs to be grouped together for the latency measurement. 
+Since the time noted should be compared with those from USBMon, \texttt{clock\_{gettime}} was selected as the preferred method.
+\texttt{clock\_{gettime}} is a function provided by Linux time library to measure the system time in nanoseconds.
+We truncate the value to microseconds as USBMon returns packet timestamps in microseconds.
+
+The difference ($T_2 - T_1$) will give the latency as per this project's definition.
+As two different processes are measuring the timestamps, the correct $T_1$ and $T_2$ needs to be grouped together for the latency measurement. 
 The following algorithm is used for this purpose.
 
 \begin{algorithm}[!h]
@@ -223,15 +233,15 @@ The impact of amount of data sent to the LimeSDR and the impact of higher sampli
 \begin{itemize}
     \item {\textbf{Objective} These parameters would help quantitatively analyze if this system design can also be applied for running higher bandwidth protocols like IEEE 802.11ac.
 Another goal of performing this experiment, is to validate the timestamp method for the latency analysis.
-In ideal case, the latency shouldn't be dependent on the amount of data or the sampling rate.}
+In ideal case, the latency should not be dependent on the amount of data or the sampling rate.}
 \item{\textbf{Input Parameters} The experiment has two input parameters:
 \begin{enumerate}
     \item {The length of the messages generated by the periodic message source block.
     Since the PHY payload for 802.15.4 should be less than 128 bytes, the message source data length plus MAC header should be less than that.
     The maximum message source data length comes to be 112 bytes with MAC header of 15 bytes.
     We decided to spread the message source length across the entire available range from one to 112.
-    We choose four different message sizes: 1 byte ,37 bytes,74 bytes and 112 bytes.}
-    \item {The sampling rate, which defines the interpolation and decimation ratio in the 802.15.4 physical layer.
+    We choose four different message sizes: 1 byte, 37 bytes, 74 bytes and 112 bytes.}
+    \item {The sampling rate defines the interpolation and decimation ratio in the 802.15.4 physical layer.
     It also configures the FPGA sampling clock.
     More samples needs to be processed for higher sampling rates.
     The default sampling rate for 802.15.4 is 4 MHz, this project also adds 8 MHz and 16 MHz as sampling rate to get an idea on the impact of a protocol's bandwidth requirements on performance.
@@ -239,8 +249,8 @@ In ideal case, the latency shouldn't be dependent on the amount of data or the s
 \end{enumerate}
 }
 \item{\textbf{Output Metric} The latency which is defined by the previous subsection as $T_2 - T_1$}
-\item{\textbf{Design of the experiment} Firstly, the time period of message source was set to 500ms to ensure that the individual latency measurement are independent of each other.
-The LimeSDR FPGA data packet batchsize is set to one.
+\item{\textbf{Design of the experiment} Firstly, the time period of message source was set to 500 ms to ensure that the individual latency measurement are independent of each other.
+The LimeSDR FPGA data packet batch size is set to one.
 A python script was created to automate the process, which runs the process for 100 seconds.
 The message source generates 199 packets during this duration which gives us 199 latency measurements.
 }
@@ -248,7 +258,7 @@ The message source generates 199 packets during this duration which gives us 199
 
 \section{Experiment 2: Analysis of component delays}
 Granular timestamps are necessary for quantitatively analyzing the results from Experiment 1.
-These also helps the project figuring out the bottlenecks in this system architecture and to comprehensively fill up the knowledge gap discovered by the literature review.
+These also helps us to figure out the bottlenecks in this system architecture and to comprehensively fill up the knowledge gap discovered by the literature review.
 This project defines seven different time delays for this purpose.
 \begin{enumerate}
     \item {\textbf{GNU Radio TX Processing Delay} This provides the delays incurred to generate the sample stream of the modulated packet.}
@@ -466,7 +476,7 @@ The component delay and their relation with timestamps defined previously is sum
 \end{itemize}}
 \item \textbf{Design of the Experiment} The time period of the message source is again set to 500ms. 
 The LimeSDR FPGA packet batchsize is set to one as in Experiment 1.
-As some of the collected time samples can't be correlated because of the limitation of our data correlation program the duration of the experiment is increases to 5000 seconds, which results in 999 packets.
+As some of the collected time samples ca not be correlated because of the limitation of our data correlation program the duration of the experiment is increases to 5000 seconds, which results in 999 packets.
 This results in 999 time samples for our analysis.
 \end{itemize}
 
@@ -479,7 +489,7 @@ An experiment was designed for this purpose by varying the batchsize of the Lime
 % \subsection{ Experiment Design}
 \begin{itemize}
     \item \textbf{Objective} This experiment is designed to understand the impact of USB transfer sizes on the latency in the experimental setup shown in Figure \ref{component_setup}.
-    \item \textbf{Input Parameters} The LimeSDR uses a parameter to set the batchsize of the LimeSDR FPGA data packets depending on the sampling rate, ensuring data from higher sampling rates configurations don't overflow the buffers.
+    \item \textbf{Input Parameters} The LimeSDR uses a parameter to set the batchsize of the LimeSDR FPGA data packets depending on the sampling rate, ensuring data from higher sampling rates configurations do not overflow the buffers.
     By varying this parameter we select three different batchsizes:
     one(minimum possible), four(default) and eight(maximum possible).
     \item \textbf{Output Metric} The latency and component delays are measured as defined in Experiment 1 and Experiment 2.

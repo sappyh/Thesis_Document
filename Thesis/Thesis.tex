@@ -13,7 +13,7 @@
 \usepackage{algpseudocode}
 \usepackage[counterclockwise, figuresleft]{rotating}
 \usepackage{diagbox}
-\addbibresource{./references.bib}
+\addbibresource{references.bib}
 % \addbibresource{USBMon.bib}
 % The file containing our references, in BibTeX format
 
@@ -35,6 +35,10 @@
 \usepackage{acro}
 \usepackage{longtable}
 
+\DeclareAcronym{RAM}{
+	short=RAM,
+	long=Random Access Memory}
+	
 \DeclareAcronym{LPWAN}{
 	short=LPWAN,
 	long=Low Power Wide Area Network}
@@ -252,6 +256,11 @@
  long= Universal Serial Bus
 }
 
+\DeclareAcronym{USRP}{
+ short=USRP,
+ long= Universal Serial Radio Peripheral
+}
+
 \DeclareAcronym{I2C}{
  short=I2C,
  long= Inter-Intergrated Circuit
@@ -340,6 +349,11 @@
  long= Automatic Repeat reQuest
 }
 
+\DeclareAcronym{IF}{
+ short = IF,
+ long= Intermediate Frequency
+}
+
 \DeclareAcronym{GPMC}{
  short = GPMC,
  long= General Purpose Memory Controller
@@ -373,6 +387,8 @@
 \begin{abstract}
     \input{Chapters/Abstract.tex}
 \end{abstract}
+
+\input{Chapters/Acknowledgement.tex}
 
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
